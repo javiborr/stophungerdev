@@ -10,6 +10,15 @@
         <script src="js/lib/jquery.min.js"></script>
         <link href="js/lib/jquery.mobile.min.css" rel="stylesheet" />
         <script src="js/lib/jquery.mobile.min.js"></script>
+        <script src="js/lib/MobileServices.Web.min.js"></script>
+        <script src="js/index.js"></script>
+        <script src="js/DonateController.js"></script>
+        <script src="js/DonatePage.js"></script>
+        <script src="js/DonateView.js"></script>
+        <script src="js/DonationManager.js"></script>
+        <script type="text/javascript">
+            app.initialize(mystuff);
+        </script>
         <script type="text/javascript">
             function mystuff() {
                 $("#saluda").html('hola jquery');
@@ -17,15 +26,63 @@
         </script>
     </head>
     <body>
-        <div>
-            <h3>Stop Hunger DEV</h3>
-            <div id="deviceready">
-                <div id="saluda"></div>
+
+        <div data-role="page" data-theme="a" id="mainPage">
+
+            <!-- ====== main content starts here ===== -->  
+            <div data-role="header" id="donationFormHeader" data-nobackbtn="true">
+                <h2>Comida para donar</h2>
+            </div>  
+            <div data-role="content" id="donationFormContent">
+                <form>
+                    <div id="Div0" class="ui-field-contain">
+                        <label for="BreadSlider">Pan:</label>
+                        <input type="range" name="BreadSlider" id="BreadSlider" data-highlight="true" data-popup_enabled="true" value="5" min="0" max="25" />
+                    </div>
+                    <div id="Div1" class="ui-field-contain">
+                        <label for="CakeSlider">Boller&iacute;a:</label>
+                        <input type="range" name="CakeSlider" id="CakeSlider" data-highlight="true" data-popup_enabled="true" value="5" min="0" max="25" />
+                    </div>
+                    <div id="Div2" class="ui-field-contain">
+                        <label for="SandwichSlider">Bocadillos:</label>
+                        <input type="range" name="SandwichSlider" id="SandwichSlider" data-highlight="true" data-popup_enabled="true" value="5" min="0" max="25" />
+                    </div>
+                    <div id="Div3" class="ui-field-contain">
+                        <label for="SaladSlider">Ensaladas:</label>
+                        <input type="range" name="SaladSlider" id="SaladSlider" data-highlight="true" data-popup_enabled="true" value="5" min="0" max="25" />
+                    </div>
+                    <button id="addDonationButton" class="ui-btn ui-icon-heart ui-btn-icon-left">Donar</button>
+                </form>
+            </div>  
+            <div data-role="footer" id="donationFormFooter"></div>  
+            <!-- ====== main content ends here ===== -->
+
+            <!-- ====== transition content page starts here ===== -->  
+            <div data-role="content" id="donationFormTransition">  
+            </div>  
+            <!-- ====== transition content ends here ===== --> 
+
+            <!-- ====== confirmation content starts here ===== -->  
+            <div data-role="header"  id="donationFormConfirmationHeader">
+                <h2>Donaci&oacute;n Notificada</h2>
+            </div>  
+            <div data-role="content" id="donationFormConfirmationContent" >  
+                <p>Muchas gracias por notificar esta donaci&oacute;n de comida.</p>
+                <button id="volverButton" class="ui-btn ui-icon-back ui-btn-icon-left">Hacer otra donaci&oacute;n</button>
+            </div>  
+            <div data-role="footer" id="donationFormConfirmationFooter"></div>  
+            <!-- ====== confirmation content ends here ===== -->
+
+        </div><!-- /page -->
+
+        <div data-role="page" id="dialogPage"  data-theme="a" >
+            <div data-role="header">
+                <h2>Error</h2>
+            </div>
+            <div role="main" class="ui-content">
+                <p>Hay un problema con esta donaci&oacute;n</p>
+                <ul id="errorlog"></ul>
             </div>
         </div>
-        <script type="text/javascript" src="js/index.js"></script>
-        <script type="text/javascript">
-            app.initialize(mystuff);
-        </script>
     </body>
 </html>
