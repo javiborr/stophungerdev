@@ -27,7 +27,7 @@
         if (FB) {
             try {
                 FB.init({
-                    appId: '326616007479104',
+                    appId: '505756812872331', // '326616007479104',
                     status: true,
                     cookie: true,
                     xfbml: true
