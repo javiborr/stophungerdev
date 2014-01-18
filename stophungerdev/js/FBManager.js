@@ -38,8 +38,12 @@
     function _fbInit() {
         if (FB) {
             try {
+                var azurerex = new RegExp('azurewebsites.net');
+                var pro = azurerex.test(location.href);
+                var appid = '326616007479104';
+                if (pro === true) appid = '505756812872331';
                 FB.init({
-                    appId: '326616007479104', //'505756812872331', // '326616007479104',
+                    appId: appid, //'505756812872331', // '326616007479104',
                     status: true,
                     cookie: true,
                     xfbml: true
