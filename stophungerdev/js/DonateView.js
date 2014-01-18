@@ -18,6 +18,17 @@
     //var mSandwichesInput = null;
     //var mSaladsInput = null;
     //
+    // Pages
+    var mDonatePage = null;
+    function _getDonatePage() {
+        mDonatePage = (mDonatePage || $("#donatePage"));
+        return mDonatePage;
+    }
+    var mLoginPage = null;
+    function _getLoginPage() {
+        mLoginPage = (mLoginPage || $("#loginPage"));
+        return mLoginPage;
+    }
     // Main form
     var mDonationFormHeader = null;
     var mDonationFormContent = null;
@@ -113,7 +124,7 @@
     Constr.prototype.Setup = function () { _setup(); }
     // -----------------------------------------------
     // Sets logged in status
-    Constr.prototype.IsLogged = function (p) {
+    Constr.prototype.SetLogged = function (p) {
         var ko = (p !== true);
         mUserLoggedIn = (p === true);
         //mBreadInput.prop('disabled', ko);
@@ -127,13 +138,17 @@
         // SI logado
         if (mUserLoggedIn) {
             //$.mobile.pageContainer.change($("#mainPage"));
-            $.mobile.changePage($("#mainPage"));
+            var page = _getDonatePage();
+            $.mobile.pageContainer.pagecontainer("change", page, {transition: 'slide'});
             _showDonationForm();
             _hideConfirmation();
             _hideContentTransition();
         } else {
             // TODO
-            $.mobile.pageContainer.change($("#loginPage"));
+            var page = _getLoginPage();
+            //$.mobile.changePage(page);
+            //$.mobile.pageContainer.change(page);
+            $.mobile.pageContainer.pagecontainer("change", page, { transition: 'slide' });
         }
     }
     //

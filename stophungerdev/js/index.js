@@ -4,6 +4,7 @@
  */
 var jqmReady = $.Deferred();
 var pgReady = $.Deferred();
+var fbReady = $.Deferred();
 
 var app = {
     //Callback for when the app is ready
@@ -42,11 +43,11 @@ var app = {
         switch (event) {
             case 'deviceready':
                 pgReady.resolve();
-                app._splashScreenEnds();
+                app._pgSplashScreenEnds();
                 break;
         }
     },
-    _splashScreenEnds: function () {
+    _pgSplashScreenEnds: function () {
         var parentElement = document.getElementById('deviceready');
         if (parentElement) {
             var listeningElement = parentElement.querySelector('.listening');
@@ -58,11 +59,15 @@ var app = {
 };
 $(document).on("pageinit", function (event, ui) {
     jqmReady.resolve();
+    $.ajaxSetup({ cache: true });
+    $.getScript('//connect.facebook.net/es_ES/all.js', function () {
+        fbReady.resolve();
+    });
 });
 /**
 * General initialization.
 */
-$.when(jqmReady, pgReady).then(function () {
+$.when(jqmReady, pgReady, fbReady).then(function () {
     //Initialization code here
     if (app.callback) {
         app.callback();

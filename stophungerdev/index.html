@@ -12,26 +12,37 @@
         <script src="js/lib/jquery.mobile.min.js"></script>
         <script src="js/lib/MobileServices.Web.min.js"></script>
         <script src="js/index.js"></script>
-        <script src="js/DonateController.js"></script>
-        <script src="js/DonatePage.js"></script>
-        <script src="js/DonateView.js"></script>
+        <script src="js/FBManager.js"></script>
         <script src="js/DonationManager.js"></script>
-        <script type="text/javascript">
-            app.initialize(mystuff);
-        </script>
+        <script src="js/DonateView.js"></script>
+        <script src="js/DonateController.js"></script>
+        <script src="js/AppManager.js"></script>
         <script type="text/javascript">
             function mystuff() {
-                $("#saluda").html('hola jquery');
+                //$("#saluda").html('hola jquery');
+                var man = new AppManager();
+                man.Init();
             }
         </script>
     </head>
     <body>
+        <div id="fb-root"></div>
 
-        <div data-role="page" data-theme="a" id="mainPage">
+        <div data-role="page" data-theme="c" id="loginPage">
+            <div data-role="header" id="loginHeader" data-nobackbtn="true">
+                <h3>Stop Hunger Login</h3>
+            </div>  
+            <div data-role="content" id="loginContent">
+                <p>Por favor usa tu cuenta en FaceBook para hacer login</p>
+                <fb:login-button show-faces="true" width="200" max-rows="1"></fb:login-button>
+            </div>
+        </div>
+
+        <div data-role="page" data-theme="a" id="donatePage">
 
             <!-- ====== main content starts here ===== -->  
             <div data-role="header" id="donationFormHeader" data-nobackbtn="true">
-                <h2>Comida para donar</h2>
+                <h3>Donar comida</>
             </div>  
             <div data-role="content" id="donationFormContent">
                 <form>
@@ -84,5 +95,8 @@
                 <ul id="errorlog"></ul>
             </div>
         </div>
+        <script type="text/javascript">
+            app.initialize(mystuff);
+        </script>
     </body>
 </html>
