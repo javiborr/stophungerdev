@@ -22,12 +22,24 @@
     Constr.prototype.SetAppManager = function (p) {
         mAppManager = p;
     }
+    //
+    Constr.prototype.Logout = function () {
+        if (FB) {
+            FB.logout(function (presponse) {
+                // Person is now logged out
+                //if (pcbk) pcbk.apply();
+                _getAppManager().LogoutEnd();
+            });
+        } else {
+            alert('FBManager error! FB is null');
+        }
+    }
     // FB
     function _fbInit() {
         if (FB) {
             try {
                 FB.init({
-                    appId: '505756812872331', // '326616007479104',
+                    appId: '326616007479104', //'505756812872331', // '326616007479104',
                     status: true,
                     cookie: true,
                     xfbml: true

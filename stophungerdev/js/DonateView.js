@@ -103,6 +103,11 @@
         pevt.preventDefault();
     }
     //
+    function _logoutButtonClick(pevt) {
+        _getDonateController().LogoutStart();
+        pevt.preventDefault();
+    }
+    //
     function _volverButtonClick(pevt) {
         _showDonationForm();
         _hideContentTransition();
@@ -117,6 +122,7 @@
     //
     function _setup() {
         $("#addDonationButton").button().click(_addDonationButtonClick);
+        $("#logout").button().click(_logoutButtonClick);
         $("#volverButton").button().click(_volverButtonClick);
         //$("#refreshButton").button().click(_refreshButtonClick);
     }

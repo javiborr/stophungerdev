@@ -25,6 +25,12 @@
             mDonateView.SetLogged(false);
         }
     }
+    Constr.prototype.LogoutEnd = function () {
+        mDonateView.SetLogged(false);
+        var url = location.href;
+        location.href = url;
+    }
+
     function _initAll() {
         console.log('_initAll started');
         //alert('_initAll started');
@@ -35,6 +41,7 @@
         // 
         mDonateController.SetDonationManager(mDonationManager);
         mDonateController.SetDonateView(mDonateView);
+        mDonateController.SetFBManager(mFBManager);
         //
         mDonateView.SetDonateController(mDonateController);
         mDonateView.Setup();

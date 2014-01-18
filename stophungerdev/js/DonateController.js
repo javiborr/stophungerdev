@@ -10,6 +10,14 @@
         }
         return mDonationManager;
     }
+    // FB
+    var mFBManager;
+    function _getFBManager() {
+        if (mFBManager === null) {
+            throw 'DonateController mFBManager is null';
+        }
+        return mFBManager;
+    }
     // Maneja la UI
     var mDonateView;
     function _getDonateView() {
@@ -23,14 +31,23 @@
     // -----------------------------------------------------
     var Constr = function () { }
     //
+    Constr.prototype.SetFBManager = function (p) { mFBManager = p; }
     Constr.prototype.SetDonationManager = function (p) { mDonationManager = p; }
     Constr.prototype.SetDonateView = function (p) { mDonateView = p; }
     //
     // -----------------------------------------------
-    // Show donations
-    Constr.prototype.RefreshDonations = function () {
-        _refreshDonations();
+    // Logout
+    Constr.prototype.LogoutStart = function () {
+        _getFBManager().Logout(); //_logoutEnd);
     }
+    //function _logoutEnd() {
+    //    _getDonateView().SetLogged(false);
+    //}
+    // -----------------------------------------------
+    // Show donations
+    //Constr.prototype.RefreshDonations = function () {
+    //    _refreshDonations();
+    //}
     // -----------------------------------------------
     // Action create a donation
     Constr.prototype.CreateDonation = function () {
