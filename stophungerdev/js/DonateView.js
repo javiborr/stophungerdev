@@ -18,17 +18,24 @@
     //var mSandwichesInput = null;
     //var mSaladsInput = null;
     //
+    // -----------------------------------------------------
     // Pages
     var mDonatePage = null;
     function _getDonatePage() {
         mDonatePage = (mDonatePage || $("#donatePage"));
         return mDonatePage;
     }
+    var mNoRolPage = null;
+    function _getNoRolPage() {
+        mNoRolPage = (mNoRolPage || $("#norolPage"));
+        return mNoRolPage;
+    }
     var mLoginPage = null;
     function _getLoginPage() {
         mLoginPage = (mLoginPage || $("#loginPage"));
         return mLoginPage;
     }
+    // -----------------------------------------------------
     // Main form
     var mDonationFormHeader = null;
     var mDonationFormContent = null;
@@ -123,6 +130,7 @@
     function _setup() {
         $("#addDonationButton").button().click(_addDonationButtonClick);
         $("#logout").button().click(_logoutButtonClick);
+        $("#norolLogout").button().click(_logoutButtonClick);
         $("#volverButton").button().click(_volverButtonClick);
         //$("#refreshButton").button().click(_refreshButtonClick);
     }
@@ -156,6 +164,10 @@
             //$.mobile.pageContainer.change(page);
             $.mobile.pageContainer.pagecontainer("change", page, { transition: 'slide' });
         }
+    }
+    Constr.prototype.ShowPageNoRol = function () {
+        var page = _getNoRolPage();
+        $.mobile.pageContainer.pagecontainer("change", page, { transition: 'slide' });
     }
     //
     // Read current data and rebuild UI.

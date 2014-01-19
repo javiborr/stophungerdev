@@ -7,6 +7,8 @@
         }
         return mAppManager;
     }
+    // User data
+    var mUserData = null;
     //
     // -----------------------------------------------------
     // Constructor
@@ -21,6 +23,10 @@
     //
     Constr.prototype.SetAppManager = function (p) {
         mAppManager = p;
+    }
+    //
+    Constr.prototype.GetCurrentUserData = function () {
+        return mUserData;
     }
     //
     Constr.prototype.Logout = function () {
@@ -48,40 +54,17 @@
                     cookie: true,
                     xfbml: true
                 });
-                $('#loginbutton,#feedbutton').removeAttr('disabled');
+                //$('#loginbutton,#feedbutton').removeAttr('disabled');
                 // Whether or not they are logged into Facebook: 2 ways
                 //1 Set status: true when you initialize the SDK and subscribe to the auth.authResponseChange event (recommended)
                 //2 Specifically call the FB.getLoginStatus function
-                //alert('FB.getLoginStatus init');
-                //FB.getLoginStatus(function (presponse) {
-                //    //alert('FB.getLoginStatus presponse.status[' + presponse.status + ']');
-                //    if (presponse.status === 'connected') {
-                //        //var uid = presponse.authResponse.userID;
-                //        //var accessToken = presponse.authResponse.accessToken;
-                //        mDonateView.SetLogged(true);
-                //    } else if (presponse.status === 'not_authorized') {
-                //        // the user is logged in to Facebook, 
-                //        // but has not authenticated your app
-                //    } else {
-                //        // the user isn't logged in to Facebook.
-                //        FB.login();
-                //    }
-                //});
-                //alert('FB.Event.subscribe init');
+                //FB.getLoginStatus(function (presponse) { ... });
                 FB.Event.subscribe('auth.authResponseChange', function (presponse) {
-                    //alert('FB.Event.subscribe callback presponse.status[' + presponse.status + ']');
                     if (presponse.status === 'connected') {
-                        // TODO can work
-                        //alert('FB 1 presponse.status[' + presponse.status + ']');
-                        //mDonateView.SetLogged(true);
-                        var appman = _getAppManager();
-                        appman.SetLogged(true);
                         _testAPI(presponse.authResponse.userID);
                     } else if (presponse.status === 'not_authorized') {
-                        //alert('FB 2 presponse.status[' + presponse.status + ']');
                         FB.login();
                     } else {
-                        //alert('FB 3 presponse.status[' + presponse.status + ']');
                         FB.login();
                     }
                 });
@@ -107,6 +90,15 @@
                             , 'last_name[' + presponse.last_name + ']'
             ].join('\n');
             alert(sa);
+            mUserData = {
+                name: presponse.name,
+                id: presponse.id,
+                userName: presponse.username,
+                firstName: presponse.first_name,
+                lastName: presponse.last_name,
+            };
+            // TODO can work
+            _getAppManager().SetLogged(true);
         });
     }
 

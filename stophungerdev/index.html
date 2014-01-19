@@ -13,6 +13,7 @@
         <script src="js/lib/MobileServices.Web.min.js"></script>
         <script src="js/index.js"></script>
         <script src="js/FBManager.js"></script>
+        <script src="js/PeopleManager.js"></script>
         <script src="js/DonationManager.js"></script>
         <script src="js/DonateView.js"></script>
         <script src="js/DonateController.js"></script>
@@ -28,9 +29,10 @@
     <body>
         <div id="fb-root"></div>
 
-        <div data-role="page" data-theme="c" id="loginPage">
+        <!-- LOGIN PAGE -->
+        <div data-role="page" data-theme="a" id="loginPage">
             <div data-role="header" id="loginHeader" data-nobackbtn="true">
-                <h3>Stop Hunger Login</h3>
+                <h3>Login Stop Hunger</h3>
             </div>  
             <div data-role="content" id="loginContent">
                 <p>Por favor usa tu cuenta en FaceBook para hacer login</p>
@@ -38,6 +40,18 @@
             </div>
         </div>
 
+        <!-- NOROL PAGE -->
+        <div data-role="page" data-theme="a" id="norolPage">
+            <div data-role="header" id="Div5" data-nobackbtn="true">
+                <h3>Usuario nuevo</h3>
+            </div>  
+            <div data-role="content" id="Div6">
+                <p>No est&aacute;s registrado</p>
+                <button id="norolLogout" class="ui-btn ui-icon-delete ui-btn-icon-left">Salir</button>
+            </div>
+        </div>
+
+        <!-- DONATE PAGE -->
         <div data-role="page" data-theme="a" id="donatePage">
 
             <!-- ====== main content starts here ===== -->  
@@ -87,6 +101,7 @@
 
         </div><!-- /page -->
 
+        <!-- DIALOG PAGE -->
         <div data-role="page" id="dialogPage"  data-theme="a" >
             <div data-role="header">
                 <h2>Error</h2>
@@ -96,6 +111,7 @@
                 <ul id="errorlog"></ul>
             </div>
         </div>
+        
         <script type="text/javascript">
             app.initialize(mystuff);
         </script>

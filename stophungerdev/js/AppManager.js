@@ -1,10 +1,11 @@
 ﻿AppManager = (function ($) {
     //
     var me = null;
-    var mDonateController = new DonateController();
-    var mDonationManager = new DonationManager();
-    var mDonateView = new DonateView();
-    var mFBManager = new FBManager();
+    var mDonateController = null;
+    var mDonationManager = null;
+    var mDonateView = null;
+    var mFBManager = null;
+    var mPeopleManager = null;
     //
     var mActivePage = 'start';
     //
@@ -17,14 +18,36 @@
     Constr.prototype.Init = function () {
         _initAll();
     }
+    // Si usuario no esta logado en FB muestra loginPage
+    // Si usuario esta logado en FB consulta su rol
+    // No rol: nouserPage
+    // Admin: adminPage
+    // Gives: donatePage
+    // Takes: checkPage
     Constr.prototype.SetLogged = function (pislogged) {
         if (pislogged === true) {
             // TODO state and user role
-            mDonateView.SetLogged(true);
+            var udata = mFBManager.GetCurrentUserData();
+            mPeopleManager.GetUserData(udata.id, _showPageForRol, _showError);
         } else {
             mDonateView.SetLogged(false);
         }
     }
+    // TODO
+    function _showPageForRol(pres) {
+        // SI encuentra usuario registrado
+        if (pres && pres.length > 0) {
+            var udata = pres[0];
+            // TODO SI admin etc
+            mDonateView.SetLogged(true);
+        } else {
+            mDonateView.ShowPageNoRol();
+        }
+    }
+    function _showError(perr) {
+        alert(perr);
+    }
+    //
     Constr.prototype.LogoutEnd = function () {
         mDonateView.SetLogged(false);
         var url = location.href;
@@ -38,6 +61,7 @@
         mDonationManager = new DonationManager();
         mDonateView = new DonateView();
         mFBManager = new FBManager();
+        mPeopleManager = new PeopleManager();
         // 
         mDonateController.SetDonationManager(mDonationManager);
         mDonateController.SetDonateView(mDonateView);
