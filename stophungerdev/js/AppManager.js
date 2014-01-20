@@ -18,6 +18,9 @@
     Constr.prototype.Init = function () {
         _initAll();
     }
+    Constr.prototype.WaitingForServer = function (pmsg) {
+        mDonateView.WaitingForServer(pmsg);
+    }
     // Si usuario no esta logado en FB muestra loginPage
     // Si usuario esta logado en FB consulta su rol
     // No rol: nouserPage
@@ -27,6 +30,7 @@
     Constr.prototype.SetLogged = function (pislogged) {
         if (pislogged === true) {
             // TODO state and user role
+            //mDonateView.WaitingForServer();
             var udata = mFBManager.GetCurrentUserData();
             mPeopleManager.GetUserData(udata.id, _showPageForRol, _showError);
         } else {
@@ -66,6 +70,7 @@
         mDonateController.SetDonationManager(mDonationManager);
         mDonateController.SetDonateView(mDonateView);
         mDonateController.SetFBManager(mFBManager);
+        mDonateController.SetPeopleManager(mPeopleManager);
         //
         mDonateView.SetDonateController(mDonateController);
         mDonateView.Setup();

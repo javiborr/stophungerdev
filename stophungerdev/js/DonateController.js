@@ -10,6 +10,14 @@
         }
         return mDonationManager;
     }
+    // Gestor datos usuario
+    var mPeopleManager;
+    function _getPeopleManager() {
+        if (mPeopleManager === null) {
+            throw 'DonateController mPeopleManager is null';
+        }
+        return mPeopleManager;
+    }
     // FB
     var mFBManager;
     function _getFBManager() {
@@ -33,16 +41,23 @@
     //
     Constr.prototype.SetFBManager = function (p) { mFBManager = p; }
     Constr.prototype.SetDonationManager = function (p) { mDonationManager = p; }
+    Constr.prototype.SetPeopleManager = function (p) { mPeopleManager = p; }
     Constr.prototype.SetDonateView = function (p) { mDonateView = p; }
     //
     // -----------------------------------------------
     // Logout
     Constr.prototype.LogoutStart = function () {
-        _getFBManager().Logout(); //_logoutEnd);
+        _getFBManager().Logout();
     }
-    //function _logoutEnd() {
-    //    _getDonateView().SetLogged(false);
-    //}
+    // RequestAccess
+    Constr.prototype.RequestAccessStart = function () {
+        _getDonateView().WaitingForServer();
+        var cudata = _getFBManager().GetCurrentUserData();
+        _getPeopleManager().Create(cudata, _requestAccessOK, _handleError);
+    }
+    function _requestAccessOK() {
+        _getDonateView().AccessRequestedEnd();
+    }
     // -----------------------------------------------
     // Show donations
     //Constr.prototype.RefreshDonations = function () {
@@ -61,9 +76,7 @@
     //    _getDonateView().RefreshDonations(donationdata);
     //}
     function _donationCreatedOK() {
-        //_getDonateView().ShowError('ERROR');
         _getDonateView().DonationOK();
-        //_refreshDonations();
     }
     function _handleError(perror) {
         _getDonateView().ShowError(perror);

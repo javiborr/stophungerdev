@@ -30,6 +30,16 @@
         mNoRolPage = (mNoRolPage || $("#norolPage"));
         return mNoRolPage;
     }
+    var mAccessRequestedPage = null;
+    function _getAccessRequestedPage() {
+        mAccessRequestedPage = (mAccessRequestedPage || $("#accessRequestedPage"));
+        return mAccessRequestedPage;
+    }
+    var mWaitingServerPage = null;
+    function _getWaitingServerPage() {
+        mWaitingServerPage = (mWaitingServerPage || $("#waitingServerPage"));
+        return mWaitingServerPage;
+    }
     var mLoginPage = null;
     function _getLoginPage() {
         mLoginPage = (mLoginPage || $("#loginPage"));
@@ -122,21 +132,30 @@
         pevt.preventDefault();
     }
     //
+    function _requestAccessButtonClick(pevt) {
+        _getDonateController().RequestAccessStart();
+        pevt.preventDefault();
+    }
+    //
     //function _refreshButtonClick(pevt) {
     //    _getDonateController().RefreshDonations();
     //    pevt.preventDefault();
     //}
     //
     function _setup() {
+        $("#requestAccess").button().click(_requestAccessButtonClick);
         $("#addDonationButton").button().click(_addDonationButtonClick);
-        $("#logout").button().click(_logoutButtonClick);
-        $("#norolLogout").button().click(_logoutButtonClick);
+        $(".ui-btn.logout").button().click(_logoutButtonClick);
         $("#volverButton").button().click(_volverButtonClick);
         //$("#refreshButton").button().click(_refreshButtonClick);
     }
     Constr.prototype.SetDonateController = function (p) { mDonateController = p; }
     Constr.prototype.Setup = function () { _setup(); }
     // -----------------------------------------------
+    Constr.prototype.AccessRequestedEnd = function() {
+        var page = _getAccessRequestedPage();
+        $.mobile.pageContainer.pagecontainer("change", page, { transition: 'slide' });
+    }
     // Sets logged in status
     Constr.prototype.SetLogged = function (p) {
         var ko = (p !== true);
@@ -207,6 +226,17 @@
         _showContentTransition();
         $.mobile.loading('show', {
             text: 'Enviando datos...',
+            textVisible: true,
+            theme: 'b',
+            textonly: false
+            //html: html
+        });
+    }
+    Constr.prototype.WaitingForServer = function (pmsg) {
+        var page = _getWaitingServerPage();
+        $.mobile.pageContainer.pagecontainer("change", page, { transition: 'slide' });
+        $.mobile.loading('show', {
+            text: pmsg,
             textVisible: true,
             theme: 'b',
             textonly: false

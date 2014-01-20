@@ -40,16 +40,39 @@
             </div>
         </div>
 
-        <!-- NOROL PAGE -->
-        <div data-role="page" data-theme="a" id="norolPage">
+        <!-- WAITING for SERVER PAGE -->
+        <div data-role="page" data-theme="a" id="waitingServerPage">
             <div data-role="header" id="Div5" data-nobackbtn="true">
-                <h3>Usuario nuevo</h3>
+                <h3>Espera por favor</h3>
             </div>  
             <div data-role="content" id="Div6">
-                <p>No est&aacute;s registrado</p>
-                <button id="norolLogout" class="ui-btn ui-icon-delete ui-btn-icon-left">Salir</button>
+                <p>Comprobando datos en el servidor...</p>
             </div>
         </div>
+
+        <!-- NOROL PAGE -->
+        <div data-role="page" data-theme="a" id="norolPage">
+            <div data-role="header" id="Div7" data-nobackbtn="true">
+                <h3>Usuario nuevo</h3>
+            </div>  
+            <div data-role="content" id="Div8">
+                <p>No est&aacute;s registrado</p>
+                <button id="requestAccess" class="ui-btn ui-icon-plus ui-btn-icon-left">Solicitar acceso</button>
+                <button id="norolLogout" class="ui-btn logout ui-icon-delete ui-btn-icon-left">Salir</button>
+            </div>
+        </div>
+
+        <!-- Access requested PAGE -->
+        <div data-role="page" data-theme="a" id="accessRequestedPage">
+            <div data-role="header" id="Div9" data-nobackbtn="true">
+                <h3>Usuario nuevo</h3>
+            </div>  
+            <div data-role="content" id="Div10">
+                <p>Gracias por tu solicitud</p>
+                <button id="accessRequestedLogout" class="ui-btn logout ui-icon-delete ui-btn-icon-left">Salir</button>
+            </div>
+        </div>
+
 
         <!-- DONATE PAGE -->
         <div data-role="page" data-theme="a" id="donatePage">
@@ -77,7 +100,7 @@
                         <input type="range" name="SaladSlider" id="SaladSlider" data-highlight="true" data-popup_enabled="true" value="5" min="0" max="25" />
                     </div>
                     <button id="addDonationButton" class="ui-btn ui-icon-heart ui-btn-icon-left">Donar</button>
-                    <button id="logout"            class="ui-btn ui-icon-delete ui-btn-icon-left">Salir</button>
+                    <button id="logout" class="ui-btn logout ui-icon-delete ui-btn-icon-left">Salir</button>
                 </form>
             </div>  
             <div data-role="footer" id="donationFormFooter"></div>  
@@ -95,6 +118,7 @@
             <div data-role="content" id="donationFormConfirmationContent" >  
                 <p>Muchas gracias por notificar esta donaci&oacute;n de comida.</p>
                 <button id="volverButton" class="ui-btn ui-icon-back ui-btn-icon-left">Hacer otra donaci&oacute;n</button>
+                <button id="donateLogout" class="ui-btn logout ui-icon-delete ui-btn-icon-left">Salir</button>
             </div>  
             <div data-role="footer" id="donationFormConfirmationFooter"></div>  
             <!-- ====== confirmation content ends here ===== -->

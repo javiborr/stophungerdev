@@ -80,6 +80,8 @@
         // TODO
         //var badmin = (puid == '1445416267');
         //mDonateView.SetLogged(true);
+        var appman = _getAppManager();
+        appman.WaitingForServer('Datos de FaceBook...');
         console.log('Welcome!  Fetching your information.... ');
         FB.api('/me', function (presponse) {
             var sa = ['Good to see you, ' + presponse.name
@@ -98,7 +100,7 @@
                 lastName: presponse.last_name,
             };
             // TODO can work
-            _getAppManager().SetLogged(true);
+            appman.SetLogged(true);
         });
     }
 
