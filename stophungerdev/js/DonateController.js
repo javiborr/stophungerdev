@@ -52,7 +52,7 @@
     // RequestAccess
     Constr.prototype.RequestAccessStart = function () {
         _getDonateView().WaitingForServer();
-        var cudata = _getFBManager().GetCurrentUserData();
+        var cudata = _getFBManager().GetCurrentUserFBData();
         _getPeopleManager().Create(cudata, _requestAccessOK, _handleError);
     }
     function _requestAccessOK() {

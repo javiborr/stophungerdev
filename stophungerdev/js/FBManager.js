@@ -8,7 +8,7 @@
         return mAppManager;
     }
     // User data
-    var mUserData = null;
+    var mCurrentUserFBData = null;
     //
     // -----------------------------------------------------
     // Constructor
@@ -25,8 +25,8 @@
         mAppManager = p;
     }
     //
-    Constr.prototype.GetCurrentUserData = function () {
-        return mUserData;
+    Constr.prototype.GetCurrentUserFBData = function () {
+        return mCurrentUserFBData;
     }
     //
     Constr.prototype.Logout = function () {
@@ -61,7 +61,7 @@
                 //FB.getLoginStatus(function (presponse) { ... });
                 FB.Event.subscribe('auth.authResponseChange', function (presponse) {
                     if (presponse.status === 'connected') {
-                        _testAPI(presponse.authResponse.userID);
+                        _getCurrentUserFBDataFromFB(presponse.authResponse.userID);
                     } else if (presponse.status === 'not_authorized') {
                         FB.login();
                     } else {
@@ -76,7 +76,7 @@
         }
     }
     //
-    function _testAPI(puid) {
+    function _getCurrentUserFBDataFromFB(puid) {
         // TODO
         //var badmin = (puid == '1445416267');
         //mDonateView.SetLogged(true);
@@ -84,15 +84,15 @@
         appman.WaitingForServer('Datos de FaceBook...');
         console.log('Welcome!  Fetching your information.... ');
         FB.api('/me', function (presponse) {
-            var sa = ['Good to see you, ' + presponse.name
-                            , 'puid[' + puid + ']'
-                            , 'id[' + presponse.id + ']'
-                            , 'username[' + presponse.username + ']'
-                            , 'first_name[' + presponse.first_name + ']'
-                            , 'last_name[' + presponse.last_name + ']'
-            ].join('\n');
-            alert(sa);
-            mUserData = {
+            //var sa = ['Good to see you, ' + presponse.name
+            //                , 'puid[' + puid + ']'
+            //                , 'id[' + presponse.id + ']'
+            //                , 'username[' + presponse.username + ']'
+            //                , 'first_name[' + presponse.first_name + ']'
+            //                , 'last_name[' + presponse.last_name + ']'
+            //].join('\n');
+            //alert(sa);
+            mCurrentUserFBData = {
                 name: presponse.name,
                 id: presponse.id,
                 userName: presponse.username,

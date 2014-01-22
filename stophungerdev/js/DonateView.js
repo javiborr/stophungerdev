@@ -2,7 +2,6 @@
     // -----------------------------------------------------
     // Privado
     // -----------------------------------------------------
-    var mUserLoggedIn = false;
     var mMobile = true;
     //
     var mDonateController = null;
@@ -20,30 +19,35 @@
     //
     // -----------------------------------------------------
     // Pages
-    var mDonatePage = null;
-    function _getDonatePage() {
-        mDonatePage = (mDonatePage || $("#donatePage"));
-        return mDonatePage;
+    var mLoginPage = null;
+    function _getLoginPage() {
+        mLoginPage = (mLoginPage || $("#loginPage"));
+        return mLoginPage;
     }
-    var mNoRolPage = null;
-    function _getNoRolPage() {
-        mNoRolPage = (mNoRolPage || $("#norolPage"));
-        return mNoRolPage;
+    var mNoUserPage = null;
+    function _getNoUserPage() {
+        mNoUserPage = (mNoUserPage || $("#nouserPage"));
+        return mNoUserPage;
     }
     var mAccessRequestedPage = null;
     function _getAccessRequestedPage() {
         mAccessRequestedPage = (mAccessRequestedPage || $("#accessRequestedPage"));
         return mAccessRequestedPage;
     }
+    var mNoRolPage = null;
+    function _getNoRolPage() {
+        mNoRolPage = (mNoRolPage || $("#norolPage"));
+        return mNoRolPage;
+    }
     var mWaitingServerPage = null;
     function _getWaitingServerPage() {
         mWaitingServerPage = (mWaitingServerPage || $("#waitingServerPage"));
         return mWaitingServerPage;
     }
-    var mLoginPage = null;
-    function _getLoginPage() {
-        mLoginPage = (mLoginPage || $("#loginPage"));
-        return mLoginPage;
+    var mDonatePage = null;
+    function _getDonatePage() {
+        mDonatePage = (mDonatePage || $("#donatePage"));
+        return mDonatePage;
     }
     // -----------------------------------------------------
     // Main form
@@ -156,10 +160,10 @@
         var page = _getAccessRequestedPage();
         $.mobile.pageContainer.pagecontainer("change", page, { transition: 'slide' });
     }
-    // Sets logged in status
-    Constr.prototype.SetLogged = function (p) {
-        var ko = (p !== true);
-        mUserLoggedIn = (p === true);
+    //// Sets logged in status
+    //Constr.prototype.SetLogged = function (p) {
+    //    var ko = (p !== true);
+    //    mUserLoggedIn = (p === true);
         //mBreadInput.prop('disabled', ko);
         //mCakesInput.prop('disabled', ko);
         //mSandwichesInput.prop('disabled', ko);
@@ -169,46 +173,43 @@
         //$("#refreshButton").button("option", "disabled", ko);
         // jQuery Mobile
         // SI logado
-        if (mUserLoggedIn) {
-            //$.mobile.pageContainer.change($("#mainPage"));
-            var page = _getDonatePage();
-            $.mobile.pageContainer.pagecontainer("change", page, {transition: 'slide'});
-            _showDonationForm();
-            _hideConfirmation();
-            _hideContentTransition();
-        } else {
-            // TODO
-            var page = _getLoginPage();
-            //$.mobile.changePage(page);
-            //$.mobile.pageContainer.change(page);
-            $.mobile.pageContainer.pagecontainer("change", page, { transition: 'slide' });
-        }
+    //    if (mUserLoggedIn) {
+    //        //$.mobile.pageContainer.change($("#mainPage"));
+    //        var page = _getDonatePage();
+    //        $.mobile.pageContainer.pagecontainer("change", page, {transition: 'slide'});
+    //        _showDonationForm();
+    //        _hideConfirmation();
+    //        _hideContentTransition();
+    //    } else {
+    //        // TODO
+    //        var page = _getLoginPage();
+    //        //$.mobile.changePage(page);
+    //        //$.mobile.pageContainer.change(page);
+    //        $.mobile.pageContainer.pagecontainer("change", page, { transition: 'slide' });
+    //    }
+    //}
+    function _showPage(p) {
+        $.mobile.pageContainer.pagecontainer("change", p, { transition: 'slide' });
+    }
+    Constr.prototype.ShowPageDonate = function () {
+        _showDonationForm();
+        _hideConfirmation();
+        _hideContentTransition();
+        _showPage(_getDonatePage());
+    }
+    Constr.prototype.ShowPageLogin = function () {
+        _showPage(_getLoginPage());
     }
     Constr.prototype.ShowPageNoRol = function () {
-        var page = _getNoRolPage();
-        $.mobile.pageContainer.pagecontainer("change", page, { transition: 'slide' });
+        _showPage(_getNoRolPage());
+    }
+    Constr.prototype.ShowPageNoUser = function () {
+        _showPage(_getNoUserPage());
     }
     //
     // Read current data and rebuild UI.
     // If you plan to generate complex UIs like this, consider using a JavaScript templating library.
-    Constr.prototype.RefreshDonations = function (pdata) {
-        //var query = donationsTable;
-        if (mUserLoggedIn === true) {
-            pdata.read().then(function (donations) {
-                var listItems = $.map(donations, function (item) {
-                    return $('<li>')
-                        .attr('data-todoitem-id', item.id)
-                        .append($('<span>').append($('<input class="donationNumber">').val(item.Bread)))
-                        .append($('<span>').append($('<input class="donationNumber">').val(item.Cake)))
-                        .append($('<span>').append($('<input class="donationNumber">').val(item.Sandwich)))
-                        .append($('<span>').append($('<input class="donationNumber">').val(item.Salad)))
-                    ;
-                });
-                $('#donationsList').empty().append(listItems).toggle(listItems.length > 0);
-                $('#summary').html('<strong>' + donations.length + '</strong> item(s)');
-            }, _showError);
-        }
-    }
+    //Constr.prototype.RefreshDonations = function (pdata) {
     // -----------------------------------------------
     // Gets form data for a donation
     Constr.prototype.GetFormData = function () {

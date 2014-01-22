@@ -31,21 +31,25 @@
         if (pislogged === true) {
             // TODO state and user role
             //mDonateView.WaitingForServer();
-            var udata = mFBManager.GetCurrentUserData();
-            mPeopleManager.GetUserData(udata.id, _showPageForRol, _showError);
+            var udata = mFBManager.GetCurrentUserFBData();
+            mPeopleManager.SetCurrentUserFBID(udata.id, _showPageForRol, _showError);
         } else {
-            mDonateView.SetLogged(false);
+            this.LogoutEnd();
         }
     }
     // TODO
-    function _showPageForRol(pres) {
+    function _showPageForRol() {
         // SI encuentra usuario registrado
-        if (pres && pres.length > 0) {
-            var udata = pres[0];
-            // TODO SI admin etc
-            mDonateView.SetLogged(true);
+        if (mPeopleManager.CurrentUserIsValid()) {
+            // SI rol Giver
+            if (mPeopleManager.CurrentUserIsGiver()) {
+                // TODO SI admin etc
+                mDonateView.ShowPageDonate();
+            } else {
+                mDonateView.ShowPageNoRol();
+            }
         } else {
-            mDonateView.ShowPageNoRol();
+            mDonateView.ShowPageNoUser();
         }
     }
     function _showError(perr) {
@@ -53,7 +57,7 @@
     }
     //
     Constr.prototype.LogoutEnd = function () {
-        mDonateView.SetLogged(false);
+        mDonateView.ShowPageLogin();
         var url = location.href;
         location.href = url;
     }
@@ -76,7 +80,7 @@
         mDonateView.Setup();
         //
         // TODO page navigation
-        mDonateView.SetLogged(false);
+        mDonateView.ShowPageLogin();
         //
         mFBManager.SetAppManager(me);
         mFBManager.Init();

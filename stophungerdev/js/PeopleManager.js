@@ -6,6 +6,8 @@
     var mAppKey = 'MDRQPHGRJDbpeYDwLbFAYIVDZKIjHl37';
     //
     var mMSClient;
+    // User data
+    var mCurrentUserData = null;
     // -----------------------------------------------------
     // Constructor
     // -----------------------------------------------------
@@ -13,9 +15,68 @@
         mMSClient = new WindowsAzure.MobileServiceClient(mAppURL, mAppKey);
     }
     // -----------------------------------------------
+    // Get current user data
+    Constr.prototype.CurrentUserIsValid = function () {
+        var res = false;
+        if (typeof (mCurrentUserData) !== 'undefined' && mCurrentUserData !== null) {
+            res = (mCurrentUserData.valid === true);
+        }
+        return res;
+    }
+    Constr.prototype.CurrentUserIsAdmin = function () {
+        var res = false;
+        if (typeof (mCurrentUserData) !== 'undefined' && mCurrentUserData !== null) {
+            res = (mCurrentUserData.admin === true);
+        }
+        return res;
+    }
+    Constr.prototype.CurrentUserIsGiver = function () {
+        var res = false;
+        if (typeof (mCurrentUserData) !== 'undefined' && mCurrentUserData !== null) {
+            res = (mCurrentUserData.gives === true);
+        }
+        return res;
+    }
+    Constr.prototype.CurrentUserIsTaker = function () {
+        var res = false;
+        if (typeof (mCurrentUserData) !== 'undefined' && mCurrentUserData !== null) {
+            res = (mCurrentUserData.takes === true);
+        }
+        return res;
+    }
+    // -----------------------------------------------
+    // Sets current user FBID and gets all data from DB not FB
+    Constr.prototype.SetCurrentUserFBID = function (pfbid, pcallbok, pcallberr) {
+        _getUserDataFromDB(pfbid
+            , function (presponse) {
+                // SI ok
+                if (presponse && presponse.length > 0) {
+                    mCurrentUserData = {
+                        valid: true,
+                        id: presponse[0].id,
+                        FBID: pfbid,
+                        userName: presponse[0].UserName,
+                        admin: presponse[0].Admin,
+                        gives: presponse[0].Gives,
+                        takes: presponse[0].Takes,
+                        siteID: presponse[0].SiteID
+                    };
+                    if (pcallbok) pcallbok(presponse);
+                } else {
+                    mCurrentUserData = { valid: false };
+                    pcallberr('Error usuario no encontrado en BD con FBID['+pfbid+']');
+                }
+            }
+            , pcallberr);
+    }
+    // -----------------------------------------------
     // Gets user data from DB not from FB
     Constr.prototype.GetUserData = function (pfbid, pcallbok, pcallberr) {
-        var filter = {FBID : pfbid};
+        _getUserDataFromDB(pfbid, pcallbok, pcallberr);
+    }
+    //
+    function _getUserDataFromDB(pfbid, pcallbok, pcallberr) {
+        var filter = { FBID: pfbid };
         var data = mMSClient.getTable('people')
             .where(filter)
             .read()
