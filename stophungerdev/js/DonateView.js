@@ -215,11 +215,11 @@
     }
     Constr.prototype.ShowPageDonate = function (pisadmin) {
         if (pisadmin === true) {
-            $('#donateBackButton').show();
-            $('#donateLogout').hide();
+            $('#donateBackButton').parent().show();
+            $('#donateFormLogout').parent().hide();
         } else {
-            $('#donateBackButton').hide();
-            $('#donateLogout').show();
+            $('#donateBackButton').parent().hide();
+            $('#donateFormLogout').parent().show();
         }
         _showDonationForm();
         _hideConfirmation();
