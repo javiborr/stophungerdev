@@ -157,8 +157,8 @@
     Constr.prototype.Setup = function () { _setup(); }
     // -----------------------------------------------
     Constr.prototype.AccessRequestedEnd = function() {
-        var page = _getAccessRequestedPage();
-        $.mobile.pageContainer.pagecontainer("change", page, { transition: 'slide' });
+        var p = _getAccessRequestedPage();
+        _showPage(p);
     }
     //// Sets logged in status
     //Constr.prototype.SetLogged = function (p) {
@@ -189,7 +189,7 @@
     //    }
     //}
     function _showPage(p) {
-        $.mobile.pageContainer.pagecontainer("change", p, { transition: 'slide' });
+        $.mobile.pageContainer.pagecontainer("change", p, { transition: 'fade' });
     }
     Constr.prototype.ShowPageDonate = function () {
         _showDonationForm();
@@ -234,8 +234,8 @@
         });
     }
     Constr.prototype.WaitingForServer = function (pmsg) {
-        var page = _getWaitingServerPage();
-        $.mobile.pageContainer.pagecontainer("change", page, { transition: 'slide' });
+        var p = _getWaitingServerPage();
+        _showPage(p);
         $.mobile.loading('show', {
             text: pmsg,
             textVisible: true,

@@ -32,7 +32,7 @@
             // TODO state and user role
             //mDonateView.WaitingForServer();
             var udata = mFBManager.GetCurrentUserFBData();
-            mPeopleManager.SetCurrentUserFBID(udata.id, _showPageForRol, _showError);
+            mPeopleManager.SetCurrentUserFBID(udata.id, udata.userName, _showPageForRol, _showError);
         } else {
             this.LogoutEnd();
         }

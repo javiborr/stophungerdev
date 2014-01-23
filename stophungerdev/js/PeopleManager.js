@@ -6,6 +6,7 @@
     var mAppKey = 'MDRQPHGRJDbpeYDwLbFAYIVDZKIjHl37';
     //
     var mMSClient;
+    var me = null;
     // User data
     var mCurrentUserData = null;
     // -----------------------------------------------------
@@ -13,6 +14,7 @@
     // -----------------------------------------------------
     var Constr = function () {
         mMSClient = new WindowsAzure.MobileServiceClient(mAppURL, mAppKey);
+        me = this;
     }
     // -----------------------------------------------
     // Get current user data
@@ -46,7 +48,7 @@
     }
     // -----------------------------------------------
     // Sets current user FBID and gets all data from DB not FB
-    Constr.prototype.SetCurrentUserFBID = function (pfbid, pcallbok, pcallberr) {
+    Constr.prototype.SetCurrentUserFBID = function (pfbid, puname, pcallbok, pcallberr) {
         _getUserDataFromDB(pfbid
             , function (presponse) {
                 // SI ok
@@ -63,8 +65,9 @@
                     };
                     if (pcallbok) pcallbok(presponse);
                 } else {
-                    mCurrentUserData = { valid: false };
-                    pcallberr('Error usuario no encontrado en BD con FBID['+pfbid+']');
+                    //var data = {id: pfbid, userName: puname};
+                    //me.Create(data, pcallbok, pcallberr);
+                    pcallbok();
                 }
             }
             , pcallberr);
