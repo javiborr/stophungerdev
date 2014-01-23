@@ -3,6 +3,7 @@
     // Privado
     // -----------------------------------------------------
     var mMobile = true;
+    var me = null;
     //
     var mDonateController = null;
     function _getDonateController() {
@@ -18,7 +19,7 @@
     //var mSaladsInput = null;
     //
     // -----------------------------------------------------
-    // Pages
+    // Pages 
     var mLoginPage = null;
     function _getLoginPage() {
         mLoginPage = (mLoginPage || $("#loginPage"));
@@ -44,6 +45,11 @@
         mWaitingServerPage = (mWaitingServerPage || $("#waitingServerPage"));
         return mWaitingServerPage;
     }
+    var mAdminMenuPage = null;
+    function _getAdminMenuPage() {
+        mAdminMenuPage = (mAdminMenuPage || $("#adminMenuPage"));
+        return mAdminMenuPage;
+    }
     var mDonatePage = null;
     function _getDonatePage() {
         mDonatePage = (mDonatePage || $("#donatePage"));
@@ -65,6 +71,7 @@
     // Constructor
     // -----------------------------------------------------
     var Constr = function () {
+        me = this;
         //if (mMobile) {
         //    mBreadInput = $('#BreadSlider');
         //    mCakesInput = $('#CakeSlider');
@@ -119,6 +126,11 @@
     }
     // -----------------------------------------------------
     //
+    function _adminDonateButtonClick(pevt) {
+        me.ShowPageDonate(true);
+        pevt.preventDefault();
+    }
+    //
     function _addDonationButtonClick(pevt) {
         _getDonateController().CreateDonation();
         pevt.preventDefault();
@@ -141,15 +153,25 @@
         pevt.preventDefault();
     }
     //
+    function _backToMenuButtonClick(pevt) {
+        me.ShowPageAdminMenu();
+        pevt.preventDefault();
+    }
+    //
     //function _refreshButtonClick(pevt) {
     //    _getDonateController().RefreshDonations();
     //    pevt.preventDefault();
     //}
     //
     function _setup() {
+        //$.mobile.toolbar.prototype.options.addBackBtn = true;
+        //$.mobile.toolbar.prototype.options.backBtnText = "Volver";
+        //
+        $("#adminDonate").button().click(_adminDonateButtonClick);
         $("#requestAccess").button().click(_requestAccessButtonClick);
         $("#addDonationButton").button().click(_addDonationButtonClick);
         $(".ui-btn.logout").button().click(_logoutButtonClick);
+        $(".ui-btn.back-to-menu").button().click(_backToMenuButtonClick);
         $("#volverButton").button().click(_volverButtonClick);
         //$("#refreshButton").button().click(_refreshButtonClick);
     }
@@ -191,7 +213,14 @@
     function _showPage(p) {
         $.mobile.pageContainer.pagecontainer("change", p, { transition: 'fade' });
     }
-    Constr.prototype.ShowPageDonate = function () {
+    Constr.prototype.ShowPageDonate = function (pisadmin) {
+        if (pisadmin === true) {
+            $('#donateBackButton').show();
+            $('#donateLogout').hide();
+        } else {
+            $('#donateBackButton').hide();
+            $('#donateLogout').show();
+        }
         _showDonationForm();
         _hideConfirmation();
         _hideContentTransition();
@@ -205,6 +234,9 @@
     }
     Constr.prototype.ShowPageNoUser = function () {
         _showPage(_getNoUserPage());
+    }
+    Constr.prototype.ShowPageAdminMenu = function () {
+        _showPage(_getAdminMenuPage());
     }
     //
     // Read current data and rebuild UI.

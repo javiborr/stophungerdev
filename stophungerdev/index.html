@@ -57,8 +57,10 @@
             </div>  
             <div data-role="content" id="Div8">
                 <p>No est&aacute;s registrado</p>
-                <button id="requestAccess" class="ui-btn ui-icon-plus ui-btn-icon-left">Solicitar acceso</button>
-                <button id="nouserLogout" class="ui-btn logout ui-icon-delete ui-btn-icon-left">Salir</button>
+                <div data-role="controlgroup">
+                    <button id="requestAccess" class="ui-btn ui-icon-plus ui-btn-icon-left">Solicitar acceso</button>
+                    <button id="nouserLogout" class="ui-btn logout ui-icon-delete ui-btn-icon-left">Salir</button>
+                </div>
             </div>
         </div>
         <!-- NOROL PAGE -->
@@ -82,13 +84,27 @@
             </div>
         </div>
 
+        <!-- Admin menu PAGE -->
+        <div data-role="page" data-theme="a" id="adminMenuPage">
+            <div data-role="header" id="Div13">
+                <h3>Admin Menu</h3>
+            </div>  
+            <div data-role="content" id="Div14">
+                <div data-role="controlgroup">
+                    <button id="adminUsers" class="ui-btn ui-icon-user ui-btn-icon-left">Usuarios</button>
+                    <button id="adminSites" class="ui-btn ui-icon-home ui-btn-icon-left">Restaurantes</button>
+                    <button id="adminDonate" class="ui-btn ui-icon-heart ui-btn-icon-left">Donar comida</button>
+                    <button id="adminMenuLogout" class="ui-btn logout ui-icon-delete ui-btn-icon-left">Salir</button>
+                </div>
+            </div>
+        </div>
 
         <!-- DONATE PAGE -->
-        <div data-role="page" data-theme="a" id="donatePage">
+        <div data-role="page" data-theme="a" id="donatePage" >
 
             <!-- ====== main content starts here ===== -->  
-            <div data-role="header" id="donationFormHeader" data-nobackbtn="true">
-                <h3>Donar comida</>
+            <div data-role="header" id="donationFormHeader">
+                <h3>Donar comida</h3>
             </div>  
             <div data-role="content" id="donationFormContent">
                 <form>
@@ -108,8 +124,11 @@
                         <label for="SaladSlider">Ensaladas:</label>
                         <input type="range" name="SaladSlider" id="SaladSlider" data-highlight="true" data-popup_enabled="true" value="5" min="0" max="25" />
                     </div>
-                    <button id="addDonationButton" class="ui-btn ui-icon-heart ui-btn-icon-left">Donar</button>
-                    <button id="logout" class="ui-btn logout ui-icon-delete ui-btn-icon-left">Salir</button>
+                    <div data-role="controlgroup"  data-type="horizontal">
+                        <button id="addDonationButton" class="ui-btn ui-icon-heart ui-btn-icon-left">Donar</button>
+                        <button id="donateBackButton" class="ui-btn back-to-menu ui-icon-back ui-btn-icon-left">Volver</button>
+                        <button id="donateFormLogout" class="ui-btn logout ui-icon-delete ui-btn-icon-left">Salir</button>
+                    </div>
                 </form>
             </div>  
             <div data-role="footer" id="donationFormFooter"></div>  
@@ -126,8 +145,10 @@
             </div>  
             <div data-role="content" id="donationFormConfirmationContent" >  
                 <p>Muchas gracias por notificar esta donaci&oacute;n de comida.</p>
-                <button id="volverButton" class="ui-btn ui-icon-back ui-btn-icon-left">Hacer otra donaci&oacute;n</button>
-                <button id="donateLogout" class="ui-btn logout ui-icon-delete ui-btn-icon-left">Salir</button>
+                <div data-role="controlgroup">
+                    <button id="volverButton" class="ui-btn ui-icon-back ui-btn-icon-left">Hacer otra donaci&oacute;n</button>
+                    <button id="donateLogout" class="ui-btn logout ui-icon-delete ui-btn-icon-left">Salir</button>
+                </div>  
             </div>  
             <div data-role="footer" id="donationFormConfirmationFooter"></div>  
             <!-- ====== confirmation content ends here ===== -->

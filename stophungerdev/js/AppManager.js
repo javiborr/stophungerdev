@@ -42,12 +42,15 @@
         // SI encuentra usuario registrado
         if (mPeopleManager.CurrentUserIsValid()) {
             // SI rol Giver
-            if (mPeopleManager.CurrentUserIsGiver()) {
-                // TODO SI admin etc
-                mDonateView.ShowPageDonate();
-            } else {
-                mDonateView.ShowPageNoRol();
-            }
+            if (mPeopleManager.CurrentUserIsAdmin()) {
+                mDonateView.ShowPageAdminMenu();
+            } else
+                if (mPeopleManager.CurrentUserIsGiver()) {
+                    // TODO SI admin etc
+                    mDonateView.ShowPageDonate(false);
+                } else {
+                    mDonateView.ShowPageNoRol();
+                }
         } else {
             mDonateView.ShowPageNoUser();
         }
