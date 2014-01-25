@@ -55,6 +55,11 @@
         mDonatePage = (mDonatePage || $("#donatePage"));
         return mDonatePage;
     }
+    var mAdminUserListPage = null;
+    function _getAdminUserListPage() {
+        mAdminUserListPage = (mAdminUserListPage || $("#adminUserListPage"));
+        return mAdminUserListPage;
+    }
     // -----------------------------------------------------
     // Main form
     var mDonationFormHeader = null;
@@ -158,6 +163,11 @@
         pevt.preventDefault();
     }
     //
+    function _adminUsersButtonClick(pevt) {
+        _getDonateController().ShowPageAdminUserList();
+        pevt.preventDefault();
+    }
+    //
     //function _refreshButtonClick(pevt) {
     //    _getDonateController().RefreshDonations();
     //    pevt.preventDefault();
@@ -166,7 +176,8 @@
     function _setup() {
         //$.mobile.toolbar.prototype.options.addBackBtn = true;
         //$.mobile.toolbar.prototype.options.backBtnText = "Volver";
-        //
+        // 
+        $("#adminUsers").button().click(_adminUsersButtonClick);
         $("#adminDonate").button().click(_adminDonateButtonClick);
         $("#requestAccess").button().click(_requestAccessButtonClick);
         $("#addDonationButton").button().click(_addDonationButtonClick);
@@ -182,37 +193,11 @@
         var p = _getAccessRequestedPage();
         _showPage(p);
     }
-    //// Sets logged in status
-    //Constr.prototype.SetLogged = function (p) {
-    //    var ko = (p !== true);
-    //    mUserLoggedIn = (p === true);
-        //mBreadInput.prop('disabled', ko);
-        //mCakesInput.prop('disabled', ko);
-        //mSandwichesInput.prop('disabled', ko);
-        //mSaladsInput.prop('disabled', ko);
-        //$("input").prop('disabled', ko);
-        //$("#addDonationButton").button("option", "disabled", ko);
-        //$("#refreshButton").button("option", "disabled", ko);
-        // jQuery Mobile
-        // SI logado
-    //    if (mUserLoggedIn) {
-    //        //$.mobile.pageContainer.change($("#mainPage"));
-    //        var page = _getDonatePage();
-    //        $.mobile.pageContainer.pagecontainer("change", page, {transition: 'slide'});
-    //        _showDonationForm();
-    //        _hideConfirmation();
-    //        _hideContentTransition();
-    //    } else {
-    //        // TODO
-    //        var page = _getLoginPage();
-    //        //$.mobile.changePage(page);
-    //        //$.mobile.pageContainer.change(page);
-    //        $.mobile.pageContainer.pagecontainer("change", page, { transition: 'slide' });
-    //    }
-    //}
+    //
     function _showPage(p) {
         $.mobile.pageContainer.pagecontainer("change", p, { transition: 'fade' });
     }
+    //
     Constr.prototype.ShowPageDonate = function (pisadmin) {
         if (pisadmin === true) {
             $('#donateBackButton').parent().show();
@@ -237,6 +222,12 @@
     }
     Constr.prototype.ShowPageAdminMenu = function () {
         _showPage(_getAdminMenuPage());
+    }
+    Constr.prototype.ShowPageAdminUserList = function (presponse) {
+        var template = $('#personListItemTpl').html();
+        var html = Mustache.to_html(template, presponse);
+        $('#adminUserList').html(html).listview('refresh');
+        _showPage(_getAdminUserListPage());
     }
     //
     // Read current data and rebuild UI.

@@ -55,8 +55,8 @@
             mDonateView.ShowPageNoUser();
         }
     }
-    function _showError(perr) {
-        alert(perr);
+    function _showError(perror) {
+        alert(perror);
     }
     //
     Constr.prototype.LogoutEnd = function () {

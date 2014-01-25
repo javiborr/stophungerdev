@@ -112,6 +112,12 @@
         );
     }
     //
+    // Gets all users from DB
+    Constr.prototype.GetAllUsersFromDB = function (pcbkok, pcbkerr) {
+        _getPeopleManager().GetAllUsersFromDB(pcbkok, pcbkerr);
+    }
+    // -----------------------------------------------
+    //
     Constr.prototype.Logout = function () {
         _getFBManager().Logout(function () {
             _getAppManager().LogoutEnd();

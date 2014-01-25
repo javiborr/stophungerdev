@@ -17,52 +17,32 @@
         me = this;
     }
     // -----------------------------------------------
-    // Gets current user from DB
-    Constr.prototype.GetUserDataFromDB = function (pfbid, pcbkok, pcbkerr) {
-        _getUserDataFromDB(pfbid, pcbkok, pcbkerr);
+    // Gets all users from DB
+    Constr.prototype.GetAllUsersFromDB = function (pcbkok, pcbkerr) {
+        var data = mMSClient.getTable('people')
+            .read()
+            .done(
+                function (presponse) {
+                    if (pcbkok) pcbkok(presponse);
+                }
+                , function (perror) {
+                    if (pcbkerr) pcbkerr(perror);
+                }
+            );
     }
     // -----------------------------------------------
-    // Sets current user FBID and gets all data from DB not FB
-    Constr.prototype.SetCurrentUserFBID = function (pfbid, puname, pcbkok, pcbkerr) {
-        _getUserDataFromDB(pfbid
-            , function (presponse) {
-                // SI ok
-                if (presponse && presponse.length > 0) {
-                    mCurrentUserData = {
-                        valid: true,
-                        id: presponse[0].id,
-                        FBID: pfbid,
-                        userName: presponse[0].UserName,
-                        admin: presponse[0].Admin,
-                        gives: presponse[0].Gives,
-                        takes: presponse[0].Takes,
-                        siteID: presponse[0].SiteID
-                    };
-                    if (pcbkok) pcbkok(presponse);
-                } else {
-                    //var data = {id: pfbid, userName: puname};
-                    //me.Create(data, pcbkok, pcbkerr);
-                    pcbkok();
-                }
-            }
-            , pcbkerr);
-    }
-    //
-    function _getUserDataFromDB(pfbid, pcbkok, pcbkerr) {
+    // Gets current user from DB
+    Constr.prototype.GetUserDataFromDB = function (pfbid, pcbkok, pcbkerr) {
         var filter = { FBID: pfbid };
         var data = mMSClient.getTable('people')
             .where(filter)
             .read()
             .done(
-                function (pres) {
-                    //var s = JSON.stringify(pres);
-                    //alert(s);
-                    if (pcbkok) pcbkok(pres);
+                function (presponse) {
+                    if (pcbkok) pcbkok(presponse);
                 }
-                , function (perr) {
-                    //var s = JSON.stringify(perr);
-                    //alert(s);
-                    if (pcbkerr) pcbkerr(perr);
+                , function (perror) {
+                    if (pcbkerr) pcbkerr(perror);
                 }
             );
     }
@@ -82,10 +62,10 @@
             .where(filter)
             .read()
             .done(
-                function (pres) {
+                function (presponse) {
                     // SI encuentra el usuario 
-                    if (pres && pres.length > 0) {
-                        var udata = pres[0];
+                    if (presponse && presponse.length > 0) {
+                        var udata = presponse[0];
                         alert('Ya existe tu usuario');
                         if (pcbkok) pcbkok();
                     } else {
@@ -101,10 +81,10 @@
                         table.insert(data).then(pcbkok, pcbkerr);
                     }
                 }
-                , function (perr) {
-                    var s = JSON.stringify(perr);
+                , function (perror) {
+                    var s = JSON.stringify(perror);
                     //alert(s);
-                    if (pcbkerr) pcbkerr(perr);
+                    if (pcbkerr) pcbkerr(perror);
                 }
             );
     }

@@ -11,6 +11,7 @@
         <link href="js/lib/jquery.mobile.min.css" rel="stylesheet" />
         <script src="js/lib/jquery.mobile.min.js"></script>
         <script src="js/lib/MobileServices.Web.min.js"></script>
+        <script src="js/lib/mustache.js"></script>
         <script src="js/index.js"></script>
         <script src="js/FBManager.js"></script>
         <script src="js/PeopleManager.js"></script>
@@ -21,10 +22,17 @@
         <script src="js/AppManager.js"></script>
         <script type="text/javascript">
             function mystuff() {
-                //$("#saluda").html('hola jquery');
                 var man = new AppManager();
                 man.Init();
             }
+        </script>
+        <!-- Templates -->
+        <script id="personListItemTpl" type="text/template">
+            {{#users}}
+                <li><a href="javascript:void(0)" onclick="alert('Hola {{FirstName}}')">{{FirstName}} {{LastName}}
+                    <br /> A:{{Admin}} D:{{Gives}} R:{{Takes}}</a>
+                </li>
+            {{/users}}
         </script>
     </head>
     <body>
@@ -99,6 +107,20 @@
                 </div>
             </div>
         </div>
+
+        <!-- Admin users PAGE -->
+        <div data-role="page" data-theme="a" id="adminUserListPage">
+            <div data-role="header" id="Div15">
+                <h3>Usuarios</h3>
+            </div>  
+            <div data-role="content" id="Div16">
+                <ul id="adminUserList" data-role="listview" data-filter="true"
+                    data-filter-placeholder="Buscar..." data-inset="true">
+                </ul>
+                <button id="adminUserListBackButton" class="ui-btn back-to-menu ui-icon-back ui-btn-icon-left">Volver</button>
+            </div>
+        </div>
+
 
         <!-- DONATE PAGE -->
         <div data-role="page" data-theme="a" id="donatePage" >

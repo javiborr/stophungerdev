@@ -55,8 +55,21 @@
         //var cudata = _getFBManager().GetCurrentUserFBData();
         _getUserManager().Create(_requestAccessOK, _handleError);
     }
+    //
     function _requestAccessOK() {
         _getDonateView().AccessRequestedEnd();
+    }
+    // -----------------------------------------------
+    // Admin user list
+    Constr.prototype.ShowPageAdminUserList = function () {
+        var view = _getDonateView();
+        view.WaitingForServer();
+        _getUserManager().GetAllUsersFromDB(
+            function (presponse) {
+                var data = {'users':presponse};
+                view.ShowPageAdminUserList(data);
+            }
+            , _handleError);
     }
     // -----------------------------------------------
     // Show donations
