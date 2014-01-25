@@ -226,8 +226,9 @@
     Constr.prototype.ShowPageAdminUserList = function (presponse) {
         var template = $('#personListItemTpl').html();
         var html = Mustache.to_html(template, presponse);
-        $('#adminUserList').html(html).listview('refresh');
+        $('#adminUserList').html(html);
         _showPage(_getAdminUserListPage());
+        $('#adminUserList').listview('refresh');
     }
     //
     // Read current data and rebuild UI.
