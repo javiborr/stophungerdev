@@ -6,6 +6,7 @@
     var mDonateView = null;
     var mFBManager = null;
     var mPeopleManager = null;
+    var mUserManager = null;
     //
     var mActivePage = 'start';
     //
@@ -29,10 +30,9 @@
     // Takes: checkPage
     Constr.prototype.SetLogged = function (pislogged) {
         if (pislogged === true) {
-            // TODO state and user role
-            //mDonateView.WaitingForServer();
-            var udata = mFBManager.GetCurrentUserFBData();
-            mPeopleManager.SetCurrentUserFBID(udata.id, udata.userName, _showPageForRol, _showError);
+            // Gets user data from FB and DB
+            mDonateView.WaitingForServer('Datos de FaceBook...');
+            mUserManager.GetCurrentUserFromFBDB(_showPageForRol, _showError);
         } else {
             this.LogoutEnd();
         }
@@ -40,15 +40,15 @@
     // TODO
     function _showPageForRol() {
         // SI encuentra usuario registrado
-        if (mPeopleManager.CurrentUserIsValid()) {
+        if (mUserManager.CurrentUserIsValid()) {
             // SI rol Giver
-            if (mPeopleManager.CurrentUserIsAdmin()) {
+            if (mUserManager.CurrentUserIsAdmin()) {
                 mDonateView.ShowPageAdminMenu();
             } else
-                if (mPeopleManager.CurrentUserIsGiver()) {
-                    // TODO SI admin etc
+                if (mUserManager.CurrentUserIsGiver()) {
                     mDonateView.ShowPageDonate(false);
                 } else {
+                    // TODO Receiver
                     mDonateView.ShowPageNoRol();
                 }
         } else {
@@ -73,25 +73,24 @@
         mDonateView = new DonateView();
         mFBManager = new FBManager();
         mPeopleManager = new PeopleManager();
+        mUserManager = new UserManager();
+        //
+        mFBManager.SetUserManager(mUserManager);
         // 
+        mUserManager.SetFBManager(mFBManager);
+        mUserManager.SetPeopleManager(mPeopleManager);
+        mUserManager.SetAppManager(me);
+        //
         mDonateController.SetDonationManager(mDonationManager);
         mDonateController.SetDonateView(mDonateView);
-        mDonateController.SetFBManager(mFBManager);
-        mDonateController.SetPeopleManager(mPeopleManager);
+        mDonateController.SetUserManager(mUserManager);
         //
         mDonateView.SetDonateController(mDonateController);
         mDonateView.Setup();
         //
-        // TODO page navigation
         mDonateView.ShowPageLogin();
         //
-        mFBManager.SetAppManager(me);
-        mFBManager.Init();
-        //
-        // On initial load, start by fetching the current data
-        //mDonateController.RefreshDonations();
-        //alert('END init');
-        //
+        mUserManager.Init();
     }
     //
     return Constr;

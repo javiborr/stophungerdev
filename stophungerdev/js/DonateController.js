@@ -11,21 +11,21 @@
         return mDonationManager;
     }
     // Gestor datos usuario
-    var mPeopleManager;
-    function _getPeopleManager() {
-        if (mPeopleManager === null) {
-            throw 'DonateController mPeopleManager is null';
+    var mUserManager;
+    function _getUserManager() {
+        if (mUserManager === null) {
+            throw 'DonateController mUserManager is null';
         }
-        return mPeopleManager;
+        return mUserManager;
     }
     // FB
-    var mFBManager;
-    function _getFBManager() {
-        if (mFBManager === null) {
-            throw 'DonateController mFBManager is null';
-        }
-        return mFBManager;
-    }
+    //var mFBManager;
+    //function _getFBManager() {
+    //    if (mFBManager === null) {
+    //        throw 'DonateController mFBManager is null';
+    //    }
+    //    return mFBManager;
+    //}
     // Maneja la UI
     var mDonateView;
     function _getDonateView() {
@@ -39,21 +39,21 @@
     // -----------------------------------------------------
     var Constr = function () { }
     //
-    Constr.prototype.SetFBManager = function (p) { mFBManager = p; }
+    //Constr.prototype.SetFBManager = function (p) { mFBManager = p; }
     Constr.prototype.SetDonationManager = function (p) { mDonationManager = p; }
-    Constr.prototype.SetPeopleManager = function (p) { mPeopleManager = p; }
+    Constr.prototype.SetUserManager = function (p) { mUserManager = p; }
     Constr.prototype.SetDonateView = function (p) { mDonateView = p; }
     //
     // -----------------------------------------------
     // Logout
     Constr.prototype.LogoutStart = function () {
-        _getFBManager().Logout();
+        _getUserManager().Logout();
     }
     // RequestAccess
     Constr.prototype.RequestAccessStart = function () {
         _getDonateView().WaitingForServer();
-        var cudata = _getFBManager().GetCurrentUserFBData();
-        _getPeopleManager().Create(cudata, _requestAccessOK, _handleError);
+        //var cudata = _getFBManager().GetCurrentUserFBData();
+        _getUserManager().Create(_requestAccessOK, _handleError);
     }
     function _requestAccessOK() {
         _getDonateView().AccessRequestedEnd();

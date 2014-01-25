@@ -14,6 +14,7 @@
         <script src="js/index.js"></script>
         <script src="js/FBManager.js"></script>
         <script src="js/PeopleManager.js"></script>
+        <script src="js/UserManager.js"></script>
         <script src="js/DonationManager.js"></script>
         <script src="js/DonateView.js"></script>
         <script src="js/DonateController.js"></script>
@@ -36,7 +37,7 @@
             </div>  
             <div data-role="content" id="loginContent">
                 <p>Por favor usa tu cuenta en FaceBook para hacer login</p>
-                <fb:login-button show-faces="true" width="200" max-rows="1"></fb:login-button>
+                <fb:login-button scope="email" show-faces="true" width="200" max-rows="1">Bienvenido</fb:login-button>
             </div>
         </div>
 

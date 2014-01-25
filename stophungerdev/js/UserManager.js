@@ -1,0 +1,135 @@
+﻿UserManager = (function ($) {
+    // -----------------------------------------------------
+    // Privado
+    // -----------------------------------------------------
+    // AppManager
+    var mAppManager = null;
+    function _getAppManager() {
+        if (typeof (mAppManager) == 'undefined' || mAppManager === null) {
+            throw Exception('UserManager error! mAppManager is null');
+        }
+        return mAppManager;
+    }
+    // FB user data
+    var mFBManager = null;
+    function _getFBManager() {
+        if (mFBManager === null) {
+            throw 'UserManager mFBManager is null';
+        }
+        return mFBManager;
+    }
+    // DB user data
+    var mPeopleManager = null;
+    function _getPeopleManager() {
+        if (mPeopleManager === null) {
+            throw 'UserManager mPeopleManager is null';
+        }
+        return mPeopleManager;
+    }
+    // User data
+    var mCurrentUserDBData = null;
+    var mCurrentUserFBData = null;
+    // -----------------------------------------------------
+    // Constructor
+    // -----------------------------------------------------
+    var Constr = function () {
+    }
+    Constr.prototype.SetFBManager = function (p) { mFBManager = p; }
+    Constr.prototype.SetPeopleManager = function (p) { mPeopleManager = p; }
+    //
+    Constr.prototype.SetAppManager = function (p) { mAppManager = p; }
+    //
+    Constr.prototype.Init = function () {
+        var fbman = _getFBManager();
+        fbman.Init();
+    }
+    //
+    Constr.prototype.SetLogged = function (pislogged) {
+        _getAppManager().SetLogged(pislogged);
+    }
+    // -----------------------------------------------
+    // Get current user data
+    Constr.prototype.CurrentUserIsValid = function () {
+        var res = false;
+        if (typeof (mCurrentUserDBData) !== 'undefined' && mCurrentUserDBData !== null) {
+            res = (mCurrentUserDBData.valid === true);
+        }
+        return res;
+    }
+    Constr.prototype.CurrentUserIsAdmin = function () {
+        var res = false;
+        if (typeof (mCurrentUserDBData) !== 'undefined' && mCurrentUserDBData !== null) {
+            res = (mCurrentUserDBData.admin === true);
+        }
+        return res;
+    }
+    Constr.prototype.CurrentUserIsGiver = function () {
+        var res = false;
+        if (typeof (mCurrentUserDBData) !== 'undefined' && mCurrentUserDBData !== null) {
+            res = (mCurrentUserDBData.gives === true);
+        }
+        return res;
+    }
+    Constr.prototype.CurrentUserIsTaker = function () {
+        var res = false;
+        if (typeof (mCurrentUserDBData) !== 'undefined' && mCurrentUserDBData !== null) {
+            res = (mCurrentUserDBData.takes === true);
+        }
+        return res;
+    }
+    //
+    // FB logado seguro
+    // DB puede existir o no. Si no existe NO crea el usuario en DB
+    Constr.prototype.GetCurrentUserFromFBDB = function (pcbkok, pcbkerr) {
+        var fbman = _getFBManager();
+        // Debemos estar logados en FB asi que debemos poder recuperar los datos FB
+        fbman.GetCurrentUserFromFB(
+            function (pfbdata) {
+                var pman = _getPeopleManager();
+                // Got FB data
+                mCurrentUserFBData = pfbdata;
+                // Get DB data maybe there is not
+                pman.GetUserDataFromDB(pfbdata.id,
+                    function (presponse) {
+                        // SI hay datos en DB
+                        if (presponse && presponse.length > 0) {
+                            // Got DB data
+                            mCurrentUserDBData = {
+                                valid: true,
+                                id: presponse[0].id,
+                                FBID: pfbdata.id,
+                                userName: presponse[0].UserName,
+                                admin: presponse[0].Admin,
+                                gives: presponse[0].Gives,
+                                takes: presponse[0].Takes,
+                                siteID: presponse[0].SiteID
+                            };
+                        }
+                        if (pcbkok) pcbkok(presponse);
+                    }, pcbkerr
+                );
+            }, pcbkerr
+        );
+    }
+    //
+    Constr.prototype.Logout = function () {
+        _getFBManager().Logout(function () {
+            _getAppManager().LogoutEnd();
+        });
+    }
+    // -----------------------------------------------
+    // Creates user
+    // FB data: {
+    //name: presponse.name,
+    //id: presponse.id,
+    //userName: presponse.username,
+    //firstName: presponse.first_name,
+    //lastName: presponse.last_name,
+    //}
+    Constr.prototype.Create = function (pcbkok, pcbkerr) {
+        var cudata = _getFBManager().GetCurrentUserFBData();
+        _getPeopleManager().Create(cudata, pcbkok, pcbkerr);
+    }
+    //
+    return Constr;
+}(jQuery));

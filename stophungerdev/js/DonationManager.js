@@ -20,9 +20,9 @@ DonationManager = (function ($) {
     }
     // -----------------------------------------------
     // Creates donation
-    Constr.prototype.Create = function (pdata, pcallbok, pcallberr) {
+    Constr.prototype.Create = function (pdata, pcbkok, pcbkerr) {
         var data = mMSClient.getTable('donations');
-        data.insert(pdata).then(pcallbok, pcallberr);
+        data.insert(pdata).then(pcbkok, pcbkerr);
     }
     //
     return Constr;
