@@ -22,6 +22,9 @@
     Constr.prototype.WaitingForServer = function (pmsg) {
         mDonateView.WaitingForServer(pmsg);
     }
+    Constr.prototype.ShowUserData = function (pfbid) {
+        mDonateController.ShowPageAdminUser(pfbid);
+    }
     // Si usuario no esta logado en FB muestra loginPage
     // Si usuario esta logado en FB consulta su rol
     // No rol: nouserPage

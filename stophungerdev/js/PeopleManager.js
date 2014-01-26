@@ -7,6 +7,8 @@
     //
     var mMSClient;
     var me = null;
+    // Cache all users
+    var mCacheAllUsers = null;
     // User data
     //var mCurrentUserData = null;
     // -----------------------------------------------------
@@ -19,16 +21,41 @@
     // -----------------------------------------------
     // Gets all users from DB
     Constr.prototype.GetAllUsersFromDB = function (pcbkok, pcbkerr) {
-        var data = mMSClient.getTable('people')
+        mCacheAllUsers = null;
+        mMSClient.getTable('people')
             .read()
             .done(
                 function (presponse) {
+                    mCacheAllUsers = presponse;
                     if (pcbkok) pcbkok(presponse);
                 }
                 , function (perror) {
                     if (pcbkerr) pcbkerr(perror);
                 }
             );
+    }
+    // -----------------------------------------------
+    // Gets user from DB
+    Constr.prototype.GetUserDataFromCacheOrDB = function (pfbid, pcbkok, pcbkerr) {
+        var udata = null;
+        // SI hay cache
+        if (mCacheAllUsers !== null && mCacheAllUsers.length > 0) {
+            // PARA CADA user
+            for (var i = 0; i < mCacheAllUsers.length; i++) {
+                // SI found
+                if (pfbid === mCacheAllUsers[i].FBID) {
+                    udata = mCacheAllUsers[i];
+                    break;
+                }
+            }
+        }
+        // SI NO cache
+        if (udata == null) {
+            me.GetUserDataFromDB(pfbid, pcbkok, pcbkerr);
+        } else {
+            var res = [udata];
+            if (pcbkok) pcbkok(res);
+        }
     }
     // -----------------------------------------------
     // Gets current user from DB

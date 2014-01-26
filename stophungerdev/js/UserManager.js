@@ -112,6 +112,11 @@
         );
     }
     //
+    // -----------------------------------------------
+    // Gets user from DB
+    Constr.prototype.GetUserDataFromCacheOrDB = function (pfbid, pcbkok, pcbkerr) {
+        _getPeopleManager().GetUserDataFromCacheOrDB(pfbid, pcbkok, pcbkerr);
+    }
     // Gets all users from DB
     Constr.prototype.GetAllUsersFromDB = function (pcbkok, pcbkerr) {
         _getPeopleManager().GetAllUsersFromDB(pcbkok, pcbkerr);

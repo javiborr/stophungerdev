@@ -21,18 +21,25 @@
         <script src="js/DonateController.js"></script>
         <script src="js/AppManager.js"></script>
         <script type="text/javascript">
+            var gAppManager = null;
             function mystuff() {
-                var man = new AppManager();
-                man.Init();
+                gAppManager = new AppManager();
+                gAppManager.Init();
             }
         </script>
         <!-- Templates -->
         <script id="personListItemTpl" type="text/template">
             {{#users}}
-                <li><a href="javascript:void(0)" onclick="alert('Hola {{FirstName}}')">{{FirstName}} {{LastName}}
-                    <br /> A:{{Admin}} D:{{Gives}} R:{{Takes}}</a>
+                <li><a href="javascript:void(0)" onclick="gAppManager.ShowUserData('{{FBID}}')">
+                    <img src="http://graph.facebook.com/{{UserName}}/picture"/>
+                    <h4>{{FirstName}} {{LastName}}</h4>
+                    <p> <span class="ui-li-count">A:{{Admin}} D:{{Gives}} R:{{Takes}}</span></p></a>
                 </li>
             {{/users}}
+        </script>
+        <script id="personTpl" type="text/template">
+            <img src="http://graph.facebook.com/{{UserName}}/picture"/>
+            <h4>{{FirstName}} {{LastName}}</h4>
         </script>
     </head>
     <body>
@@ -121,6 +128,27 @@
             </div>
         </div>
 
+        <!-- Admin user form PAGE -->
+        <div data-role="page" data-add-back-btn="true" id="adminUserFormPage">
+            <div data-role="header">
+	            <h3>Usuario</h3>
+            </div>
+            <div data-role="content">
+                <div id="adminUserData"></div>
+                <form autocomplete="off">
+                    <fieldset data-role="controlgroup" data-type="horizontal">
+                        <legend>Permisos:</legend>
+                        <input name="radioRol" id="radioRolAdmin" type="radio" value="admin">
+                        <label for="radioRolAdmin">Admin</label>
+                        <input name="radioRol" id="radioRolGives" type="radio" value="gives">
+                        <label for="radioRolGives">Donante</label>
+                        <input name="radioRol" id="radioRolTakes" type="radio" value="takes">
+                        <label for="radioRolTakes">Recoge</label>
+                    </fieldset>
+                    <button id="adminUserFormBackButton" class="ui-btn back-to-userlist ui-icon-back ui-btn-icon-left">Volver</button>
+                </form>
+            </div>
+        </div>
 
         <!-- DONATE PAGE -->
         <div data-role="page" data-theme="a" id="donatePage" >

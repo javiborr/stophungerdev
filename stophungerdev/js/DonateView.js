@@ -60,6 +60,28 @@
         mAdminUserListPage = (mAdminUserListPage || $("#adminUserListPage"));
         return mAdminUserListPage;
     }
+    var mAdminUserPage = null;
+    function _getAdminUserPage() {
+        mAdminUserPage = (mAdminUserPage || $("#adminUserFormPage"));
+        return mAdminUserPage;
+    }
+    // -----------------------------------------------------
+    // Admin user form Rol checkboxes
+    var mAdminUserRolAdminCheck = null;
+    function _getAdminUserRolAdminCheck() {
+        mAdminUserRolAdminCheck = (mAdminUserRolAdminCheck || $("#radioRolAdmin"));
+        return mAdminUserRolAdminCheck;
+    }
+    var mAdminUserRolGivesCheck = null;
+    function _getAdminUserRolGivesCheck() {
+        mAdminUserRolGivesCheck = (mAdminUserRolGivesCheck || $("#radioRolGives"));
+        return mAdminUserRolGivesCheck;
+    }
+    var mAdminUserRolTakesCheck = null;
+    function _getAdminUserRolTakesCheck() {
+        mAdminUserRolTakesCheck = (mAdminUserRolTakesCheck || $("#radioRolTakes"));
+        return mAdminUserRolTakesCheck;
+    }
     // -----------------------------------------------------
     // Main form
     var mDonationFormHeader = null;
@@ -163,6 +185,11 @@
         pevt.preventDefault();
     }
     //
+    function _backToUserListButtonClick(pevt) {
+        _getDonateController().ShowPageAdminUserList();
+        pevt.preventDefault();
+    }
+    //
     function _adminUsersButtonClick(pevt) {
         _getDonateController().ShowPageAdminUserList();
         pevt.preventDefault();
@@ -183,6 +210,7 @@
         $("#addDonationButton").button().click(_addDonationButtonClick);
         $(".ui-btn.logout").button().click(_logoutButtonClick);
         $(".ui-btn.back-to-menu").button().click(_backToMenuButtonClick);
+        $(".ui-btn.back-to-userlist").button().click(_backToUserListButtonClick);
         $("#volverButton").button().click(_volverButtonClick);
         //$("#refreshButton").button().click(_refreshButtonClick);
     }
@@ -223,12 +251,43 @@
     Constr.prototype.ShowPageAdminMenu = function () {
         _showPage(_getAdminMenuPage());
     }
+    // -----------------------------------------------
+    // Muestra la lista de usuarios
     Constr.prototype.ShowPageAdminUserList = function (presponse) {
         var template = $('#personListItemTpl').html();
         var html = Mustache.to_html(template, presponse);
-        $('#adminUserList').html(html);
+        var ui = $('#adminUserList');
+        ui.html(html);
         _showPage(_getAdminUserListPage());
-        $('#adminUserList').listview('refresh');
+        ui.listview('refresh');
+    }
+    // Muestra un usuario
+    Constr.prototype.ShowPageAdminUser = function (pudata) {
+        if (pudata !== null && pudata.length > 0) {
+            var template = $('#personTpl').html();
+            var html = Mustache.to_html(template, pudata[0]);
+            var ui = $('#adminUserData');
+            ui.html(html);
+            //
+            var r1 = _getAdminUserRolAdminCheck();
+            var r2 = _getAdminUserRolGivesCheck();
+            var r3 = _getAdminUserRolTakesCheck();
+            // SI es Admin
+            if (pudata[0].Admin == true) {
+                r1.attr('checked', true); //.checkboxradio('refresh');
+            } else
+                if (pudata[0].Gives == true) {
+                    r2.attr('checked', true); //.checkboxradio('refresh');
+                } else
+                    if (pudata[0].Takes == true) {
+                        r3.attr('checked', true); //.checkboxradio('refresh');
+                    }
+            //
+            _showPage(_getAdminUserPage());
+            r1.checkboxradio('refresh');
+            r2.checkboxradio('refresh');
+            r3.checkboxradio('refresh');
+        }
     }
     //
     // Read current data and rebuild UI.

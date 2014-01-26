@@ -71,6 +71,17 @@
             }
             , _handleError);
     }
+    // Admin user
+    Constr.prototype.ShowPageAdminUser = function (pfbid) {
+        var view = _getDonateView();
+        view.WaitingForServer();
+        _getUserManager().GetUserDataFromCacheOrDB(
+            pfbid,
+            function (pudata) {
+                view.ShowPageAdminUser(pudata);
+            }
+            , _handleError);
+    }
     // -----------------------------------------------
     // Show donations
     //Constr.prototype.RefreshDonations = function () {
