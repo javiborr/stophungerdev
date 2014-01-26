@@ -18,14 +18,6 @@
         }
         return mUserManager;
     }
-    // FB
-    //var mFBManager;
-    //function _getFBManager() {
-    //    if (mFBManager === null) {
-    //        throw 'DonateController mFBManager is null';
-    //    }
-    //    return mFBManager;
-    //}
     // Maneja la UI
     var mDonateView;
     function _getDonateView() {
@@ -34,6 +26,9 @@
         }
         return mDonateView;
     }
+    // User we are editing now
+    var mUserEditingFBID = null;
+    var mUserEditingID = null;
     // -----------------------------------------------------
     // Constructor
     // -----------------------------------------------------
@@ -73,14 +68,24 @@
     }
     // Admin user
     Constr.prototype.ShowPageAdminUser = function (pfbid) {
+        mUserEditingFBID = pfbid;
         var view = _getDonateView();
         view.WaitingForServer();
         _getUserManager().GetUserDataFromCacheOrDB(
             pfbid,
             function (pudata) {
-                view.ShowPageAdminUser(pudata);
+                if (pudata !== null && pudata.length > 0) {
+                    mUserEditingID = pudata[0].id;
+                    view.ShowPageAdminUser(pudata);
+                }
             }
             , _handleError);
+    }
+    Constr.prototype.SaveUser = function (pudata, pcbkok, pcbkerr) {
+        if (pudata !== null && mUserEditingID !== null) {
+            pudata.id = mUserEditingID;
+            _getUserManager().Save(pudata, pcbkok, pcbkerr);
+        }
     }
     // -----------------------------------------------
     // Show donations

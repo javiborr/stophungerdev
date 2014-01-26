@@ -190,6 +190,29 @@
         pevt.preventDefault();
     }
     //
+    function _adminUserFormSaveButtonClick(pevt) {
+        var udata = {};
+        // TODO other fields
+        var r1 = _getAdminUserRolAdminCheck();
+        var r2 = _getAdminUserRolGivesCheck();
+        var r3 = _getAdminUserRolTakesCheck();
+        udata.Admin = false;
+        udata.Gives = false;
+        udata.Takes = false;
+        // SEGUN rol
+        if (r1.prop('checked') === true) {
+            udata.Admin = true;
+        } else
+            if (r2.prop('checked') === true) {
+                udata.Gives = true;
+            } else
+                if (r3.prop('checked') === true) {
+                    udata.Takes = true;
+                }
+        _getDonateController().SaveUser(udata, _getDonateController().ShowPageAdminUserList, null);
+        pevt.preventDefault();
+    }
+    //
     function _adminUsersButtonClick(pevt) {
         _getDonateController().ShowPageAdminUserList();
         pevt.preventDefault();
@@ -204,6 +227,7 @@
         //$.mobile.toolbar.prototype.options.addBackBtn = true;
         //$.mobile.toolbar.prototype.options.backBtnText = "Volver";
         // 
+        $("#adminUserFormSaveButton").button().click(_adminUserFormSaveButtonClick);
         $("#adminUsers").button().click(_adminUsersButtonClick);
         $("#adminDonate").button().click(_adminDonateButtonClick);
         $("#requestAccess").button().click(_requestAccessButtonClick);
@@ -272,18 +296,21 @@
             var r1 = _getAdminUserRolAdminCheck();
             var r2 = _getAdminUserRolGivesCheck();
             var r3 = _getAdminUserRolTakesCheck();
-            r1.attr('checked', false);
-            r2.attr('checked', false);
-            r3.attr('checked', false);
+            r1.prop('checked', false);
+            r2.prop('checked', false);
+            r3.prop('checked', false);
+            //r1.checkboxradio('refresh');
+            //r2.checkboxradio('refresh');
+            //r3.checkboxradio('refresh');
             // SI es Admin
             if (pudata[0].Admin == true) {
-                r1.attr('checked', true);
+                r1.prop('checked', true);
             } else
                 if (pudata[0].Gives == true) {
-                    r2.attr('checked', true);
+                    r2.prop('checked', true);
                 } else
                     if (pudata[0].Takes == true) {
-                        r3.attr('checked', true);
+                        r3.prop('checked', true);
                     }
             //
             _showPage(_getAdminUserPage());

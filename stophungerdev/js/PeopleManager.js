@@ -115,6 +115,22 @@
                 }
             );
     }
+    Constr.prototype.Save = function (pdata, pcbkok, pcbkerr) {
+        mMSClient.getTable('people')
+            .update(pdata)
+            .done(
+                function (presponse) {
+                    //var s = JSON.stringify(presponse);
+                    //alert(s);
+                    if (pcbkok) pcbkok();
+                }
+                , function (perror) {
+                    //var s = JSON.stringify(perror);
+                    //alert(s);
+                    if (pcbkerr) pcbkerr(perror);
+                }
+            );
+    }
     //
     return Constr;
 }(jQuery));

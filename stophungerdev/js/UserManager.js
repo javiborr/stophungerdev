@@ -141,6 +141,9 @@
         var cudata = _getFBManager().GetCurrentUserFBData();
         _getPeopleManager().Create(cudata, pcbkok, pcbkerr);
     }
+    Constr.prototype.Save = function (pdata, pcbkok, pcbkerr) {
+        _getPeopleManager().Save(pdata, pcbkok, pcbkerr);
+    }
     //
     return Constr;
 }(jQuery));
