@@ -272,15 +272,18 @@
             var r1 = _getAdminUserRolAdminCheck();
             var r2 = _getAdminUserRolGivesCheck();
             var r3 = _getAdminUserRolTakesCheck();
+            r1.attr('checked', false);
+            r2.attr('checked', false);
+            r3.attr('checked', false);
             // SI es Admin
             if (pudata[0].Admin == true) {
-                r1.attr('checked', true); //.checkboxradio('refresh');
+                r1.attr('checked', true);
             } else
                 if (pudata[0].Gives == true) {
-                    r2.attr('checked', true); //.checkboxradio('refresh');
+                    r2.attr('checked', true);
                 } else
                     if (pudata[0].Takes == true) {
-                        r3.attr('checked', true); //.checkboxradio('refresh');
+                        r3.attr('checked', true);
                     }
             //
             _showPage(_getAdminUserPage());
