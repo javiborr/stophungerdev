@@ -8,14 +8,19 @@
         <link rel="stylesheet" type="text/css" href="css/index.css" />
         <title>Stop Hunger DEV</title>
         <script src="js/lib/jquery.min.js"></script>
+        <script src="js/lib/jquery.validate.js"></script>
+        <script src="js/lib/additional-methods.js"></script>
         <link href="js/lib/jquery.mobile.min.css" rel="stylesheet" />
         <script src="js/lib/jquery.mobile.min.js"></script>
         <script src="js/lib/MobileServices.Web.min.js"></script>
         <script src="js/lib/mustache.js"></script>
+        <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
+        <script src="js/lib/jquery.ui.map.js"></script>
         <script src="js/index.js"></script>
         <script src="js/FBManager.js"></script>
         <script src="js/PeopleManager.js"></script>
         <script src="js/UserManager.js"></script>
+        <script src="js/SiteManager.js"></script>
         <script src="js/DonationManager.js"></script>
         <script src="js/DonateView.js"></script>
         <script src="js/DonateController.js"></script>
@@ -40,6 +45,41 @@
         <script id="personTpl" type="text/template">
             <img src="http://graph.facebook.com/{{UserName}}/picture"/>
             <h4>{{FirstName}} {{LastName}}</h4>
+        </script>
+        <script id="siteListItemTpl" type="text/template">
+            {{#sites}}
+                <li><a href="javascript:void(0)" onclick="gAppManager.ShowSiteData('{{id}}')">
+                    <h4>{{name}}</h4>
+                    <p>{{Address1}} {{ZIP}} {{City}}</p></a>
+                </li>
+            {{/sites}}
+        </script>
+        <script id="siteTpl" type="text/template">
+            <p id="siteFormError"></p>
+            <div id="Div4" class="ui-field-contain">
+                <label for="SiteNameText">Nombre:</label>
+                <input type="text" class="required" minlength="5" name="SiteNameText" id="SiteNameText" value="{{name}}"/>
+            </div>
+            <div id="Div19" class="ui-field-contain">
+                <label for="Address1Text">Direcci&oacute;n:</label>
+                <input type="text" class="required" minlength="5" name="Address1Text" id="Address1Text" value="{{Address1}}"/>
+            </div>
+            <div id="Div21" class="ui-field-contain">
+                <label for="ZIPText">C&oacute;digo Postal:</label>
+                <input type="number" minlength="5"  maxlength="5" pattern="[0-9]{5}"  name="ZIPText" id="ZIPText" value="{{ZIP}}"/>
+            </div>
+            <div id="Div22" class="ui-field-contain">
+                <label for="CityText">Ciudad:</label>
+                <input type="text" class="required" minlength="5" name="CityText" id="CityText" value="{{City}}"/>
+            </div>
+            <div id="Div23" class="ui-field-contain">
+                <label for="LongitudText">Longitud:</label>
+                <input type="text" name="LongitudText" id="LongitudText" value="{{Longitud}}"/>
+            </div>
+            <div id="Div24" class="ui-field-contain">
+                <label for="LatitudText">Latitud:</label>
+                <input type="text" name="LatitudText" id="LatitudText" value="{{Latitud}}"/>
+            </div>
         </script>
     </head>
     <body>
@@ -122,12 +162,11 @@
             </div>  
             <div data-role="content" id="Div16">
                 <ul id="adminUserList" data-role="listview" data-filter="true"
-                    data-filter-placeholder="Buscar..." data-inset="true">
+                    data-filter-placeholder="Buscar usuario..." data-inset="true">
                 </ul>
                 <button id="adminUserListBackButton" class="ui-btn back-to-menu ui-icon-back ui-btn-icon-left">Volver</button>
             </div>
         </div>
-
         <!-- Admin user form PAGE -->
         <div data-role="page" data-add-back-btn="true" id="adminUserFormPage">
             <div data-role="header">
@@ -148,6 +187,34 @@
                     <button id="adminUserFormSaveButton" class="ui-btn ui-icon-check ui-btn-icon-left">Grabar</button>
                     <button id="adminUserFormBackButton" class="ui-btn back-to-userlist ui-icon-back ui-btn-icon-left">Volver</button>
                 </form>
+            </div>
+        </div>
+
+        <!-- Admin sites PAGE -->
+        <div data-role="page" data-theme="a" id="adminSiteListPage">
+            <div data-role="header" id="Div17">
+                <h3>Restaurantes</h3>
+            </div>  
+            <div data-role="content" id="Div18">
+                <ul id="adminSiteList" data-role="listview" data-filter="true"
+                    data-filter-placeholder="Buscar restaurante..." data-inset="true">
+                </ul>
+                <button id="adminSiteListBackButton" class="ui-btn back-to-menu ui-icon-back ui-btn-icon-left">Volver</button>
+            </div>
+        </div>
+
+        <!-- Admin site form PAGE -->
+        <div data-role="page" data-add-back-btn="true" id="adminSiteFormPage">
+            <div data-role="header">
+	            <h3>Restaurante</h3>
+            </div>
+            <div data-role="content">
+                <form autocomplete="off" id="adminSiteForm">
+                    <div id="adminSiteData"></div>
+                    <button id="adminSiteFormSaveButton" class="ui-btn ui-icon-check ui-btn-icon-left">Grabar</button>
+                    <button id="adminSiteFormBackButton" class="ui-btn back-to-sitelist ui-icon-back ui-btn-icon-left">Volver</button>
+                </form>
+                <div id="mapcanvas" style="height:350px;width:100%;"></div>
             </div>
         </div>
 
@@ -198,7 +265,7 @@
             <div data-role="content" id="donationFormConfirmationContent" >  
                 <p>Muchas gracias por notificar esta donaci&oacute;n de comida.</p>
                 <div data-role="controlgroup">
-                    <button id="volverButton" class="ui-btn ui-icon-back ui-btn-icon-left">Hacer otra donaci&oacute;n</button>
+                    <button id="volverDonateButton" class="ui-btn ui-icon-back ui-btn-icon-left">Hacer otra donaci&oacute;n</button>
                     <button id="donateLogout" class="ui-btn logout ui-icon-delete ui-btn-icon-left">Salir</button>
                 </div>  
             </div>  

@@ -55,6 +55,7 @@
         mDonatePage = (mDonatePage || $("#donatePage"));
         return mDonatePage;
     }
+    // Users
     var mAdminUserListPage = null;
     function _getAdminUserListPage() {
         mAdminUserListPage = (mAdminUserListPage || $("#adminUserListPage"));
@@ -64,6 +65,17 @@
     function _getAdminUserPage() {
         mAdminUserPage = (mAdminUserPage || $("#adminUserFormPage"));
         return mAdminUserPage;
+    }
+    // Sites
+    var mAdminSiteListPage = null;
+    function _getAdminSiteListPage() {
+        mAdminSiteListPage = (mAdminSiteListPage || $("#adminSiteListPage"));
+        return mAdminSiteListPage;
+    }
+    var mAdminSitePage = null;
+    function _getAdminSitePage() {
+        mAdminSitePage = (mAdminSitePage || $("#adminSiteFormPage"));
+        return mAdminSitePage;
     }
     // -----------------------------------------------------
     // Admin user form Rol checkboxes
@@ -168,7 +180,7 @@
         pevt.preventDefault();
     }
     //
-    function _volverButtonClick(pevt) {
+    function _volverDonateButtonClick(pevt) {
         _showDonationForm();
         _hideContentTransition();
         _hideConfirmation();
@@ -184,7 +196,7 @@
         me.ShowPageAdminMenu();
         pevt.preventDefault();
     }
-    //
+    // --------- USERS --------------------
     function _backToUserListButtonClick(pevt) {
         _getDonateController().ShowPageAdminUserList();
         pevt.preventDefault();
@@ -217,6 +229,42 @@
         _getDonateController().ShowPageAdminUserList();
         pevt.preventDefault();
     }
+    // --------- SITES --------------------
+    function _backToSiteListButtonClick(pevt) {
+        _getDonateController().ShowPageAdminSiteList();
+        pevt.preventDefault();
+    }
+    //
+    function _adminSiteFormSaveButtonClick(pevt) {
+        // TODO form validation
+        $.validator.setDefaults({
+            debug: true,
+            success: "valid"
+        });
+        var f = $("#adminSiteForm");
+        f.validate();
+        if ( f.valid() ) {
+            var data = {};
+            data.name = $('#SiteNameText').val();
+            data.Address1 = $('#Address1Text').val();
+            data.ZIP = $('#ZIPText').val();
+            data.City = $('#CityText').val();
+            data.Longitud = $('#LongitudText').val();
+            data.Latitud = $('#LatitudText').val();
+            // TODO other fields
+            _getDonateController().SaveSite(data, _getDonateController().ShowPageAdminSiteList, _adminSiteFormError);
+        }
+        pevt.preventDefault();
+    }
+    //
+    function _adminSitesButtonClick(pevt) {
+        _getDonateController().ShowPageAdminSiteList();
+        pevt.preventDefault();
+    }
+    //
+    function _adminSiteFormError(perror) {
+        $('#siteFormError').text(perror);
+    }
     //
     //function _refreshButtonClick(pevt) {
     //    _getDonateController().RefreshDonations();
@@ -227,15 +275,22 @@
         //$.mobile.toolbar.prototype.options.addBackBtn = true;
         //$.mobile.toolbar.prototype.options.backBtnText = "Volver";
         // 
+        // Users
         $("#adminUserFormSaveButton").button().click(_adminUserFormSaveButtonClick);
         $("#adminUsers").button().click(_adminUsersButtonClick);
+        $(".ui-btn.back-to-userlist").button().click(_backToUserListButtonClick);
+        // Sites
+        $("#adminSiteFormSaveButton").button().click(_adminSiteFormSaveButtonClick);
+        $("#adminSites").button().click(_adminSitesButtonClick);
+        $(".ui-btn.back-to-sitelist").button().click(_backToSiteListButtonClick);
+        // Donations
         $("#adminDonate").button().click(_adminDonateButtonClick);
-        $("#requestAccess").button().click(_requestAccessButtonClick);
         $("#addDonationButton").button().click(_addDonationButtonClick);
+        $("#volverDonateButton").button().click(_volverDonateButtonClick);
+        // Admin
+        $("#requestAccess").button().click(_requestAccessButtonClick);
         $(".ui-btn.logout").button().click(_logoutButtonClick);
         $(".ui-btn.back-to-menu").button().click(_backToMenuButtonClick);
-        $(".ui-btn.back-to-userlist").button().click(_backToUserListButtonClick);
-        $("#volverButton").button().click(_volverButtonClick);
         //$("#refreshButton").button().click(_refreshButtonClick);
     }
     Constr.prototype.SetDonateController = function (p) { mDonateController = p; }
@@ -317,6 +372,62 @@
             r1.checkboxradio('refresh');
             r2.checkboxradio('refresh');
             r3.checkboxradio('refresh');
+        }
+    }
+    //
+    // -----------------------------------------------
+    // Muestra la lista de sitios
+    Constr.prototype.ShowPageAdminSiteList = function (presponse) {
+        var template = $('#siteListItemTpl').html();
+        var html = Mustache.to_html(template, presponse);
+        var ui = $('#adminSiteList');
+        ui.html(html);
+        _showPage(_getAdminSiteListPage());
+        ui.listview('refresh');
+    }
+    // Muestra un sitio
+    Constr.prototype.ShowPageAdminSite = function (pudata) {
+        if (pudata !== null && pudata.length > 0) {
+            var template = $('#siteTpl').html();
+            var html = Mustache.to_html(template, pudata[0]);
+            var ui = $('#adminSiteData');
+            ui.html(html);
+            //
+            _showPage(_getAdminSitePage());
+            //
+            var long = $('#LongitudText').val();
+            var lat = $('#LatitudText').val();
+            var mapOptions = {
+                center: new google.maps.LatLng(long, lat),
+                zoom: 15,
+                mapTypeId: google.maps.MapTypeId.ROADMAP,
+                callback: function () {
+                    var self = this;
+                    self.addMarker({ 'position': this.get('map').getCenter() }).click(function () {
+                        self.openInfoWindow({ 'content': 'Hello World!' }, this);
+                    });
+                }
+            };
+            var map = new google.maps.Map(document.getElementById("mapcanvas"), mapOptions);
+            //
+            //var mobileDemo = { 'center': [long, lat].join(','), 'zoom': 10 };
+            //var map = $('#mapcanvas').gmap({
+            //    'center': mobileDemo.center,
+            //    'zoom': mobileDemo.zoom,
+            //    'disableDefaultUI': false,
+            //    'callback': function () {
+            //        var self = this;
+            //        self.addMarker({ 'position': this.get('map').getCenter() }).click(function () {
+            //            self.openInfoWindow({ 'content': 'Hello World!' }, this);
+            //        });
+            //    }
+            //});
+            google.maps.event.addListenerOnce(map, 'idle', function () {
+                setTimeout(function () {
+                    google.maps.event.trigger(map, 'resize');
+                }, 500);
+            });
+            //
         }
     }
     //

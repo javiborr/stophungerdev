@@ -39,6 +39,7 @@
     Constr.prototype.GetUserDataFromCacheOrDB = function (pfbid, pcbkok, pcbkerr) {
         var udata = null;
         // SI hay cache
+        // TODO expire cache
         if (mCacheAllUsers !== null && mCacheAllUsers.length > 0) {
             // PARA CADA user
             for (var i = 0; i < mCacheAllUsers.length; i++) {
@@ -58,7 +59,7 @@
         }
     }
     // -----------------------------------------------
-    // Gets current user from DB
+    // Gets user from DB
     Constr.prototype.GetUserDataFromDB = function (pfbid, pcbkok, pcbkerr) {
         var filter = { FBID: pfbid };
         var data = mMSClient.getTable('people')

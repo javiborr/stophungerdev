@@ -7,6 +7,7 @@
     var mFBManager = null;
     var mPeopleManager = null;
     var mUserManager = null;
+    var mSiteManager = null;
     //
     var mActivePage = 'start';
     //
@@ -24,6 +25,9 @@
     }
     Constr.prototype.ShowUserData = function (pfbid) {
         mDonateController.ShowPageAdminUser(pfbid);
+    }
+    Constr.prototype.ShowSiteData = function (pid) {
+        mDonateController.ShowPageAdminSite(pid);
     }
     // Si usuario no esta logado en FB muestra loginPage
     // Si usuario esta logado en FB consulta su rol
@@ -77,6 +81,7 @@
         mFBManager = new FBManager();
         mPeopleManager = new PeopleManager();
         mUserManager = new UserManager();
+        mSiteManager = new SiteManager();
         //
         mFBManager.SetUserManager(mUserManager);
         // 
@@ -87,6 +92,7 @@
         mDonateController.SetDonationManager(mDonationManager);
         mDonateController.SetDonateView(mDonateView);
         mDonateController.SetUserManager(mUserManager);
+        mDonateController.SetSiteManager(mSiteManager);
         //
         mDonateView.SetDonateController(mDonateController);
         mDonateView.Setup();
