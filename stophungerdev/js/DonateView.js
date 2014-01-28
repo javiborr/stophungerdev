@@ -339,10 +339,12 @@
                 , 'Debe ser parecido a 40.51325 o -3.67158'
                 );
             $("#adminSiteForm").validate();
-            //$("#mapCollapsible").on("collapsiblecollapse", function (event, ui) {
-            //    alert('Close');
-            //});
-            $("#mapCollapsible").on("collapsibleexpand", function (event, ui) {
+            var siteformcollap = $("#siteFormCollapsible");
+            var sitemapcollap = $("#mapCollapsible");
+            siteformcollap.on("collapsiblecollapse", function (event, ui) {
+                sitemapcollap.collapsible('expand');
+            });
+            sitemapcollap.on("collapsibleexpand", function (event, ui) {
                 var long = $('#LongitudText').val();
                 var lat = $('#LatitudText').val();
                 var map = _resetSiteMap(long, lat)
@@ -353,6 +355,8 @@
                         map.setCenter(center);
                     }, 1000);
                 });
+            }).on("collapsiblecollapse", function (event, ui) {
+                siteformcollap.collapsible('expand');
             });
         });
     }
