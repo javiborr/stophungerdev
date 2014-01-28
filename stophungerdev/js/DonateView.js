@@ -77,6 +77,34 @@
         mAdminSitePage = (mAdminSitePage || $("#adminSiteFormPage"));
         return mAdminSitePage;
     }
+    var mSiteMap = null;
+    function _getSiteMap() {
+        if (mSiteMap === null) {
+            var long = $('#LongitudText').val();
+            var lat = $('#LatitudText').val();
+            mSiteMap = _createSiteMap(long, lat);
+        }
+        return mSiteMap;
+    }
+    function _resetSiteMap(plong, plat) {
+        mSiteMap = _createSiteMap(plong, plat);
+        return mSiteMap;
+    }
+    function _createSiteMap(plong, plat) {
+        var myLatlng = new google.maps.LatLng(plong, plat);
+        var mapOptions = {
+            center: myLatlng,
+            zoom: 16,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+        var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
+        var marker = new google.maps.Marker({
+            position: myLatlng,
+            map: map,
+            title: 'Hello World!'
+        });
+        return map;
+    }
     // -----------------------------------------------------
     // Admin user form Rol checkboxes
     var mAdminUserRolAdminCheck = null;
@@ -292,6 +320,41 @@
         $(".ui-btn.logout").button().click(_logoutButtonClick);
         $(".ui-btn.back-to-menu").button().click(_backToMenuButtonClick);
         //$("#refreshButton").button().click(_refreshButtonClick);
+        // Form site
+        $(document).on("pageshow", "#adminSiteFormPage", function () {
+            $.validator.addMethod(
+                "ZIP"
+                , function (p) {
+                    var patt = new RegExp("[0-9]{5}");
+                    return patt.test(p);
+                }
+                , 'Debe ser 5 d&iacute;gitos'
+                );
+            $.validator.addMethod(
+                "Geodata"
+                , function (p) {
+                    var patt = new RegExp("[\-]*[0-9]+\.[0-9]+");
+                    return patt.test(p);
+                }
+                , 'Debe ser parecido a 40.51325 o -3.67158'
+                );
+            $("#adminSiteForm").validate();
+            //$("#mapCollapsible").on("collapsiblecollapse", function (event, ui) {
+            //    alert('Close');
+            //});
+            $("#mapCollapsible").on("collapsibleexpand", function (event, ui) {
+                var long = $('#LongitudText').val();
+                var lat = $('#LatitudText').val();
+                var map = _resetSiteMap(long, lat)
+                google.maps.event.addListenerOnce(map, 'idle', function () {
+                    setTimeout(function () {
+                        center = map.getCenter();
+                        google.maps.event.trigger(map, 'resize');
+                        map.setCenter(center);
+                    }, 1000);
+                });
+            });
+        });
     }
     Constr.prototype.SetDonateController = function (p) { mDonateController = p; }
     Constr.prototype.Setup = function () { _setup(); }
@@ -403,12 +466,12 @@
                 zoom: 16,
                 mapTypeId: google.maps.MapTypeId.ROADMAP
             };
-            var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
-            var marker = new google.maps.Marker({
-                position: myLatlng,
-                map: map,
-                title: 'Hello World!'
-            });
+            //var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
+            //var marker = new google.maps.Marker({
+            //    position: myLatlng,
+            //    map: map,
+            //    title: 'Hello World!'
+            //});
             //
             //var mobileDemo = { 'center': [long, lat].join(','), 'zoom': 10 };
             //var map = $('#map-canvas').gmap({
@@ -422,13 +485,13 @@
             //        });
             //    }
             //});
-            google.maps.event.addListenerOnce(map, 'idle', function () {
-                setTimeout(function () {
-                    center = map.getCenter();
-                    google.maps.event.trigger(map, 'resize');
-                    map.setCenter(center);
-                }, 1000);
-            });
+            //google.maps.event.addListenerOnce(map, 'idle', function () {
+            //    setTimeout(function () {
+            //        center = map.getCenter();
+            //        google.maps.event.trigger(map, 'resize');
+            //        map.setCenter(center);
+            //    }, 1000);
+            //});
             //
         }
     }

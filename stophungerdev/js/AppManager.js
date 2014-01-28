@@ -100,6 +100,7 @@
         mDonateView.ShowPageLogin();
         //
         mUserManager.Init();
+        //
     }
     //
     return Constr;
