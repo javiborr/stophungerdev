@@ -443,7 +443,6 @@
                         r3.prop('checked', true);
                     }
             //
-            _showPage(_getAdminUserPage());
             r1.checkboxradio('refresh');
             r2.checkboxradio('refresh');
             r3.checkboxradio('refresh');
@@ -456,13 +455,8 @@
                     ui.html(html);
                     var s = ["#select-site option[value='",udata.SiteID,"']"].join('');
                     $(s).attr('selected', 'selected');
-                    //// PARA CADA site
-                    //for (var i = 0; i < ui[0].length; i++) {
-                    //    // SI es el site del user
-                    //    if ( udata.SiteID === ui[0].selectedIndex
-                    //}
-                    //ui[0].selectedIndex = 1; // TODO
                     ui.selectmenu('refresh');
+                    _showPage(_getAdminUserPage());
                 });
         }
     }
