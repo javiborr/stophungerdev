@@ -442,10 +442,6 @@
                     if (udata.Takes == true) {
                         r3.prop('checked', true);
                     }
-            //
-            r1.checkboxradio('refresh');
-            r2.checkboxradio('refresh');
-            r3.checkboxradio('refresh');
             // TODO select current value
             _getDonateController().GetAllSitesFromDB(
                 function (presponse) {
@@ -455,8 +451,11 @@
                     ui.html(html);
                     var s = ["#select-site option[value='",udata.SiteID,"']"].join('');
                     $(s).attr('selected', 'selected');
-                    ui.selectmenu('refresh');
                     _showPage(_getAdminUserPage());
+                    ui.selectmenu('refresh');
+                    r1.checkboxradio('refresh');
+                    r2.checkboxradio('refresh');
+                    r3.checkboxradio('refresh');
                 });
         }
     }
