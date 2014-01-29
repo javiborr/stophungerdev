@@ -111,3 +111,8 @@ label.error {
 	vertical-align: top; 
 	font-weight:bold
 }
+
+img.user-photo { 
+	float: left; 
+	padding-right: .5em; 
+}

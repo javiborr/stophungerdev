@@ -70,57 +70,34 @@
             );
     }
     // -----------------------------------------------
-    // Creates site
-    // pdata {name, Address1, ZIP, City, Longitud, Latitud}
-    Constr.prototype.Create = function (pdata, pcbkok, pcbkerr) {
-        // SI OK
-        if (pdata !== null && pdata.name !== null && pdata.name.length > 0) {
-            // Comprueba si ya existe por name
-            var filter = { name: pdata.name };
-            mMSClient.getTable('sites')
-                .where(filter)
-                .read()
-                .done(
-                    function (presponse) {
-                        var table = mMSClient.getTable('sites');
-                        // SI encuentra el site lo actualiza 
-                        if (presponse && presponse.length > 0) {
-                            alert('Ya existe este sitio');
-                            if (pcbkok) pcbkok();
-                            //var data = presponse[0];
-                            //data.Address1 = pdata.Address1;
-                            //data.ZIP = pdata.Address1;
-                            //data.City = pdata.Address1;
-                            //data.Longitud = pdata.Address1;
-                            //data.Latitud = pdata.Address1;
-                            //table.update(data).done(pcbkok, pcbkerr);
-                        } else {
-                            // SI NO existe lo crea
-                            table.insert(pdata).then(pcbkok, pcbkerr);
-                        }
-                    }
-                    , function (perror) {
-                        var s = JSON.stringify(perror);
-                        //alert(s);
-                        if (pcbkerr) pcbkerr(perror);
-                    }
-                );
-        }
-    }
-    //
+    // Update or Insert
     Constr.prototype.Save = function (pdata, pcbkok, pcbkerr) {
         // SI OK
         if (pdata !== null && pdata.name !== null && pdata.name.length > 0) {
-            mMSClient.getTable('sites')
-                .update(pdata)
-                .done(
-                    function (presponse) {
-                        if (pcbkok) pcbkok();
-                    }
-                    , function (perror) {
-                        if (pcbkerr) pcbkerr(perror);
-                    }
-                );
+            // SI UPDATE
+            if ( typeof(pdata.id) !== 'undefined' && pdata.id !== null) {
+                mMSClient.getTable('sites')
+                    .update(pdata)
+                    .done(
+                        function (presponse) {
+                            if (pcbkok) pcbkok();
+                        }
+                        , function (perror) {
+                            if (pcbkerr) pcbkerr(perror);
+                        }
+                    );
+            } else {
+                mMSClient.getTable('sites')
+                    .insert(pdata)
+                    .done(
+                        function (presponse) {
+                            if (pcbkok) pcbkok();
+                        }
+                        , function (perror) {
+                            if (pcbkerr) pcbkerr(perror);
+                        }
+                    );
+            }
         }
     }
     //

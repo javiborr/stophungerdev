@@ -192,7 +192,8 @@
         mDonationFormConfirmationFooter.show();
     }
     // -----------------------------------------------------
-    //
+    // Button click handlers
+    // -----------------------------------------------------
     function _adminDonateButtonClick(pevt) {
         me.ShowPageDonate(true);
         pevt.preventDefault();
@@ -224,7 +225,9 @@
         me.ShowPageAdminMenu();
         pevt.preventDefault();
     }
+    // -----------------------------------------------------
     // --------- USERS --------------------
+    // -----------------------------------------------------
     function _backToUserListButtonClick(pevt) {
         _getDonateController().ShowPageAdminUserList();
         pevt.preventDefault();
@@ -249,6 +252,9 @@
                 if (r3.prop('checked') === true) {
                     udata.Takes = true;
                 }
+        // Sites
+        udata.SiteID = $("#select-site option:selected").val();
+        //
         _getDonateController().SaveUser(udata, _getDonateController().ShowPageAdminUserList, null);
         pevt.preventDefault();
     }
@@ -257,14 +263,21 @@
         _getDonateController().ShowPageAdminUserList();
         pevt.preventDefault();
     }
+    // -----------------------------------------------------
     // --------- SITES --------------------
-    function _backToSiteListButtonClick(pevt) {
+    // -----------------------------------------------------
+    // Muestra la lista de sites
+    function _adminSitesButtonClick(pevt) {
         _getDonateController().ShowPageAdminSiteList();
         pevt.preventDefault();
     }
     //
+    function _adminSitesNewButtonClick(pevt) {
+        _getDonateController().ShowPageAdminSite();
+        pevt.preventDefault();
+    }
+    //
     function _adminSiteFormSaveButtonClick(pevt) {
-        // TODO form validation
         $.validator.setDefaults({
             debug: true,
             success: "valid"
@@ -285,20 +298,13 @@
         pevt.preventDefault();
     }
     //
-    function _adminSitesButtonClick(pevt) {
-        _getDonateController().ShowPageAdminSiteList();
-        pevt.preventDefault();
-    }
-    //
     function _adminSiteFormError(perror) {
         $('#siteFormError').text(perror);
     }
     //
-    //function _refreshButtonClick(pevt) {
-    //    _getDonateController().RefreshDonations();
-    //    pevt.preventDefault();
-    //}
-    //
+    // -----------------------------------------------------
+    // Initialize
+    // -----------------------------------------------------
     function _setup() {
         //$.mobile.toolbar.prototype.options.addBackBtn = true;
         //$.mobile.toolbar.prototype.options.backBtnText = "Volver";
@@ -307,10 +313,11 @@
         $("#adminUserFormSaveButton").button().click(_adminUserFormSaveButtonClick);
         $("#adminUsers").button().click(_adminUsersButtonClick);
         $(".ui-btn.back-to-userlist").button().click(_backToUserListButtonClick);
-        // Sites
+        // Sites 
+        $("#adminSitesNewButton").button().click(_adminSitesNewButtonClick);
         $("#adminSiteFormSaveButton").button().click(_adminSiteFormSaveButtonClick);
         $("#adminSites").button().click(_adminSitesButtonClick);
-        $(".ui-btn.back-to-sitelist").button().click(_backToSiteListButtonClick);
+        $(".ui-btn.back-to-sitelist").button().click(_adminSitesButtonClick);
         // Donations
         $("#adminDonate").button().click(_adminDonateButtonClick);
         $("#addDonationButton").button().click(_addDonationButtonClick);
@@ -368,6 +375,9 @@
         _showPage(p);
     }
     //
+    // -----------------------------------------------------
+    // Show pages
+    // -----------------------------------------------------
     function _showPage(p) {
         $.mobile.pageContainer.pagecontainer("change", p, { transition: 'fade' });
     }
@@ -410,8 +420,9 @@
     // Muestra un usuario
     Constr.prototype.ShowPageAdminUser = function (pudata) {
         if (pudata !== null && pudata.length > 0) {
+            var udata = pudata[0];
             var template = $('#personTpl').html();
-            var html = Mustache.to_html(template, pudata[0]);
+            var html = Mustache.to_html(template, udata);
             var ui = $('#adminUserData');
             ui.html(html);
             //
@@ -421,17 +432,14 @@
             r1.prop('checked', false);
             r2.prop('checked', false);
             r3.prop('checked', false);
-            //r1.checkboxradio('refresh');
-            //r2.checkboxradio('refresh');
-            //r3.checkboxradio('refresh');
             // SI es Admin
-            if (pudata[0].Admin == true) {
+            if (udata.Admin == true) {
                 r1.prop('checked', true);
             } else
-                if (pudata[0].Gives == true) {
+                if (udata.Gives == true) {
                     r2.prop('checked', true);
                 } else
-                    if (pudata[0].Takes == true) {
+                    if (udata.Takes == true) {
                         r3.prop('checked', true);
                     }
             //
@@ -439,9 +447,25 @@
             r1.checkboxradio('refresh');
             r2.checkboxradio('refresh');
             r3.checkboxradio('refresh');
+            // TODO select current value
+            _getDonateController().GetAllSitesFromDB(
+                function (presponse) {
+                    template = $('#selectSiteListItemTpl').html();
+                    html = Mustache.to_html(template, presponse);
+                    ui = $('#select-site');
+                    ui.html(html);
+                    var s = ["#select-site option[value='",udata.SiteID,"']"].join('');
+                    $(s).attr('selected', 'selected');
+                    //// PARA CADA site
+                    //for (var i = 0; i < ui[0].length; i++) {
+                    //    // SI es el site del user
+                    //    if ( udata.SiteID === ui[0].selectedIndex
+                    //}
+                    //ui[0].selectedIndex = 1; // TODO
+                    ui.selectmenu('refresh');
+                });
         }
     }
-    //
     // -----------------------------------------------
     // Muestra la lista de sitios
     Constr.prototype.ShowPageAdminSiteList = function (presponse) {
@@ -454,9 +478,20 @@
     }
     // Muestra un sitio
     Constr.prototype.ShowPageAdminSite = function (pudata) {
-        if (pudata !== null && pudata.length > 0) {
+        var data = null;
+        // SI nuevo
+        if (typeof (pudata) === 'undefined' || pudata === null) {
+            data = {};
+        } else {
+            // SI existente
+            if (pudata.length > 0) {
+                data = pudata[0];
+            }
+        }
+        // SI OK
+        if (data !== null) {
             var template = $('#siteTpl').html();
-            var html = Mustache.to_html(template, pudata[0]);
+            var html = Mustache.to_html(template, data);
             var ui = $('#adminSiteData');
             ui.html(html);
             //
@@ -464,45 +499,20 @@
             //
             var long = $('#LongitudText').val();
             var lat = $('#LatitudText').val();
-            var myLatlng = new google.maps.LatLng(long, lat);
-            var mapOptions = {
-                center: myLatlng,
-                zoom: 16,
-                mapTypeId: google.maps.MapTypeId.ROADMAP
-            };
-            //var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
-            //var marker = new google.maps.Marker({
-            //    position: myLatlng,
-            //    map: map,
-            //    title: 'Hello World!'
-            //});
-            //
-            //var mobileDemo = { 'center': [long, lat].join(','), 'zoom': 10 };
-            //var map = $('#map-canvas').gmap({
-            //    'center': mobileDemo.center,
-            //    'zoom': mobileDemo.zoom,
-            //    'disableDefaultUI': false,
-            //    'callback': function () {
-            //        var self = this;
-            //        self.addMarker({ 'position': this.get('map').getCenter() }).click(function () {
-            //            self.openInfoWindow({ 'content': 'Hello World!' }, this);
-            //        });
-            //    }
-            //});
-            //google.maps.event.addListenerOnce(map, 'idle', function () {
-            //    setTimeout(function () {
-            //        center = map.getCenter();
-            //        google.maps.event.trigger(map, 'resize');
-            //        map.setCenter(center);
-            //    }, 1000);
-            //});
-            //
+            // SI tengo datos long/lat
+            if (long !== '' && lat !== '') {
+                var myLatlng = new google.maps.LatLng(long, lat);
+                var mapOptions = {
+                    center: myLatlng,
+                    zoom: 16,
+                    mapTypeId: google.maps.MapTypeId.ROADMAP
+                };
+            }
         }
     }
     //
-    // Read current data and rebuild UI.
-    // If you plan to generate complex UIs like this, consider using a JavaScript templating library.
-    //Constr.prototype.RefreshDonations = function (pdata) {
+    // -----------------------------------------------
+    // Forms data
     // -----------------------------------------------
     // Gets form data for a donation
     Constr.prototype.GetFormData = function () {

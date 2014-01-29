@@ -23,12 +23,17 @@
     Constr.prototype.WaitingForServer = function (pmsg) {
         mDonateView.WaitingForServer(pmsg);
     }
+    // -----------------------------------------------------
+    // Es global porque el enlace está en una plantilla en index.html
     Constr.prototype.ShowUserData = function (pfbid) {
         mDonateController.ShowPageAdminUser(pfbid);
     }
+    // -----------------------------------------------------
+    // Es global porque el enlace está en una plantilla en index.html
     Constr.prototype.ShowSiteData = function (pid) {
         mDonateController.ShowPageAdminSite(pid);
     }
+    // -----------------------------------------------------
     // Si usuario no esta logado en FB muestra loginPage
     // Si usuario esta logado en FB consulta su rol
     // No rol: nouserPage
@@ -62,6 +67,7 @@
             mDonateView.ShowPageNoUser();
         }
     }
+    //
     function _showError(perror) {
         alert(perror);
     }
@@ -71,7 +77,7 @@
         var url = location.href;
         location.href = url;
     }
-
+    //
     function _initAll() {
         console.log('_initAll started');
         //alert('_initAll started');

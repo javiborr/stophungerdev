@@ -49,13 +49,15 @@
     Constr.prototype.SetUserManager = function (p) { mUserManager = p; }
     Constr.prototype.SetSiteManager = function (p) { mSiteManager = p; }
     Constr.prototype.SetDonateView = function (p) { mDonateView = p; }
-    //
     // -----------------------------------------------
     // Logout
+    // -----------------------------------------------
     Constr.prototype.LogoutStart = function () {
         _getUserManager().Logout();
     }
+    // -----------------------------------------------
     // RequestAccess
+    // -----------------------------------------------
     Constr.prototype.RequestAccessStart = function () {
         _getDonateView().WaitingForServer();
         //var cudata = _getFBManager().GetCurrentUserFBData();
@@ -65,6 +67,8 @@
     function _requestAccessOK() {
         _getDonateView().AccessRequestedEnd();
     }
+    // -----------------------------------------------
+    // Users
     // -----------------------------------------------
     // Admin user list
     Constr.prototype.ShowPageAdminUserList = function () {
@@ -92,12 +96,15 @@
             }
             , _handleError);
     }
+    // Save user
     Constr.prototype.SaveUser = function (pudata, pcbkok, pcbkerr) {
         if (pudata !== null && mUserEditingID !== null) {
             pudata.id = mUserEditingID;
             _getUserManager().Save(pudata, pcbkok, pcbkerr);
         }
     }
+    // -----------------------------------------------
+    // Sites
     // -----------------------------------------------
     // Admin site list
     Constr.prototype.ShowPageAdminSiteList = function () {
@@ -112,29 +119,48 @@
     }
     // Admin site
     Constr.prototype.ShowPageAdminSite = function (psiteid) {
-        mSiteEditingID = psiteid;
         var view = _getDonateView();
-        view.WaitingForServer();
-        _getSiteManager().GetSiteDataFromCacheOrDB(
-            psiteid,
-            function (pdata) {
-                if (pdata !== null && pdata.length > 0) {
-                    view.ShowPageAdminSite(pdata);
+        // SI psiteid es OK entonces editamos un site
+        if (typeof (psiteid) !== 'undefined' && psiteid !== null) {
+            mSiteEditingID = psiteid;
+            view.WaitingForServer();
+            _getSiteManager().GetSiteDataFromCacheOrDB(
+                psiteid,
+                function (pdata) {
+                    if (pdata !== null && pdata.length > 0) {
+                        view.ShowPageAdminSite(pdata);
+                    }
                 }
-            }
-            , _handleError);
+                , _handleError);
+        } else {
+            // SI psiteid es null entonces creamos un site nuevo
+            view.ShowPageAdminSite();
+        }
     }
+    // Save site
     Constr.prototype.SaveSite = function (pdata, pcbkok, pcbkerr) {
-        if (pdata !== null && mSiteEditingID !== null) {
-            pdata.id = mSiteEditingID;
+        // SI OK
+        if (pdata !== null) {
+            // SI updating
+            if (mSiteEditingID !== null) {
+                pdata.id = mSiteEditingID;
+            }
+            // Insert or Update
             _getSiteManager().Save(pdata, pcbkok, pcbkerr);
         }
     }
+    // Gets all sites from DB
+    Constr.prototype.GetAllSitesFromDB = function (pcbkok, pcbkerr) {
+        //_getDonateView().WaitingForServer();
+        _getSiteManager().GetAllSitesFromDB(
+            function (presponse) {
+                var data = { 'sites': presponse };
+                if (pcbkok) pcbkok(data);
+            }
+            , _handleError);
+    }
     // -----------------------------------------------
-    // Show donations
-    //Constr.prototype.RefreshDonations = function () {
-    //    _refreshDonations();
-    //}
+    // Donations
     // -----------------------------------------------
     // Action create a donation
     Constr.prototype.CreateDonation = function () {
@@ -142,14 +168,10 @@
         _getDonateView().Loading();
         _getDonationManager().Create(donationdata, _donationCreatedOK, _handleError);
     }
-    // -----------------------------------------------
-    //function _refreshDonations() {
-    //    var donationdata = _getDonationManager().GetAllDonations();
-    //    _getDonateView().RefreshDonations(donationdata);
-    //}
     function _donationCreatedOK() {
         _getDonateView().DonationOK();
     }
+    // -----------------------------------------------
     function _handleError(perror) {
         _getDonateView().ShowError(perror);
     }
