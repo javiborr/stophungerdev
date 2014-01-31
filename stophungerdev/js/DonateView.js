@@ -77,7 +77,12 @@
         mAdminSitePage = (mAdminSitePage || $("#adminSiteFormPage"));
         return mAdminSitePage;
     }
+    // -----------------------------------------------------
+    // Maps
+    // -----------------------------------------------------
     var mSiteMap = null;
+    var mMapMarkerDest = null;
+    var mMapMarkerMyPos = null;
     function _getSiteMap() {
         if (mSiteMap === null) {
             var long = $('#LongitudText').val();
@@ -87,24 +92,76 @@
         return mSiteMap;
     }
     function _resetSiteMap(plong, plat) {
-        mSiteMap = _createSiteMap(plong, plat);
-        return mSiteMap;
+        var latlngDest = _validateLonLat(plong, plat);
+        var map = _getSiteMap();
+        // SI tengo la posicion destino
+        if (latlngDest !== null) {
+            // SI hay un marcador previo
+            if (mMapMarkerDest !== null) {
+                mMapMarkerDest.setMap(null);
+            }
+            map.panTo(latlngDest);
+            mMapMarkerDest = new google.maps.Marker({
+                position: latlngDest,
+                map: map
+            });
+        }
+        return map;
     }
     function _createSiteMap(plong, plat) {
-        var myLatlng = new google.maps.LatLng(plong, plat);
+        var latlngDest = _validateLonLat(plong, plat);
         var mapOptions = {
-            center: myLatlng,
             zoom: 16,
             mapTypeId: google.maps.MapTypeId.ROADMAP
         };
+        // SI param OK
+        if (latlngDest !== null) {
+            mapOptions.center = latlngDest;
+        }
         var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
-        var marker = new google.maps.Marker({
-            position: myLatlng,
-            map: map,
-            title: 'Hello World!'
-        });
+        // SI tengo la posicion destino
+        if (latlngDest !== null) {
+            mMapMarkerDest = new google.maps.Marker({
+                position: latlngDest,
+                map: map
+            });
+        }
+        // SI browser usa HTML5 geolocation
+        // Muy impreciso, cualquier sitio de Madrid
+        if (false && navigator.geolocation) {
+            // Try HTML5 geolocation
+            navigator.geolocation.getCurrentPosition(
+                function (pposition) {
+                    var pos = new google.maps.LatLng(pposition.coords.latitude,
+                                                     pposition.coords.longitude);
+                    mMapMarkerMyPos = new google.maps.Marker({
+                        position: pos,
+                        map: map
+                    });
+                    var infowindow = new google.maps.InfoWindow({
+                        map: map,
+                        position: pos,
+                        content: 'Estoy aqui'
+                    });
+                    //map.setCenter(pos);
+                }, function () {
+                    //alert(navigator.appName + ' geolocation ha fallado');
+                });
+        }
         return map;
     }
+    function _validateLonLat(plong, plat) {
+        var lonlat = null;
+        var patt = new RegExp("[\-]*[0-9]+\.[0-9]+");
+        // SI param OK
+        if ((typeof (plong) !== 'undefined') && (typeof (plat) !== 'undefined')
+            && patt.test(plong) && patt.test(plat))
+        {
+            lonlat = new google.maps.LatLng(plong, plat);
+        }
+        return lonlat;
+    }
+    // -----------------------------------------------------
     // -----------------------------------------------------
     // Admin user form Rol checkboxes
     var mAdminUserRolAdminCheck = null;
@@ -490,17 +547,8 @@
             //
             _showPage(_getAdminSitePage());
             //
-            var long = $('#LongitudText').val();
-            var lat = $('#LatitudText').val();
-            // SI tengo datos long/lat
-            if (long !== '' && lat !== '') {
-                var myLatlng = new google.maps.LatLng(long, lat);
-                var mapOptions = {
-                    center: myLatlng,
-                    zoom: 16,
-                    mapTypeId: google.maps.MapTypeId.ROADMAP
-                };
-            }
+            var siteformcollap = $("#siteFormCollapsible");
+            siteformcollap.collapsible('expand');
         }
     }
     //
