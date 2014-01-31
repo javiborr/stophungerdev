@@ -116,3 +116,21 @@ img.user-photo {
 	float: left; 
 	padding-right: .5em; 
 }
+
+.role {
+    background-color: rgb(246, 246, 246);
+    border-color: rgb(221, 221, 221);
+    border-style: solid;
+    border-width: thin;
+    font-weight: normal;
+    padding: 0px 6px 0px 6px;
+}
+.role.true {
+    background-color: rgb(51, 136, 204);
+    border-color: rgb(221, 221, 221);
+    border-style: solid;
+    border-width: thin;
+    font-weight: bold;
+    color: white;
+}
+

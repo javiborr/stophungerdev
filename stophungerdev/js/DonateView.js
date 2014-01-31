@@ -299,18 +299,24 @@
         udata.Admin = false;
         udata.Gives = false;
         udata.Takes = false;
+        var siteid = null;
         // SEGUN rol
+        // SI es admin
         if (r1.prop('checked') === true) {
             udata.Admin = true;
+            siteid = $("#select-site option:selected").val();
         } else
+            // SI es donante
             if (r2.prop('checked') === true) {
                 udata.Gives = true;
+                siteid = $("#select-site option:selected").val();
             } else
+                // SI es receptor
                 if (r3.prop('checked') === true) {
                     udata.Takes = true;
                 }
         // Sites
-        udata.SiteID = $("#select-site option:selected").val();
+        udata.SiteID = siteid;
         //
         _getDonateController().SaveUser(udata, _getDonateController().ShowPageAdminUserList, null);
         pevt.preventDefault();
@@ -367,24 +373,39 @@
         //$.mobile.toolbar.prototype.options.backBtnText = "Volver";
         // 
         // Users
-        $("#adminUserFormSaveButton").button().click(_adminUserFormSaveButtonClick);
         $("#adminUsers").button().click(_adminUsersButtonClick);
-        $(".ui-btn.back-to-userlist").button().click(_backToUserListButtonClick);
+        $("#adminUserFormSaveButton").click(_adminUserFormSaveButtonClick);
+        $(".ui-btn-left.back-to-userlist").click(_backToUserListButtonClick);
         // Sites 
-        $("#adminSitesNewButton").button().click(_adminSitesNewButtonClick);
-        $("#adminSiteFormSaveButton").button().click(_adminSiteFormSaveButtonClick);
         $("#adminSites").button().click(_adminSitesButtonClick);
-        $(".ui-btn.back-to-sitelist").button().click(_adminSitesButtonClick);
+        $("#adminSitesNewButton").click(_adminSitesNewButtonClick);
+        $("#adminSiteFormSaveButton").button().click(_adminSiteFormSaveButtonClick);
+        $(".ui-btn-left.back-to-sitelist").click(_adminSitesButtonClick);
         // Donations
         $("#adminDonate").button().click(_adminDonateButtonClick);
-        $("#addDonationButton").button().click(_addDonationButtonClick);
-        $("#volverDonateButton").button().click(_volverDonateButtonClick);
+        $("#addDonationButton").click(_addDonationButtonClick);
+        $("#volverDonateButton").click(_volverDonateButtonClick);
         // Admin
         $("#requestAccess").button().click(_requestAccessButtonClick);
         $(".ui-btn.logout").button().click(_logoutButtonClick);
-        $(".ui-btn.back-to-menu").button().click(_backToMenuButtonClick);
+        $(".ui-btn-left.back-to-menu").click(_backToMenuButtonClick);
+        //$(".ui-btn.back-to-menu").button().click(_backToMenuButtonClick);
         //$("#refreshButton").button().click(_refreshButtonClick);
+        // ------------------------------------------------------
+        // Form user
+        // ------------------------------------------------------
+        $(document).on('change', 'input:radio.selectSite', function () {
+            // SI es Giver muestra el control
+            var bvisible = (this.id === 'radioRolGives');
+            if ( bvisible ) {
+                $("#adminUserSelectSite").show();
+            } else {
+                $("#adminUserSelectSite").hide();
+            }
+        });
+        // ------------------------------------------------------
         // Form site
+        // ------------------------------------------------------
         $(document).on("pageshow", "#adminSiteFormPage", function () {
             $.validator.addMethod(
                 "ZIP"
@@ -492,12 +513,15 @@
             // SI es Admin
             if (udata.Admin == true) {
                 r1.prop('checked', true);
+                $("#adminUserSelectSite").show();
             } else
                 if (udata.Gives == true) {
                     r2.prop('checked', true);
+                    $("#adminUserSelectSite").show();
                 } else
                     if (udata.Takes == true) {
                         r3.prop('checked', true);
+                        $("#adminUserSelectSite").hide();
                     }
             // TODO select current value
             _getDonateController().GetAllSitesFromDB(

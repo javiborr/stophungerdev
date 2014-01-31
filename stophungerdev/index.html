@@ -34,10 +34,11 @@
         <!-- Templates -->
         <script id="personListItemTpl" type="text/template">
             {{#users}}
-                <li><a href="javascript:void(0)" onclick="gAppManager.ShowUserData('{{FBID}}')">
+                <li><a href="#" onclick="gAppManager.ShowUserData('{{FBID}}')">
                     <img src="http://graph.facebook.com/{{UserName}}/picture"/>
                     <h4>{{FirstName}} {{LastName}}</h4>
-                    <p> A:{{Admin}} D:{{Gives}} R:{{Takes}}</p></a>
+                    <p><span class="role {{Admin}}">A</span><span class="role {{Gives}}">D</span><span class="role {{Takes}}">R</span></p>
+                    </a>
                 </li>
             {{/users}}
         </script>
@@ -47,7 +48,7 @@
         </script>
         <script id="siteListItemTpl" type="text/template">
             {{#sites}}
-                <li><a href="javascript:void(0)" onclick="gAppManager.ShowSiteData('{{id}}')">
+                <li><a href="#" onclick="gAppManager.ShowSiteData('{{id}}')">
                     <h4>{{name}}</h4>
                     <p>{{Address1}} {{ZIP}} {{City}}</p></a>
                 </li>
@@ -163,19 +164,21 @@
         <!-- Admin users PAGE -->
         <div data-role="page" data-theme="a" id="adminUserListPage">
             <div data-role="header" id="Div15">
+                <a href="#" data-icon="back" class="ui-btn-left back-to-menu">Volver</a>
                 <h3>Usuarios</h3>
             </div>  
             <div data-role="content" id="Div16">
                 <ul id="adminUserList" data-role="listview" data-filter="true"
                     data-filter-placeholder="Buscar usuario..." data-inset="true">
                 </ul>
-                <button id="adminUserListBackButton" class="ui-btn back-to-menu ui-icon-back ui-btn-icon-left">Volver</button>
             </div>
         </div>
         <!-- Admin user form PAGE -->
         <div data-role="page" data-add-back-btn="true" id="adminUserFormPage">
             <div data-role="header">
+                <a href="#" data-icon="back" class="ui-btn-left back-to-userlist">Volver</a>
 	            <h3>Usuario</h3>
+                <a href="#" id="adminUserFormSaveButton" data-icon="check" data-theme="b" class="ui-btn-right">Grabar</a>
             </div>
             <div data-role="content">
                 <div id="adminUserData"></div>
@@ -184,23 +187,20 @@
                         <li class="ui-field-contain">
                             <fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">
                                 <legend>Permisos:</legend>
-                                <input name="radioRol" id="radioRolAdmin" type="radio" value="admin">
+                                <input name="radioRol" id="radioRolAdmin" type="radio" class="selectSite" value="admin">
                                 <label for="radioRolAdmin">Admin</label>
-                                <input name="radioRol" id="radioRolGives" type="radio" value="gives">
+                                <input name="radioRol" id="radioRolGives" type="radio" class="selectSite" value="gives">
                                 <label for="radioRolGives">Donante</label>
-                                <input name="radioRol" id="radioRolTakes" type="radio" value="takes">
+                                <input name="radioRol" id="radioRolTakes" type="radio" class="selectSite" value="takes">
                                 <label for="radioRolTakes">Recoge</label>
                             </fieldset>
                         </li>
-                        <li class="ui-field-contain">
+                        <li class="ui-field-contain" id="adminUserSelectSite">
                             <label for="select-site" class="select">Restaurante:</label>
                             <select name="select-site" id="select-site">
                             </select>                        
                         </li>
                     </ul>
-
-                    <button id="adminUserFormSaveButton" class="ui-btn ui-icon-check ui-btn-icon-left">Grabar</button>
-                    <button id="adminUserFormBackButton" class="ui-btn back-to-userlist ui-icon-back ui-btn-icon-left">Volver</button>
                 </form>
             </div>
         </div>
@@ -208,20 +208,23 @@
         <!-- Admin sites PAGE -->
         <div data-role="page" data-theme="a" id="adminSiteListPage">
             <div data-role="header" id="Div17">
+                <a href="#" data-icon="back" class="ui-btn-left back-to-menu">Volver</a>
                 <h3>Restaurantes</h3>
+                <a href="#" id="adminSitesNewButton" data-icon="plus" data-theme="b" class="ui-btn-right">Nuevo</a>
             </div>  
             <div data-role="content" id="Div18">
                 <ul id="adminSiteList" data-role="listview" data-filter="true"
                     data-filter-placeholder="Buscar restaurante..." data-inset="true">
                 </ul>
-                <button id="adminSitesNewButton" class="ui-btn ui-icon-plus ui-btn-icon-left">Crear</button>
-                <button id="adminSiteListBackButton" class="ui-btn back-to-menu ui-icon-back ui-btn-icon-left">Volver</button>
+                <!--<button id="adminSitesNewButton" class="ui-btn ui-icon-plus ui-btn-icon-left">Crear</button>-->
+                <!--<button id="adminSiteListBackButton" class="ui-btn back-to-menu ui-icon-back ui-btn-icon-left">Volver</button>-->
             </div>
         </div>
 
         <!-- Admin site form PAGE -->
         <div data-role="page" data-add-back-btn="true" id="adminSiteFormPage">
             <div data-role="header">
+                <a href="#" data-icon="back" class="ui-btn-left back-to-sitelist">Volver</a>
 	            <h3>Restaurante</h3>
             </div>
             <div data-role="content">
@@ -238,7 +241,7 @@
                         </form>
                     </div>
                 </div>
-                <button id="adminSiteFormBackButton" class="ui-btn back-to-sitelist ui-icon-back ui-btn-icon-left">Volver</button>
+                <!--<button id="adminSiteFormBackButton" class="ui-btn back-to-sitelist ui-icon-back ui-btn-icon-left">Volver</button>-->
             </div>
         </div>
 
@@ -247,7 +250,9 @@
 
             <!-- ====== main content starts here ===== -->  
             <div data-role="header" id="donationFormHeader">
+                <a href="#" data-icon="back" class="ui-btn-left back-to-menu">Volver</a>
                 <h3>Donar comida</h3>
+                <a href="#" id="addDonationButton" data-icon="heart" data-theme="b" class="ui-btn-right">Donar</a>
             </div>  
             <div data-role="content" id="donationFormContent">
                 <form>
@@ -268,8 +273,8 @@
                         <input type="range" name="SaladSlider" id="SaladSlider" data-highlight="true" data-popup_enabled="true" value="5" min="0" max="25" />
                     </div>
                     <div data-role="controlgroup">
-                        <button id="addDonationButton" class="ui-btn ui-icon-heart ui-btn-icon-left">Donar</button>
-                        <button id="donateBackButton" class="ui-btn back-to-menu ui-icon-back ui-btn-icon-left">Volver</button>
+                        <!--<button id="addDonationButton" class="ui-btn ui-icon-heart ui-btn-icon-left">Donar</button>-->
+                        <!--<button id="donateBackButton" class="ui-btn back-to-menu ui-icon-back ui-btn-icon-left">Volver</button>-->
                         <button id="donateFormLogout" class="ui-btn logout ui-icon-delete ui-btn-icon-left">Salir</button>
                     </div>
                 </form>
@@ -284,12 +289,13 @@
 
             <!-- ====== confirmation content starts here ===== -->  
             <div data-role="header"  id="donationFormConfirmationHeader">
+                <a href="#" data-icon="back" class="ui-btn-left back-to-menu">Volver</a>
                 <h2>Donaci&oacute;n Notificada</h2>
             </div>  
             <div data-role="content" id="donationFormConfirmationContent" >  
                 <p>Muchas gracias por notificar esta donaci&oacute;n de comida.</p>
                 <div data-role="controlgroup">
-                    <button id="volverDonateButton" class="ui-btn ui-icon-back ui-btn-icon-left">Hacer otra donaci&oacute;n</button>
+                    <!--<button id="volverDonateButton" class="ui-btn ui-icon-back ui-btn-icon-left">Hacer otra donaci&oacute;n</button>-->
                     <button id="donateLogout" class="ui-btn logout ui-icon-delete ui-btn-icon-left">Salir</button>
                 </div>  
             </div>  
