@@ -22,12 +22,15 @@
     // Gets all users from DB
     Constr.prototype.GetAllUsersFromDB = function (pcbkok, pcbkerr) {
         mCacheAllUsers = null;
-        mMSClient.getTable('people')
-            .read()
-            .done(
+        //mMSClient.getTable('peopleextra')
+        //    .read()
+        mMSClient.invokeApi("peopleextra", {
+                body: null,
+                method: "get"
+            }).done(
                 function (presponse) {
-                    mCacheAllUsers = presponse;
-                    if (pcbkok) pcbkok(presponse);
+                    mCacheAllUsers = presponse.result;
+                    if (pcbkok) pcbkok(presponse.result);
                 }
                 , function (perror) {
                     if (pcbkerr) pcbkerr(perror);
@@ -62,12 +65,15 @@
     // Gets user from DB
     Constr.prototype.GetUserDataFromDB = function (pfbid, pcbkok, pcbkerr) {
         var filter = { FBID: pfbid };
-        var data = mMSClient.getTable('people')
-            .where(filter)
-            .read()
-            .done(
+        //var data = mMSClient.getTable('people')
+        //    .where(filter)
+        //    .read()
+        mMSClient.invokeApi("peopleoneextra?fbid="+pfbid, {
+                body: null,
+                method: "get",
+            }).done(
                 function (presponse) {
-                    if (pcbkok) pcbkok(presponse);
+                    if (pcbkok) pcbkok(presponse.result);
                 }
                 , function (perror) {
                     if (pcbkerr) pcbkerr(perror);
