@@ -50,10 +50,16 @@
         mAdminMenuPage = (mAdminMenuPage || $("#adminMenuPage"));
         return mAdminMenuPage;
     }
+    // Donations
     var mDonatePage = null;
     function _getDonatePage() {
         mDonatePage = (mDonatePage || $("#donatePage"));
         return mDonatePage;
+    }
+    var mDonateConfirmPage = null;
+    function _getDonateConfirmPage() {
+        mDonateConfirmPage = (mDonateConfirmPage || $("#donateConfirmPage"));
+        return mDonateConfirmPage;
     }
     // Users
     var mAdminUserListPage = null;
@@ -261,6 +267,11 @@
         pevt.preventDefault();
     }
     //
+    function _confirmDonationButtonClick(pevt) {
+        _getDonateController().ConfirmDonation();
+        pevt.preventDefault();
+    }
+    //
     function _logoutButtonClick(pevt) {
         _getDonateController().LogoutStart();
         pevt.preventDefault();
@@ -270,6 +281,7 @@
         _showDonationForm();
         _hideContentTransition();
         _hideConfirmation();
+        _getDonateController().ShowDonateFormPage();
         pevt.preventDefault();
     }
     //
@@ -384,7 +396,9 @@
         // Donations
         $("#adminDonate").button().click(_adminDonateButtonClick);
         $("#addDonationButton").click(_addDonationButtonClick);
+        $("#confirmDonationButton").click(_confirmDonationButtonClick);
         $("#volverDonateButton").click(_volverDonateButtonClick);
+        $(".ui-btn-left.back-to-donate").click(_volverDonateButtonClick);
         // Admin
         $("#requestAccess").button().click(_requestAccessButtonClick);
         $(".ui-btn.logout").button().click(_logoutButtonClick);
@@ -462,17 +476,28 @@
     //
     Constr.prototype.ShowPageDonate = function (pisadmin) {
         if (pisadmin === true) {
-            $('#donateBackButton').parent().show();
-            $('#donateFormLogout').parent().hide();
+            $('#donateBackButton').show();
+            $('#donateFormLogout').hide();
         } else {
-            $('#donateBackButton').parent().hide();
-            $('#donateFormLogout').parent().show();
+            $('#donateBackButton').hide();
+            $('#donateFormLogout').show();
         }
         _showDonationForm();
         _hideConfirmation();
         _hideContentTransition();
         _showPage(_getDonatePage());
     }
+    //
+    Constr.prototype.ShowPageDonateConfirm = function (p) {
+        // TODO template
+        var template = $('#donateConfirmTpl').html();
+        var html = Mustache.to_html(template, p);
+        var ui = $('#donateConfirm');
+        ui.html(html);
+        //
+        _showPage(_getDonateConfirmPage());
+    }
+    //
     Constr.prototype.ShowPageLogin = function () {
         _showPage(_getLoginPage());
     }
@@ -580,7 +605,7 @@
     // Forms data
     // -----------------------------------------------
     // Gets form data for a donation
-    Constr.prototype.GetFormData = function () {
+    Constr.prototype.GetDonateFormData = function () {
         // TODO validate numbers
         var bread = $('#BreadSlider').val();
         var cakes = $('#CakeSlider').val();
@@ -618,6 +643,7 @@
         _hideContentTransition();
         $.mobile.loading("hide");
         _showConfirmation();
+        _showPage(_getDonatePage());
     }
     // -----------------------------------------------
     function _showError(perror) {

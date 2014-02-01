@@ -87,6 +87,11 @@
                 <input type="text" class="required Geodata" name="LatitudText" id="LatitudText" value="{{Latitud}}"/>
             </div>
         </script>
+        <script id="donateConfirmTpl" type="text/template">
+            <p>Vas a donar {{donation.Bread}} panes, {{donation.Cake}} bollos, {{donation.Sandwich}} bocadillos, {{donation.Salad}} ensaladas,
+                 en {{user.site}}<br />{{user.address1}}<br />{{user.zip}} {{user.city}}</p>
+            <p>¿Confirmar?</p>
+        </script>
     </head>
     <body>
         <div id="fb-root"></div>
@@ -250,7 +255,8 @@
 
             <!-- ====== main content starts here ===== -->  
             <div data-role="header" id="donationFormHeader">
-                <a href="#" data-icon="back" class="ui-btn-left back-to-menu">Volver</a>
+                <a href="#" data-icon="back" class="ui-btn-left back-to-menu" id="donateBackButton">Volver</a>
+                <a href="#" data-icon="delete" class="ui-btn-left" id="donateFormLogout">Salir</a>
                 <h3>Donar comida</h3>
                 <a href="#" id="addDonationButton" data-icon="heart" data-theme="b" class="ui-btn-right">Donar</a>
             </div>  
@@ -275,7 +281,7 @@
                     <div data-role="controlgroup">
                         <!--<button id="addDonationButton" class="ui-btn ui-icon-heart ui-btn-icon-left">Donar</button>-->
                         <!--<button id="donateBackButton" class="ui-btn back-to-menu ui-icon-back ui-btn-icon-left">Volver</button>-->
-                        <button id="donateFormLogout" class="ui-btn logout ui-icon-delete ui-btn-icon-left">Salir</button>
+                        <!--<button id="donateFormLogout" class="ui-btn logout ui-icon-delete ui-btn-icon-left">Salir</button>-->
                     </div>
                 </form>
             </div>  
@@ -302,7 +308,21 @@
             <div data-role="footer" id="donationFormConfirmationFooter"></div>  
             <!-- ====== confirmation content ends here ===== -->
 
-        </div><!-- /page -->
+        </div>
+
+        <!-- DONATE confirm PAGE -->
+        <div data-role="page" data-theme="a" id="donateConfirmPage" >
+
+            <div data-role="header" id="Div25">
+                <a href="#" data-icon="back" class="ui-btn-left back-to-donate">Volver</a>
+                <h3>Donar Comida</h3>
+                <a href="#" id="confirmDonationButton" data-icon="check" data-theme="b" class="ui-btn-right">Confirmar</a>
+            </div>  
+            <div data-role="content" id="Div26">
+                <p id="donateConfirm"></p>
+            </div>  
+
+        </div>
 
         <!-- DIALOG PAGE -->
         <div data-role="page" id="dialogPage"  data-theme="a" >

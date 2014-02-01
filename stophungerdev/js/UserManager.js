@@ -77,6 +77,7 @@
         }
         return res;
     }
+    Constr.prototype.CurrentUserData = function () { return mCurrentUserDBData; }
     //
     // FB logado seguro
     // DB puede existir o no. Si no existe NO crea el usuario en DB
@@ -103,7 +104,10 @@
                                 gives: presponse[0].Gives,
                                 takes: presponse[0].Takes,
                                 siteID: presponse[0].SiteID,
-                                site: presponse[0].Site
+                                site: presponse[0].Site,
+                                address1: presponse[0].Address1,
+                                zip: presponse[0].ZIP,
+                                city: presponse[0].City
                             };
                         }
                         if (pcbkok) pcbkok(presponse);

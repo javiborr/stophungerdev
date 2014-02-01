@@ -164,10 +164,29 @@
     // -----------------------------------------------
     // Action create a donation
     Constr.prototype.CreateDonation = function () {
-        var donationdata = _getDonateView().GetFormData();
-        _getDonateView().Loading();
+        var view = _getDonateView();
+        var donationdata = view.GetDonateFormData();
+        var userdata = _getUserManager().CurrentUserData();
+        var o = { donation: donationdata, user: userdata };
+        // TODO confirm donation page
+        view.ShowPageDonateConfirm(o);
+        //view.Loading();
+        //_getDonationManager().Create(donationdata, _donationCreatedOK, _handleError);
+    }
+    //
+    Constr.prototype.ConfirmDonation = function () {
+        // TODO user and site ID
+        var view = _getDonateView();
+        view.Loading();
+        var donationdata = view.GetDonateFormData();
         _getDonationManager().Create(donationdata, _donationCreatedOK, _handleError);
     }
+    //
+    Constr.prototype.ShowDonateFormPage = function() {
+        var badmin = _getUserManager().CurrentUserIsAdmin();
+        _getDonateView().ShowPageDonate(badmin);
+    }
+    //
     function _donationCreatedOK() {
         _getDonateView().DonationOK();
     }
