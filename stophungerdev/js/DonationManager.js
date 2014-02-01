@@ -21,13 +21,17 @@ DonationManager = (function ($) {
     // -----------------------------------------------
     // Creates donation
     Constr.prototype.Create = function (pdata, pcbkok, pcbkerr) {
-        var data = mMSClient.getTable('donations');
-        data.insert(pdata).then(pcbkok, pcbkerr);
+        // SI NO valen los datos
+        if (typeof (pdata.Site) === 'undefined' || pdata.Site === null) {
+            if (pcbkerr) pcbkerr('Faltan los datos del restaurante.\nPor favor sal y vuelve a entrar en la aplicacion.');
+        } else 
+            if (typeof (pdata.Donor) === 'undefined' || pdata.Donor === null) {
+                if (pcbkerr) pcbkerr('Faltan tus datos.\nPor favor sal y vuelve a entrar en la aplicacion.');
+            } else {
+                var data = mMSClient.getTable('donations');
+                data.insert(pdata).then(pcbkok, pcbkerr);
+            }
     }
     //
     return Constr;
 }(jQuery));
-
-    // Handle insert
-    // Handle update
-    // Handle delete

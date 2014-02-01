@@ -59,21 +59,21 @@
     Constr.prototype.CurrentUserIsAdmin = function () {
         var res = false;
         if (typeof (mCurrentUserDBData) !== 'undefined' && mCurrentUserDBData !== null) {
-            res = (mCurrentUserDBData.admin === true);
+            res = (mCurrentUserDBData.Admin === true);
         }
         return res;
     }
     Constr.prototype.CurrentUserIsGiver = function () {
         var res = false;
         if (typeof (mCurrentUserDBData) !== 'undefined' && mCurrentUserDBData !== null) {
-            res = (mCurrentUserDBData.gives === true);
+            res = (mCurrentUserDBData.Gives === true);
         }
         return res;
     }
     Constr.prototype.CurrentUserIsTaker = function () {
         var res = false;
         if (typeof (mCurrentUserDBData) !== 'undefined' && mCurrentUserDBData !== null) {
-            res = (mCurrentUserDBData.takes === true);
+            res = (mCurrentUserDBData.Takes === true);
         }
         return res;
     }
@@ -97,17 +97,17 @@
                             // Got DB data
                             mCurrentUserDBData = {
                                 valid: true,
-                                id: presponse[0].id,
+                                id: presponse[0].UserID,
                                 FBID: pfbdata.id,
-                                userName: presponse[0].UserName,
-                                admin: presponse[0].Admin,
-                                gives: presponse[0].Gives,
-                                takes: presponse[0].Takes,
-                                siteID: presponse[0].SiteID,
-                                site: presponse[0].Site,
-                                address1: presponse[0].Address1,
-                                zip: presponse[0].ZIP,
-                                city: presponse[0].City
+                                UserName: presponse[0].UserName,
+                                Admin: presponse[0].Admin,
+                                Gives: presponse[0].Gives,
+                                Takes: presponse[0].Takes,
+                                SiteID: presponse[0].SiteID,
+                                Site: presponse[0].Site,
+                                Address1: presponse[0].Address1,
+                                ZIP: presponse[0].ZIP,
+                                City: presponse[0].City
                             };
                         }
                         if (pcbkok) pcbkok(presponse);

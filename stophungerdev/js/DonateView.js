@@ -83,6 +83,12 @@
         mAdminSitePage = (mAdminSitePage || $("#adminSiteFormPage"));
         return mAdminSitePage;
     }
+    // dialogPage
+    var mDialogPage = null;
+    function _getDialogPage() {
+        mDialogPage = (mDialogPage || $("#dialogPage"));
+        return mDialogPage;
+    }
     // -----------------------------------------------------
     // Maps
     // -----------------------------------------------------
@@ -658,7 +664,8 @@
         //_showConfirmation();
         //alert(perror);
         _showError(perror);
-        $.mobile.changePage("#dialogPage", { role: "dialog" });
+        _showPage(_getDialogPage());
+        //$.mobile.changePage("#dialogPage", { role: "dialog" });
     }
     //
     return Constr;

@@ -168,17 +168,18 @@
         var donationdata = view.GetDonateFormData();
         var userdata = _getUserManager().CurrentUserData();
         var o = { donation: donationdata, user: userdata };
-        // TODO confirm donation page
         view.ShowPageDonateConfirm(o);
         //view.Loading();
         //_getDonationManager().Create(donationdata, _donationCreatedOK, _handleError);
     }
     //
     Constr.prototype.ConfirmDonation = function () {
-        // TODO user and site ID
         var view = _getDonateView();
         view.Loading();
+        var userdata = _getUserManager().CurrentUserData();
         var donationdata = view.GetDonateFormData();
+        donationdata.Donor = userdata.id;
+        donationdata.Site = userdata.SiteID;
         _getDonationManager().Create(donationdata, _donationCreatedOK, _handleError);
     }
     //

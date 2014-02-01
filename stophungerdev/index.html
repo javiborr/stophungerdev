@@ -89,7 +89,7 @@
         </script>
         <script id="donateConfirmTpl" type="text/template">
             <p>Vas a donar {{donation.Bread}} panes, {{donation.Cake}} bollos, {{donation.Sandwich}} bocadillos, {{donation.Salad}} ensaladas,
-                 en {{user.site}}<br />{{user.address1}}<br />{{user.zip}} {{user.city}}</p>
+               <br />en {{user.Site}}<br />{{user.Address1}}<br />{{user.ZIP}} {{user.City}}</p>
             <p>¿Confirmar?</p>
         </script>
     </head>
@@ -327,6 +327,7 @@
         <!-- DIALOG PAGE -->
         <div data-role="page" id="dialogPage"  data-theme="a" >
             <div data-role="header">
+                <a href="#" data-icon="back" class="ui-btn-left back-to-donate">Volver</a>
                 <h2>Error</h2>
             </div>
             <div role="main" class="ui-content">
