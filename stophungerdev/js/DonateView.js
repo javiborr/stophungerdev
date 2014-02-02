@@ -416,7 +416,7 @@
         // ------------------------------------------------------
         $(document).on('change', 'input:radio.selectSite', function () {
             // SI es Giver muestra el control
-            var bvisible = (this.id === 'radioRolGives');
+            var bvisible = ((this.id === 'radioRolGives') || (this.id === 'radioRolAdmin'));
             if ( bvisible ) {
                 $("#adminUserSelectSite").show();
             } else {
@@ -582,33 +582,27 @@
         ui.listview('refresh');
     }
     // Muestra un sitio
-    Constr.prototype.ShowPageAdminSite = function (pudata) {
+    Constr.prototype.ShowPageAdminSite = function (pdata) {
         var data = null;
         // SI nuevo
-        if (typeof (pudata) === 'undefined' || pudata === null) {
-            data = {};
+        if (typeof (pdata) === 'undefined' || pdata === null) {
+            data = [];
         } else {
-            // SI existente
-            if (pudata.length > 0) {
-                data = pudata[0];
-            }
+            data = pdata;
         }
-        // SI OK
-        if (data !== null) {
-            var template = $('#siteTpl').html();
-            var html = Mustache.to_html(template, data);
-            var ui = $('#adminSiteData');
-            ui.html(html);
-            //
-            _showPage(_getAdminSitePage());
-            //
-            var siteformcollap = $("#siteFormCollapsible");
-            siteformcollap.collapsible('expand');
-        }
+        var template = $('#siteTpl').html();
+        var html = Mustache.to_html(template, data);
+        var ui = $('#adminSiteData');
+        ui.html(html);
+        //
+        _showPage(_getAdminSitePage());
+        //
+        var siteformcollap = $("#siteFormCollapsible");
+        siteformcollap.collapsible('expand');
     }
     //
     // -----------------------------------------------
-    // Forms data
+    // Donate forms data
     // -----------------------------------------------
     // Gets form data for a donation
     Constr.prototype.GetDonateFormData = function () {

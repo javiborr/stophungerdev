@@ -26,8 +26,8 @@
                 method: "get",
             }).done(
                 function (presponse) {
-                    mCacheAllSites = presponse;
-                    if (pcbkok) pcbkok(presponse);
+                    mCacheAllSites = presponse.result;
+                    if (pcbkok) pcbkok(presponse.result);
                 }
                 , function (perror) {
                     if (pcbkerr) pcbkerr(perror);
@@ -43,7 +43,7 @@
             // PARA CADA site
             for (var i = 0; i < mCacheAllSites.length; i++) {
                 // SI found
-                if (psiteid === mCacheAllSites[i].id) {
+                if (psiteid === mCacheAllSites[i].SiteID) {
                     data = mCacheAllSites[i];
                     break;
                 }
@@ -53,20 +53,23 @@
         if (data == null) {
             me.GetSiteDataFromDB(psiteid, pcbkok, pcbkerr);
         } else {
-            var res = [data];
-            if (pcbkok) pcbkok(res);
+            //var res = [data];
+            if (pcbkok) pcbkok(data);
         }
     }
     // -----------------------------------------------
     // Gets site from DB
     Constr.prototype.GetSiteDataFromDB = function (psiteid, pcbkok, pcbkerr) {
-        var filter = { id: psiteid };
-        var data = mMSClient.getTable('sites')
-            .where(filter)
-            .read()
-            .done(
+        //var filter = { id: psiteid };
+        //var data = mMSClient.getTable('sites').where(filter).read()
+        mMSClient.invokeApi("sitebyidwithdonations?siteid="+psiteid, {
+                body: null,
+                method: "get",
+            }).done(
                 function (presponse) {
-                    if (pcbkok) pcbkok(presponse);
+                    if (presponse !== null && presponse.result !== null && presponse.result.length > 0) {
+                        if (pcbkok) pcbkok(presponse.result[0]);
+                    }
                 }
                 , function (perror) {
                     if (pcbkerr) pcbkerr(perror);

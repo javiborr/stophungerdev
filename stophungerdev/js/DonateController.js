@@ -90,7 +90,7 @@
             pfbid,
             function (pudata) {
                 if (pudata !== null && pudata.length > 0) {
-                    mUserEditingID = pudata[0].id;
+                    mUserEditingID = pudata[0].UserID;
                     view.ShowPageAdminUser(pudata);
                 }
             }
@@ -108,11 +108,12 @@
     // -----------------------------------------------
     // Admin site list
     Constr.prototype.ShowPageAdminSiteList = function () {
+        mSiteEditingID = null;
         var view = _getDonateView();
         view.WaitingForServer();
         _getSiteManager().GetAllSitesFromDB(
             function (presponse) {
-                var data = { 'sites': presponse.result };
+                var data = { 'sites': presponse };
                 view.ShowPageAdminSiteList(data);
             }
             , _handleError);
@@ -127,7 +128,7 @@
             _getSiteManager().GetSiteDataFromCacheOrDB(
                 psiteid,
                 function (pdata) {
-                    if (pdata !== null && pdata.length > 0) {
+                    if ((typeof(pdata) !== 'undefined') && (pdata !== null)) {
                         view.ShowPageAdminSite(pdata);
                     }
                 }

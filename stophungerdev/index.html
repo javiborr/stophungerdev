@@ -51,7 +51,7 @@
                 <li><a href="#" onclick="gAppManager.ShowSiteData('{{SiteID}}')">
                     <h4>{{Name}}</h4>
                     <p>{{Address1}} {{ZIP}} {{City}}</p>
-                    <p><span class="reserved {{Reserved}}">&nbsp;</span> {{Bread}} panes, {{Cake}} bollos, {{Sandwich}} bocadillos, {{Salad}} ensaladas                       
+                    <p><span class="reserved {{Reserved}} d{{Bread}}{{Cake}}{{Sandwich}}{{Salad}}">&nbsp;</span> {{Bread}} panes, {{Cake}} bollos, {{Sandwich}} bocadillos, {{Salad}} ensaladas                       
                     </p>
                     </a>
                 </li>
@@ -59,7 +59,7 @@
         </script>
         <script id="selectSiteListItemTpl" type="text/template">
             {{#sites}}
-                <option value="{{id}}">{{name}}</option>
+                <option value="{{SiteID}}">{{Name}}</option>
             {{/sites}}
         </script>
 
@@ -67,7 +67,7 @@
             <p id="siteFormError"></p>
             <div id="Div4" class="ui-field-contain">
                 <label for="SiteNameText">Nombre:</label>
-                <input type="text" class="required" minlength="5" name="SiteNameText" id="SiteNameText" value="{{name}}"/>
+                <input type="text" class="required" minlength="5" name="SiteNameText" id="SiteNameText" value="{{Name}}"/>
             </div>
             <div id="Div19" class="ui-field-contain">
                 <label for="Address1Text">Direcci&oacute;n:</label>
