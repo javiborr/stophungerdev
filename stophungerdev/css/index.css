@@ -133,4 +133,21 @@ img.user-photo {
     font-weight: bold;
     color: white;
 }
+        .reserved {
+            background-color: limegreen;
+            border-color: rgb(221, 221, 221);
+            border-style: solid;
+            border-width: thin;
+            font-weight: normal;
+            padding: 0px 6px 0px 6px;
+        }
+        .reserved.true {
+            background-color: orangered;
+            border-color: rgb(221, 221, 221);
+            border-style: solid;
+            border-width: thin;
+            font-weight: bold;
+            color: white;
+        }
+
 

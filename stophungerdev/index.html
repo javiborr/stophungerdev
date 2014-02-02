@@ -48,9 +48,12 @@
         </script>
         <script id="siteListItemTpl" type="text/template">
             {{#sites}}
-                <li><a href="#" onclick="gAppManager.ShowSiteData('{{id}}')">
-                    <h4>{{name}}</h4>
-                    <p>{{Address1}} {{ZIP}} {{City}}</p></a>
+                <li><a href="#" onclick="gAppManager.ShowSiteData('{{SiteID}}')">
+                    <h4>{{Name}}</h4>
+                    <p>{{Address1}} {{ZIP}} {{City}}</p>
+                    <p><span class="reserved {{Reserved}}">&nbsp;</span> {{Bread}} panes, {{Cake}} bollos, {{Sandwich}} bocadillos, {{Salad}} ensaladas                       
+                    </p>
+                    </a>
                 </li>
             {{/sites}}
         </script>

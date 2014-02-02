@@ -20,7 +20,11 @@
     // Gets all sites from DB
     Constr.prototype.GetAllSitesFromDB = function (pcbkok, pcbkerr) {
         mCacheAllSites = null;
-        mMSClient.getTable('sites').read().done(
+        //mMSClient.getTable('sites').read()
+        mMSClient.invokeApi("siteswithdonations", {
+                body: null,
+                method: "get",
+            }).done(
                 function (presponse) {
                     mCacheAllSites = presponse;
                     if (pcbkok) pcbkok(presponse);
@@ -28,7 +32,7 @@
                 , function (perror) {
                     if (pcbkerr) pcbkerr(perror);
                 }
-            );
+        );
     }
     // -----------------------------------------------
     // Gets site from DB

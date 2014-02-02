@@ -19,9 +19,33 @@
             font-weight: bold;
             color: white;
         }
+        .reserved {
+            background-color: limegreen;
+            border-color: rgb(221, 221, 221);
+            border-style: solid;
+            border-width: thin;
+            font-weight: normal;
+            padding: 0px 6px 0px 6px;
+        }
+        .reserved.true {
+            background-color: orangered;
+            border-color: rgb(221, 221, 221);
+            border-style: solid;
+            border-width: thin;
+            font-weight: bold;
+            color: white;
+        }
     </style>
 </head>
 <body>
-    <span class="role TRUE">A</span><span class="role FALSE">D</span><span class="role FALSE">R</span>
+    <span class="role true">A</span><span class="role false">D</span><span class="role false">R</span>
+    <br />
+    <span class="notreserved false">D</span><span class="reserved false">R</span>
+    <br />
+    <span class="notreserved false">D</span><span class="reserved true">R</span>
+    <br />
+    <span class="reserved false">&nbsp;</span>
+    <br />
+    <span class="reserved true">&nbsp;</span>
 </body>
 </html>

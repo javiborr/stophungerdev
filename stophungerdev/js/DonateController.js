@@ -112,7 +112,7 @@
         view.WaitingForServer();
         _getSiteManager().GetAllSitesFromDB(
             function (presponse) {
-                var data = { 'sites': presponse };
+                var data = { 'sites': presponse.result };
                 view.ShowPageAdminSiteList(data);
             }
             , _handleError);
