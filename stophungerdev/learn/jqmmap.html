@@ -1,0 +1,76 @@
+﻿
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>JQM map</title>
+      <script src="../js/lib/jquery.min.js"></script>
+      <link href="../js/lib/jquery.mobile.min.css" rel="stylesheet" />
+      <script src="../js/lib/jquery.mobile.min.js"></script>
+      <script src="../js/MapManager.js"></script>
+    <style>
+        html, body, #map-canvas {
+            height: 350px;
+            width: 100%;
+            margin: 0px;
+            padding: 0px
+        }
+        .fullwidth {
+            padding: 0;
+        }
+    </style>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+    <script>
+        var mapman = null;
+        $(document).on("pageinit", function (event, ui) {
+            mapman = new MapManager('map-canvas');
+            //mapman.SetUpMap(40.51325, -3.67158);
+            $('#siteMapTabLink').on('click', function (pev) {
+                mapman.Refresh(40.51325, -3.67158);
+            });
+        });
+    </script>
+  </head>
+  <body>
+        <!-- Admin site form PAGE -->
+        <div data-role="page" data-add-back-btn="true" id="adminSiteFormPage">
+            <div data-role="header">
+                <a href="#" data-icon="back" class="ui-btn-left back-to-sitelist">Volver</a>
+	            <h3>Restaurante</h3>
+            </div>
+            <div data-role="content" class="fullwidth">
+                <div data-role="tabs" id="tabs">
+                  <div data-role="navbar">
+                    <ul>
+                      <li><a href="#siteFormTab" data-ajax="false" id="siteFormTabLink">Datos</a></li>
+                      <li><a href="#siteMapTab" data-ajax="false" id="siteMapTabLink">Mapa</a></li>
+                      <li><a href="#siteDonationTab" data-ajax="false" id="siteDonationTabLink">Donativo</a></li>
+                    </ul>
+                  </div>
+                  <div id="siteFormTab">
+                    <ul data-role="listview" data-inset="true">
+                        <li><a href="#">Acura</a></li>
+                        <li><a href="#">Audi</a></li>
+                        <li><a href="#">BMW</a></li>
+                        <li><a href="#">Cadillac</a></li>
+                        <li><a href="#">Ferrari</a></li>
+                    </ul>
+                  </div>
+                  <div id="siteMapTab" class="ui-body-d ui-content fullwidth">
+                    <div id="map-canvas" class="fullwidth"></div>
+                  </div>
+                  <div id="siteDonationTab" class="ui-body-d ui-content">
+                    <h1>First tab contents</h1>
+                  </div>
+                </div>
+            </div>
+            <div data-role="footer">
+                <h4>Stop Hunger</h4>
+            </div>
+        </div>
+
+  </body>
+</html>
+

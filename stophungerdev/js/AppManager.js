@@ -8,6 +8,7 @@
     var mPeopleManager = null;
     var mUserManager = null;
     var mSiteManager = null;
+    var mMapManager = null;
     //
     var mActivePage = 'start';
     //
@@ -53,7 +54,7 @@
     function _showPageForRol() {
         // SI encuentra usuario registrado
         if (mUserManager.CurrentUserIsValid()) {
-            // SI rol Giver
+            // SI rol Admin
             if (mUserManager.CurrentUserIsAdmin()) {
                 mDonateView.ShowPageAdminMenu();
             } else
@@ -88,6 +89,7 @@
         mPeopleManager = new PeopleManager();
         mUserManager = new UserManager();
         mSiteManager = new SiteManager();
+        mMapManager = new MapManager();
         //
         mFBManager.SetUserManager(mUserManager);
         // 
@@ -101,6 +103,7 @@
         mDonateController.SetSiteManager(mSiteManager);
         //
         mDonateView.SetDonateController(mDonateController);
+        mDonateView.SetMapManager(mMapManager);
         mDonateView.Setup();
         //
         mDonateView.ShowPageLogin();

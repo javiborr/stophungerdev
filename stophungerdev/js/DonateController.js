@@ -176,7 +176,7 @@
     //
     Constr.prototype.ConfirmDonation = function () {
         var view = _getDonateView();
-        view.Loading();
+        view.WaitingForServer('Enviando datos...');
         var userdata = _getUserManager().CurrentUserData();
         var donationdata = view.GetDonateFormData();
         donationdata.Donor = userdata.id;

@@ -20,6 +20,7 @@
         <script src="js/PeopleManager.js"></script>
         <script src="js/UserManager.js"></script>
         <script src="js/SiteManager.js"></script>
+        <script src="js/MapManager.js"></script>
         <script src="js/DonationManager.js"></script>
         <script src="js/DonateView.js"></script>
         <script src="js/DonateController.js"></script>
@@ -228,28 +229,34 @@
                 <!--<button id="adminSiteListBackButton" class="ui-btn back-to-menu ui-icon-back ui-btn-icon-left">Volver</button>-->
             </div>
         </div>
-
         <!-- Admin site form PAGE -->
         <div data-role="page" data-add-back-btn="true" id="adminSiteFormPage">
             <div data-role="header">
                 <a href="#" data-icon="back" class="ui-btn-left back-to-sitelist">Volver</a>
 	            <h3>Restaurante</h3>
             </div>
-            <div data-role="content">
-                <div data-role="collapsible-set" data-theme="a" data-content-theme="a" id="adminSiteFormDiv">
-                    <div data-role="collapsible" id="mapCollapsible">
-                        <h3>Mapa</h3>
-                        <div id="map-canvas"></div>
-                    </div>
-                    <div data-role="collapsible" data-collapsed="false" id="siteFormCollapsible">
-                        <h3>Datos</h3>
-                        <form autocomplete="off" id="adminSiteForm">
-                            <div id="adminSiteData"></div>
-                            <button id="adminSiteFormSaveButton" class="ui-btn ui-icon-check ui-btn-icon-left">Grabar</button>
-                        </form>
-                    </div>
+            <div data-role="content" class="fullwidth">
+                <div data-role="tabs" id="tabs">
+                  <div data-role="navbar">
+                    <ul>
+                      <li><a href="#siteFormTab" data-ajax="false" id="siteFormTabLink">Datos</a></li>
+                      <li><a href="#siteMapTab" data-ajax="false" id="siteMapTabLink">Mapa</a></li>
+                      <li><a href="#siteDonationTab" data-ajax="false" id="siteDonationTabLink">Donativo</a></li>
+                    </ul>
+                  </div>
+                  <div id="siteFormTab">
+                    <form autocomplete="off" id="adminSiteForm">
+                        <div id="adminSiteData"></div>
+                        <button id="adminSiteFormSaveButton" class="ui-btn ui-icon-check ui-btn-icon-left">Grabar</button>
+                    </form>
+                  </div>
+                  <div id="siteMapTab" class="ui-body-d ui-content fullwidth">
+                    <div id="map-canvas" class="fullwidth"></div>
+                  </div>
+                  <div id="siteDonationTab" class="ui-body-d ui-content">
+                    <h3>TODO</h3>
+                  </div>
                 </div>
-                <!--<button id="adminSiteFormBackButton" class="ui-btn back-to-sitelist ui-icon-back ui-btn-icon-left">Volver</button>-->
             </div>
         </div>
 

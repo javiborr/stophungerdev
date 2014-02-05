@@ -4,13 +4,21 @@
     // -----------------------------------------------------
     var mMobile = true;
     var me = null;
-    //
+    // DonateController
     var mDonateController = null;
     function _getDonateController() {
         if (mDonateController === null) {
             throw 'DonateView mDonateController is null';
         }
         return mDonateController;
+    }
+    // 
+    var mMapManager = null;
+    function _getMapManager() {
+        if (mMapManager === null) {
+            throw 'DonateView mMapManager is null';
+        }
+        return mMapManager;
     }
     // 
     //var mBreadInput = null;
@@ -92,87 +100,13 @@
     // -----------------------------------------------------
     // Maps
     // -----------------------------------------------------
-    var mSiteMap = null;
-    var mMapMarkerDest = null;
-    var mMapMarkerMyPos = null;
-    function _getSiteMap() {
-        if (mSiteMap === null) {
-            var long = $('#LongitudText').val();
-            var lat = $('#LatitudText').val();
-            mSiteMap = _createSiteMap(long, lat);
-        }
-        return mSiteMap;
-    }
-    function _resetSiteMap(plong, plat) {
-        var latlngDest = _validateLonLat(plong, plat);
-        var map = _getSiteMap();
-        // SI tengo la posicion destino
-        if (latlngDest !== null) {
-            // SI hay un marcador previo
-            if (mMapMarkerDest !== null) {
-                mMapMarkerDest.setMap(null);
-            }
-            map.panTo(latlngDest);
-            mMapMarkerDest = new google.maps.Marker({
-                position: latlngDest,
-                map: map
-            });
-        }
-        return map;
-    }
-    function _createSiteMap(plong, plat) {
-        var latlngDest = _validateLonLat(plong, plat);
-        var mapOptions = {
-            zoom: 16,
-            mapTypeId: google.maps.MapTypeId.ROADMAP
-        };
-        // SI param OK
-        if (latlngDest !== null) {
-            mapOptions.center = latlngDest;
-        }
-        var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
-        // SI tengo la posicion destino
-        if (latlngDest !== null) {
-            mMapMarkerDest = new google.maps.Marker({
-                position: latlngDest,
-                map: map
-            });
-        }
-        // SI browser usa HTML5 geolocation
-        // Muy impreciso, cualquier sitio de Madrid
-        if (false && navigator.geolocation) {
-            // Try HTML5 geolocation
-            navigator.geolocation.getCurrentPosition(
-                function (pposition) {
-                    var pos = new google.maps.LatLng(pposition.coords.latitude,
-                                                     pposition.coords.longitude);
-                    mMapMarkerMyPos = new google.maps.Marker({
-                        position: pos,
-                        map: map
-                    });
-                    var infowindow = new google.maps.InfoWindow({
-                        map: map,
-                        position: pos,
-                        content: 'Estoy aqui'
-                    });
-                    //map.setCenter(pos);
-                }, function () {
-                    //alert(navigator.appName + ' geolocation ha fallado');
-                });
-        }
-        return map;
-    }
-    function _validateLonLat(plong, plat) {
-        var lonlat = null;
-        var patt = new RegExp("[\-]*[0-9]+\.[0-9]+");
-        // SI param OK
-        if ((typeof (plong) !== 'undefined') && (typeof (plat) !== 'undefined')
-            && patt.test(plong) && patt.test(plat))
-        {
-            lonlat = new google.maps.LatLng(plong, plat);
-        }
-        return lonlat;
-    }
+    //var mSiteMap = null;
+    //var mMapMarkerDest = null;
+    //var mMapMarkerMyPos = null;
+    //function _getSiteMap() {
+    //function _resetSiteMap(plong, plat) {
+    //function _createSiteMap(plong, plat) {
+
     // -----------------------------------------------------
     // -----------------------------------------------------
     // Admin user form Rol checkboxes
@@ -444,28 +378,24 @@
                 , 'Debe ser parecido a 40.51325 o -3.67158'
                 );
             $("#adminSiteForm").validate();
-            var siteformcollap = $("#siteFormCollapsible");
-            var sitemapcollap = $("#mapCollapsible");
-            siteformcollap.on("collapsiblecollapse", function (event, ui) {
-                sitemapcollap.collapsible('expand');
-            });
-            sitemapcollap.on("collapsibleexpand", function (event, ui) {
-                var long = $('#LongitudText').val();
-                var lat = $('#LatitudText').val();
-                var map = _resetSiteMap(long, lat)
-                google.maps.event.addListenerOnce(map, 'idle', function () {
-                    setTimeout(function () {
-                        center = map.getCenter();
-                        google.maps.event.trigger(map, 'resize');
-                        map.setCenter(center);
-                    }, 1000);
-                });
-            }).on("collapsiblecollapse", function (event, ui) {
-                siteformcollap.collapsible('expand');
-            });
+        });
+        var mapman = _getMapManager();
+        $('#siteMapTabLink').on('click', function (pev) {
+            var long = $('#LongitudText').val();
+            var lat = $('#LatitudText').val();
+            mapman.Refresh(long, lat);
         });
     }
+    //
     Constr.prototype.SetDonateController = function (p) { mDonateController = p; }
+    //
+    Constr.prototype.SetMapManager = function (p) {
+        mMapManager = p;
+        if (mMapManager !== null) {
+            mMapManager.SetMapDivID('map-canvas');
+        }
+    }
+    //
     Constr.prototype.Setup = function () { _setup(); }
     // -----------------------------------------------
     Constr.prototype.AccessRequestedEnd = function() {
@@ -597,8 +527,8 @@
         //
         _showPage(_getAdminSitePage());
         //
-        var siteformcollap = $("#siteFormCollapsible");
-        siteformcollap.collapsible('expand');
+        $("#tabs").tabs("option", "active", 0);
+        $("#siteFormTabLink").addClass('ui-btn-active');
     }
     //
     // -----------------------------------------------
@@ -615,17 +545,17 @@
         return o;
     }
     // -----------------------------------------------
-    Constr.prototype.Loading = function () {
-        _hideDonationForm();
-        _showContentTransition();
-        $.mobile.loading('show', {
-            text: 'Enviando datos...',
-            textVisible: true,
-            theme: 'b',
-            textonly: false
-            //html: html
-        });
-    }
+    //Constr.prototype.Loading = function () {
+    //    _hideDonationForm();
+    //    _showContentTransition();
+    //    $.mobile.loading('show', {
+    //        text: 'Enviando datos...',
+    //        textVisible: true,
+    //        theme: 'b',
+    //        textonly: false
+    //        //html: html
+    //    });
+    //}
     Constr.prototype.WaitingForServer = function (pmsg) {
         var p = _getWaitingServerPage();
         _showPage(p);
