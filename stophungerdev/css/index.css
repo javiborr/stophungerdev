@@ -97,12 +97,6 @@ h1 {
     -webkit-animation:fade 3000ms infinite;
 }
 
-#map-canvas {
-    height: 350px;
-    width: 100%;
-    margin: 0px;
-    padding: 0px
-}
 
 label.error { 
 	float: left; 
@@ -158,4 +152,13 @@ img.user-photo {
     padding: 0px 6px 0px 6px;
 }
 
+.fullwidth.ui-content {
+    padding: 0;
+}
 
+.map {
+    height: 100%;
+    width: 100%;
+    margin: 0px;
+    padding: 0px
+}
