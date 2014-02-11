@@ -184,7 +184,7 @@
         _getDonationManager().Create(donationdata, _donationCreatedOK, _handleError);
         // GA
         if (ga) {
-            ga('send', 'event', 'button', 'click', 'donation');
+            ga('send', 'event', 'button', 'click', 'donation', 1);
         }
     }
     //
