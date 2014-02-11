@@ -182,6 +182,10 @@
         donationdata.Donor = userdata.id;
         donationdata.Site = userdata.SiteID;
         _getDonationManager().Create(donationdata, _donationCreatedOK, _handleError);
+        // GA
+        if (ga) {
+            ga('send', 'event', 'button', 'click', 'donation');
+        }
     }
     //
     Constr.prototype.ShowDonateFormPage = function() {
