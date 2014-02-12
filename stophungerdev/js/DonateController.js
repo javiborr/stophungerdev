@@ -185,6 +185,13 @@
         // GA
         if (ga) {
             ga('send', 'event', 'button', 'click', 'donation', 1);
+        } else
+        // GTM
+        if (dataLayer) {
+            dataLayer.push({
+                'bread': donationdata.Bread,
+                'event': 'donation'
+            });        
         }
     }
     //
