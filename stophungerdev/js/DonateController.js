@@ -183,16 +183,16 @@
         donationdata.Site = userdata.SiteID;
         _getDonationManager().Create(donationdata, _donationCreatedOK, _handleError);
         // GA
-        if (ga) {
+        if (typeof(ga) !== 'undefined' && ga !== null) {
             ga('send', 'event', 'button', 'click', 'donation', 1);
         } else
         // GTM
-        if (dataLayer) {
-            dataLayer.push({
-                'bread': donationdata.Bread,
-                'event': 'donation'
-            });        
-        }
+            if (typeof (dataLayer) !== 'undefined' && dataLayer !== null) {
+                dataLayer.push({
+                    'bread': donationdata.Bread,
+                    'event': 'donation'
+                });        
+            }
     }
     //
     Constr.prototype.ShowDonateFormPage = function() {
