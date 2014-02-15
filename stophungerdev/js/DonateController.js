@@ -184,8 +184,9 @@
         _getDonationManager().Create(donationdata, _donationCreatedOK, _handleError);
         // GA
         if (typeof(ga) !== 'undefined' && ga !== null) {
-            ga('send', 'event', 'button', 'click', 'donation', 1);
-        } 
+            //ga('send', 'event', 'button', 'click', 'donation', 1);
+            ga('send', 'event', 'StopHunger', 'Donation', 'Make donation', 1);
+        }
         // GTM
             if (typeof (dataLayer) !== 'undefined' && dataLayer !== null) {
                 //dataLayer.push({
