@@ -188,10 +188,18 @@
         } else
         // GTM
             if (typeof (dataLayer) !== 'undefined' && dataLayer !== null) {
+                //dataLayer.push({
+                //    'bread': donationdata.Bread,
+                //    'event': 'donation'
+                //});
                 dataLayer.push({
                     'bread': donationdata.Bread,
-                    'event': 'donation'
-                });        
+                    'event': 'GAevent',
+                    'eventCategory': 'StopHunger',
+                    'eventAction': 'Donation',
+                    'eventLabel': 'Make donation',
+                    'eventValue': 1
+                })
             }
     }
     //
