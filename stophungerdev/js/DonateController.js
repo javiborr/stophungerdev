@@ -185,7 +185,7 @@
         // GA
         if (typeof(ga) !== 'undefined' && ga !== null) {
             ga('send', 'event', 'button', 'click', 'donation', 1);
-        } else
+        } 
         // GTM
             if (typeof (dataLayer) !== 'undefined' && dataLayer !== null) {
                 //dataLayer.push({
