@@ -195,10 +195,10 @@
             //});
             dataLayer.push({
                 'bread': donationdata.Bread,
-                'event': 'GAevent',
+                'event': 'GAEvent',
                 'eventCategory': 'StopHunger',
                 'eventAction': 'Donation',
-                'eventLabel': 'Make donation',
+                'eventLabel': 'Using GTM',
                 'eventValue': 1
             })
         }
