@@ -185,23 +185,23 @@
         // GA
         if (typeof(ga) !== 'undefined' && ga !== null) {
             //ga('send', 'event', 'button', 'click', 'donation', 1);
-            ga('send', 'event', 'StopHunger', 'Donation', 'Make donation', 1);
+            ga('send', 'event', 'StopHunger', 'Donation', 'Using GA', 1);
         }
         // GTM
-            if (typeof (dataLayer) !== 'undefined' && dataLayer !== null) {
-                //dataLayer.push({
-                //    'bread': donationdata.Bread,
-                //    'event': 'donation'
-                //});
-                dataLayer.push({
-                    'bread': donationdata.Bread,
-                    'event': 'GAevent',
-                    'eventCategory': 'StopHunger',
-                    'eventAction': 'Donation',
-                    'eventLabel': 'Make donation',
-                    'eventValue': 1
-                })
-            }
+        if (typeof (dataLayer) !== 'undefined' && dataLayer !== null) {
+            //dataLayer.push({
+            //    'bread': donationdata.Bread,
+            //    'event': 'donation'
+            //});
+            dataLayer.push({
+                'bread': donationdata.Bread,
+                'event': 'GAevent',
+                'eventCategory': 'StopHunger',
+                'eventAction': 'Donation',
+                'eventLabel': 'Make donation',
+                'eventValue': 1
+            })
+        }
     }
     //
     Constr.prototype.ShowDonateFormPage = function() {
