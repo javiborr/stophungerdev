@@ -2,7 +2,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>GA Demo - Comprar</title>
+    <script src="../js/lib/jquery.min.js"></script>
     <script src="../js/lib/googleanalytics.js"></script>
+    <script>
+        dataLayer = [];
+    </script>
 </head>
 <body>
     <!-- Google Tag Manager -->
@@ -19,8 +23,8 @@
     <!-- End Google Tag Manager -->
     <form>
         <label for="TicketsInput">Tickets:</label>
-        <input type="number" value="3" id="TicketsInput" />
-        <a href="Gracias.html" >Comprar</a>
+        <input type="number" value="3" id="ticketsInput" />
+        <a id="comprarLink" href="Gracias.html" >Comprar</a>
     </form>
 </body>
 </html>
