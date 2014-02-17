@@ -91,6 +91,11 @@
                 <input type="text" class="required Geodata" name="LatitudText" id="LatitudText" value="{{Latitud}}"/>
             </div>
         </script>
+        <script id="siteAndDonationTpl" type="text/template">
+            <p>Hay {{Bread}} panes, {{Cake}} bollos, {{Sandwich}} bocadillos, {{Salad}} ensaladas,
+               <br />en {{Name}}<br />{{Address1}}<br />{{ZIP}} {{City}}</p>
+            <p>¿Reservar?</p>
+        </script>
         <script id="donateConfirmTpl" type="text/template">
             <p>Vas a donar {{donation.Bread}} panes, {{donation.Cake}} bollos, {{donation.Sandwich}} bocadillos, {{donation.Salad}} ensaladas,
                <br />en {{user.Site}}<br />{{user.Address1}}<br />{{user.ZIP}} {{user.City}}</p>
@@ -243,6 +248,7 @@ j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; 
                 <ul id="adminSiteList" data-role="listview" data-filter="true"
                     data-filter-placeholder="Buscar restaurante..." data-inset="true">
                 </ul>
+                <button id="adminSiteListLogoutButton" class="ui-btn logout ui-icon-delete ui-btn-icon-left">Salir</button>
                 <!--<button id="adminSitesNewButton" class="ui-btn ui-icon-plus ui-btn-icon-left">Crear</button>-->
                 <!--<button id="adminSiteListBackButton" class="ui-btn back-to-menu ui-icon-back ui-btn-icon-left">Volver</button>-->
             </div>
@@ -257,7 +263,7 @@ j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; 
                 <div data-role="tabs" id="tabs" class="map">
                   <div data-role="navbar">
                     <ul>
-                      <li><a href="#siteFormTab" data-ajax="false" id="siteFormTabLink">Datos</a></li>
+                      <li id="siteFormTabLI"><a href="#siteFormTab" data-ajax="false" id="siteFormTabLink">Datos</a></li>
                       <li><a href="#siteMapTab" data-ajax="false" id="siteMapTabLink">Mapa</a></li>
                       <li><a href="#siteDonationTab" data-ajax="false" id="siteDonationTabLink">Donativo</a></li>
                     </ul>
@@ -272,7 +278,7 @@ j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; 
                     <div id="map-canvas" class="map fullwidth"></div>
                   </div>
                   <div id="siteDonationTab" class="ui-body-d ui-content">
-                    <h3>TODO</h3>
+                    <p id="siteAndDonationInfo"></p>
                   </div>
                 </div>
             </div>

@@ -12,13 +12,21 @@
         }
         return mDonateController;
     }
-    // 
+    // MapManager
     var mMapManager = null;
     function _getMapManager() {
         if (mMapManager === null) {
             throw 'DonateView mMapManager is null';
         }
         return mMapManager;
+    }
+    // UserManager
+    var mUserManager = null;
+    function _getUserManager() {
+        if (mUserManager === null) {
+            throw 'DonateView mUserManager is null';
+        }
+        return mUserManager;
     }
     // 
     //var mBreadInput = null;
@@ -321,6 +329,7 @@
     // Initialize
     // -----------------------------------------------------
     function _setup() {
+        var bisadmin = _getUserManager().CurrentUserIsAdmin();
         //$.mobile.toolbar.prototype.options.addBackBtn = true;
         //$.mobile.toolbar.prototype.options.backBtnText = "Volver";
         // 
@@ -330,7 +339,6 @@
         $(".ui-btn-left.back-to-userlist").click(_backToUserListButtonClick);
         // Sites 
         $("#adminSites").button().click(_adminSitesButtonClick);
-        $("#adminSitesNewButton").click(_adminSitesNewButtonClick);
         $("#adminSiteFormSaveButton").button().click(_adminSiteFormSaveButtonClick);
         $(".ui-btn-left.back-to-sitelist").click(_adminSitesButtonClick);
         // Donations
@@ -342,7 +350,14 @@
         // Admin
         $("#requestAccess").button().click(_requestAccessButtonClick);
         $(".ui-btn.logout").button().click(_logoutButtonClick);
-        $(".ui-btn-left.back-to-menu").click(_backToMenuButtonClick);
+        // SI es Admin
+        if (bisadmin) {
+            $("#adminSitesNewButton").click(_adminSitesNewButtonClick);
+            $(".ui-btn-left.back-to-menu").click(_backToMenuButtonClick);
+        } else {
+            $("#adminSitesNewButton").hide();
+            $(".ui-btn-left.back-to-menu").hide();
+        }
         //$(".ui-btn.back-to-menu").button().click(_backToMenuButtonClick);
         //$("#refreshButton").button().click(_refreshButtonClick);
         // ------------------------------------------------------
@@ -381,6 +396,8 @@
         });
         var mapman = _getMapManager();
         $('#siteMapTabLink').on('click', function (pev) {
+            // TODO
+            // Obtener lonlat cuando no hay form???
             var long = $('#LongitudText').val();
             var lat = $('#LatitudText').val();
             mapman.Refresh(long, lat);
@@ -389,6 +406,8 @@
     //
     Constr.prototype.SetDonateController = function (p) { mDonateController = p; }
     //
+    Constr.prototype.SetUserManager = function (p) { mUserManager = p; }
+    // MapManager
     Constr.prototype.SetMapManager = function (p) {
         mMapManager = p;
         if (mMapManager !== null) {
@@ -520,15 +539,34 @@
         } else {
             data = pdata;
         }
-        var template = $('#siteTpl').html();
-        var html = Mustache.to_html(template, data);
-        var ui = $('#adminSiteData');
-        ui.html(html);
         //
-        _showPage(_getAdminSitePage());
-        //
-        $("#tabs").tabs("option", "active", 0);
-        $("#siteFormTabLink").addClass('ui-btn-active');
+        var bisadmin = _getUserManager().CurrentUserIsAdmin();
+        if (bisadmin) {
+            var template = $('#siteTpl').html();
+            var html = Mustache.to_html(template, data);
+            var ui = $('#adminSiteData');
+            ui.html(html);
+            //
+            _showPage(_getAdminSitePage());
+            $("#tabs").tabs("option", "active", 0);
+            $("#siteFormTabLink").addClass('ui-btn-active');
+        } else {
+            _getMapManager().SetLonLat(data.Longitud, data.Latitud);
+            var template = $('#siteAndDonationTpl').html();
+            var html = Mustache.to_html(template, data);
+            var ui = $('#siteAndDonationInfo');
+            ui.html(html);
+            //
+            _showPage(_getAdminSitePage());
+            setTimeout(function () {
+                $("#siteFormTabLI").hide();
+                $("#siteFormTab").hide();
+                $("#siteDonationTab").show();
+                //
+                $("#tabs").tabs("option", "active", 2);
+                $("#siteDonationTabLink").addClass('ui-btn-active');
+            }, 500);
+        }
     }
     //
     // -----------------------------------------------

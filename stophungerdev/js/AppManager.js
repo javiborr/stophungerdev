@@ -58,12 +58,16 @@
             if (mUserManager.CurrentUserIsAdmin()) {
                 mDonateView.ShowPageAdminMenu();
             } else
-                if (mUserManager.CurrentUserIsGiver()) {
-                    mDonateView.ShowPageDonate(false);
-                } else {
-                    // TODO Receiver
-                    mDonateView.ShowPageNoRol();
-                }
+            // SI rol Giver
+            if (mUserManager.CurrentUserIsGiver()) {
+                mDonateView.ShowPageDonate(false);
+            } else
+            // SI rol Taker
+            if (mUserManager.CurrentUserIsTaker()) {
+                mDonateController.ShowPageAdminSiteList();
+            } else {
+                mDonateView.ShowPageNoRol();
+            }
         } else {
             mDonateView.ShowPageNoUser();
         }
@@ -104,6 +108,7 @@
         //
         mDonateView.SetDonateController(mDonateController);
         mDonateView.SetMapManager(mMapManager);
+        mDonateView.SetUserManager(mUserManager);
         mDonateView.Setup();
         //
         mDonateView.ShowPageLogin();

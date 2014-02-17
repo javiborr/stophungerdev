@@ -22,6 +22,9 @@
     var mMapMarkerDest = null;
     var mMapMarkerMyPos = null;
     //
+    var mLon = null;
+    var mLat = null;
+    //
     function _resetSiteMap(plong, plat) {
         var latlngDest = _validateLonLat(plong, plat);
         var map = _getSiteMap(plong, plat);
@@ -119,6 +122,8 @@
     //
     Constr.prototype.SetMapDivID = function (p) { mMapDivID = p; }
     //
+    Constr.prototype.SetLonLat = function (plon, plat) { mLon = plon; mLat = plat; }
+    //
     //Constr.prototype.SetUpMap = function (plon, plat) {
     //    _getSiteMap(plon, plat);
     //}
@@ -128,6 +133,11 @@
     //}
     //
     Constr.prototype.Refresh = function (plon, plat) {
+        // SI NO valen los parametros
+        if (undefined === plon || undefined === plat) {
+            plon = mLon;
+            plat = mLat;
+        }
         var map = _resetSiteMap(plon, plat);
         if (map && google) {
             google.maps.event.addListenerOnce(map, 'idle', function () {
