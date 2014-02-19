@@ -56,6 +56,20 @@
         }
         return res;
     }
+    Constr.prototype.CurrentUserID = function () {
+        var res = false;
+        if (typeof (mCurrentUserDBData) !== 'undefined' && mCurrentUserDBData !== null) {
+            res = mCurrentUserDBData.id;
+        }
+        return res;
+    }
+    Constr.prototype.CurrentUserRole = function () {
+        var res = Role.None;
+        if (typeof (mCurrentUserDBData) !== 'undefined' && mCurrentUserDBData !== null) {
+            res = mCurrentUserDBData.Role;
+        }
+        return res;
+    }
     Constr.prototype.CurrentUserIsAdmin = function () {
         var res = false;
         if (typeof (mCurrentUserDBData) !== 'undefined' && mCurrentUserDBData !== null) {
@@ -77,7 +91,9 @@
         }
         return res;
     }
-    Constr.prototype.CurrentUserData = function () { return mCurrentUserDBData; }
+    Constr.prototype.CurrentUserData = function () {
+        return mCurrentUserDBData;
+    }
     //
     // FB logado seguro
     // DB puede existir o no. Si no existe NO crea el usuario en DB
@@ -95,6 +111,17 @@
                         // SI hay datos en DB
                         if (presponse && presponse.length > 0) {
                             // Got DB data
+                            var role = Role.None;
+                            // SEGUN role
+                            if (presponse[0].Admin === true) {
+                                role = Role.Admin;
+                            } else 
+                                if (presponse[0].Gives === true) {
+                                    role = Role.Donor;
+                                } else
+                                    if (presponse[0].Takes === true) {
+                                        role = Role.Taker;
+                                    }
                             mCurrentUserDBData = {
                                 valid: true,
                                 id: presponse[0].UserID,
@@ -103,6 +130,7 @@
                                 Admin: presponse[0].Admin,
                                 Gives: presponse[0].Gives,
                                 Takes: presponse[0].Takes,
+                                Role: role,
                                 SiteID: presponse[0].SiteID,
                                 Site: presponse[0].Site,
                                 Address1: presponse[0].Address1,

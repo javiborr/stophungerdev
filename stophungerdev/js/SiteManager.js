@@ -9,12 +9,19 @@
     var me = null;
     // Cache all sites
     var mCacheAllSites = null;
+    // Current
+    var mCurrentSite = null;
     // -----------------------------------------------------
     // Constructor
     // -----------------------------------------------------
     var Constr = function () {
         mMSClient = new WindowsAzure.MobileServiceClient(mAppURL, mAppKey);
         me = this;
+    }
+    // -----------------------------------------------
+    // Get Current
+    Constr.prototype.GetCurrentSite = function () {
+        return mCurrentSite;
     }
     // -----------------------------------------------
     // Gets all sites from DB
@@ -38,6 +45,7 @@
     // Gets site from DB
     Constr.prototype.GetSiteDataFromCacheOrDB = function (psiteid, pcbkok, pcbkerr) {
         var data = null;
+        mCurrentSite = null;
         // SI hay cache
         if (mCacheAllSites !== null && mCacheAllSites.length > 0) {
             // PARA CADA site
@@ -54,12 +62,14 @@
             me.GetSiteDataFromDB(psiteid, pcbkok, pcbkerr);
         } else {
             //var res = [data];
+            mCurrentSite = data;
             if (pcbkok) pcbkok(data);
         }
     }
     // -----------------------------------------------
     // Gets site from DB
     Constr.prototype.GetSiteDataFromDB = function (psiteid, pcbkok, pcbkerr) {
+        mCurrentSite = null;
         //var filter = { id: psiteid };
         //var data = mMSClient.getTable('sites').where(filter).read()
         mMSClient.invokeApi("sitebyidwithdonations?siteid="+psiteid, {
@@ -68,6 +78,7 @@
             }).done(
                 function (presponse) {
                     if (presponse !== null && presponse.result !== null && presponse.result.length > 0) {
+                        mCurrentSite = data;
                         if (pcbkok) pcbkok(presponse.result[0]);
                     }
                 }

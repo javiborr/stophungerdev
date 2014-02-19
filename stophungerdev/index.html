@@ -25,6 +25,7 @@
         <script src="js/DonateView.js"></script>
         <script src="js/DonateController.js"></script>
         <script src="js/AppManager.js"></script>
+        <script src="js/Enum.js"></script>
         <script type="text/javascript">
             var gAppManager = null;
             function mystuff() {
@@ -91,10 +92,19 @@
                 <input type="text" class="required Geodata" name="LatitudText" id="LatitudText" value="{{Latitud}}"/>
             </div>
         </script>
-        <script id="siteAndDonationTpl" type="text/template">
+        <script id="donationAvailableTpl" type="text/template">
             <p>Hay {{Bread}} panes, {{Cake}} bollos, {{Sandwich}} bocadillos, {{Salad}} ensaladas,
                <br />en {{Name}}<br />{{Address1}}<br />{{ZIP}} {{City}}</p>
-            <p>¿Reservar?</p>
+        </script>
+        <script id="donationReservedOtherTpl" type="text/template">
+            <p>Hay {{Bread}} panes, {{Cake}} bollos, {{Sandwich}} bocadillos, {{Salad}} ensaladas,
+               <br />en {{Name}}<br />{{Address1}}<br />{{ZIP}} {{City}}</p>
+            <p>Reservado para ...</p>
+        </script>
+        <script id="donationReserved4MeTpl" type="text/template">
+            <p>Hay {{Bread}} panes, {{Cake}} bollos, {{Sandwich}} bocadillos, {{Salad}} ensaladas,
+               <br />en {{Name}}<br />{{Address1}}<br />{{ZIP}} {{City}}</p>
+            <p>Reservado para mi</p>
         </script>
         <script id="donateConfirmTpl" type="text/template">
             <p>Vas a donar {{donation.Bread}} panes, {{donation.Cake}} bollos, {{donation.Sandwich}} bocadillos, {{donation.Salad}} ensaladas,
@@ -248,7 +258,7 @@ j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; 
                 <ul id="adminSiteList" data-role="listview" data-filter="true"
                     data-filter-placeholder="Buscar restaurante..." data-inset="true">
                 </ul>
-                <button id="adminSiteListLogoutButton" class="ui-btn logout ui-icon-delete ui-btn-icon-left">Salir</button>
+                <button id="adminSiteListLogoutButton" class="ui-btn noadmin logout ui-icon-delete ui-btn-icon-left">Salir</button>
                 <!--<button id="adminSitesNewButton" class="ui-btn ui-icon-plus ui-btn-icon-left">Crear</button>-->
                 <!--<button id="adminSiteListBackButton" class="ui-btn back-to-menu ui-icon-back ui-btn-icon-left">Volver</button>-->
             </div>
@@ -279,6 +289,7 @@ j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; 
                   </div>
                   <div id="siteDonationTab" class="ui-body-d ui-content">
                     <p id="siteAndDonationInfo"></p>
+                    <button id="makeReservationButton" class="ui-btn ui-icon-check ui-btn-icon-left">Reservar</button>
                   </div>
                 </div>
             </div>

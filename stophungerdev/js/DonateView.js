@@ -325,11 +325,24 @@
         $('#siteFormError').text(perror);
     }
     //
+    function _makeReservationError(perror) {
+        var msg = ['No ha sido posible hacer la reserva'
+            , perror
+        ].join('\n');
+        alert(msg);
+        _getDonateController().ShowPageAdminSiteList();
+    }
+    //
+    function _makeReservationButtonClick(pevt) {
+        _getDonateController().MakeReservationCurrent(_getDonateController().ShowPageAdminSiteList, _makeReservationError);
+        pevt.preventDefault();
+    }
     // -----------------------------------------------------
     // Initialize
     // -----------------------------------------------------
     function _setup() {
-        var bisadmin = _getUserManager().CurrentUserIsAdmin();
+        // Todavía no sabe los datos del usuario
+        //var bisadmin = _getUserManager().CurrentUserIsAdmin();
         //$.mobile.toolbar.prototype.options.addBackBtn = true;
         //$.mobile.toolbar.prototype.options.backBtnText = "Volver";
         // 
@@ -341,6 +354,7 @@
         $("#adminSites").button().click(_adminSitesButtonClick);
         $("#adminSiteFormSaveButton").button().click(_adminSiteFormSaveButtonClick);
         $(".ui-btn-left.back-to-sitelist").click(_adminSitesButtonClick);
+        $("#makeReservationButton").button().click(_makeReservationButtonClick);
         // Donations
         $("#adminDonate").button().click(_adminDonateButtonClick);
         $("#addDonationButton").click(_addDonationButtonClick);
@@ -351,13 +365,13 @@
         $("#requestAccess").button().click(_requestAccessButtonClick);
         $(".ui-btn.logout").button().click(_logoutButtonClick);
         // SI es Admin
-        if (bisadmin) {
-            $("#adminSitesNewButton").click(_adminSitesNewButtonClick);
-            $(".ui-btn-left.back-to-menu").click(_backToMenuButtonClick);
-        } else {
-            $("#adminSitesNewButton").hide();
-            $(".ui-btn-left.back-to-menu").hide();
-        }
+        //if (bisadmin) {
+        //    $("#adminSitesNewButton").click(_adminSitesNewButtonClick);
+        //    $(".ui-btn-left.back-to-menu").click(_backToMenuButtonClick);
+        //} else {
+        //    $("#adminSitesNewButton").hide();
+        //    $(".ui-btn-left.back-to-menu").hide();
+        //}
         //$(".ui-btn.back-to-menu").button().click(_backToMenuButtonClick);
         //$("#refreshButton").button().click(_refreshButtonClick);
         // ------------------------------------------------------
@@ -402,6 +416,18 @@
             var lat = $('#LatitudText').val();
             mapman.Refresh(long, lat);
         });
+    }
+    //
+    Constr.prototype.SetRole = function (p) {
+        var bisadmin = (p === Role.Admin);
+        if (bisadmin) {
+            $("#adminSitesNewButton").click(_adminSitesNewButtonClick);
+            $(".ui-btn-left.back-to-menu").click(_backToMenuButtonClick);
+            $(".noadmin.logout").parent().hide();
+        } else {
+            $("#adminSitesNewButton").hide();
+            $(".ui-btn-left.back-to-menu").hide();
+        }
     }
     //
     Constr.prototype.SetDonateController = function (p) { mDonateController = p; }
@@ -503,13 +529,14 @@
                         r3.prop('checked', true);
                         $("#adminUserSelectSite").hide();
                     }
-            // TODO select current value
+            // Obtiene la lista de todos los restaurantes
             _getDonateController().GetAllSitesFromDB(
                 function (presponse) {
                     template = $('#selectSiteListItemTpl').html();
                     html = Mustache.to_html(template, presponse);
                     ui = $('#select-site');
                     ui.html(html);
+                    // Selecciona el restaurante del usuario
                     var s = ["#select-site option[value='",udata.SiteID,"']"].join('');
                     $(s).attr('selected', 'selected');
                     _showPage(_getAdminUserPage());
@@ -540,8 +567,48 @@
             data = pdata;
         }
         //
-        var bisadmin = _getUserManager().CurrentUserIsAdmin();
+        var uman = _getUserManager();
+        var bisadmin = uman.CurrentUserIsAdmin();
+        // Hay donativo?
+        var bhaydon = ((data.Bread > 0) || (data.Cake > 0) || (data.Sandwich > 0) || (data.Salad > 0));
+        // Reservado?
+        // pdata.Reserved
+        // pdata.ReservedFor
+        // TODO nombre reservador para
+        var breserved = (data.Reserved === true);
+        var breserved4me = (uman.CurrentUserID() === data.ReservedFor);
+        // SI NO reservada
+        if (!breserved) {
+            var template = $('#donationAvailableTpl').html();
+            var html = Mustache.to_html(template, data);
+            var ui = $('#siteAndDonationInfo');
+            ui.html(html);
+            $("#makeReservationButton").parent().show();
+        } else {
+            // SI reservada para mi
+            if (breserved4me) {
+                var template = $('#donationReserved4MeTpl').html();
+                var html = Mustache.to_html(template, data);
+                var ui = $('#siteAndDonationInfo');
+                ui.html(html);
+                // TODO cancelar reserva
+                $("#makeReservationButton").parent().hide();
+            } else {
+                // Reservado para otro
+                var template = $('#donationReservedOtherTpl').html();
+                var html = Mustache.to_html(template, data);
+                var ui = $('#siteAndDonationInfo');
+                ui.html(html);
+                $("#makeReservationButton").parent().hide();
+            }
+        }
+        // SI NO hay donativo
+        if (!bhaydon) {
+            $("#makeReservationButton").parent().hide();
+        }
+        // SI admin muestra el form site
         if (bisadmin) {
+            // Form site
             var template = $('#siteTpl').html();
             var html = Mustache.to_html(template, data);
             var ui = $('#adminSiteData');
@@ -551,11 +618,8 @@
             $("#tabs").tabs("option", "active", 0);
             $("#siteFormTabLink").addClass('ui-btn-active');
         } else {
+            // No puede consultar el form site
             _getMapManager().SetLonLat(data.Longitud, data.Latitud);
-            var template = $('#siteAndDonationTpl').html();
-            var html = Mustache.to_html(template, data);
-            var ui = $('#siteAndDonationInfo');
-            ui.html(html);
             //
             _showPage(_getAdminSitePage());
             setTimeout(function () {

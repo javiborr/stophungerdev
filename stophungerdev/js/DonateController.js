@@ -40,6 +40,8 @@
     var mUserEditingID = null;
     // Site we are editing now
     var mSiteEditingID = null;
+    // Donation we are using now
+    var mDonationID = null;
     // -----------------------------------------------------
     // Constructor
     // -----------------------------------------------------
@@ -121,14 +123,20 @@
     // Admin site
     Constr.prototype.ShowPageAdminSite = function (psiteid) {
         var view = _getDonateView();
+        mDonationID = null;
         // SI psiteid es OK entonces editamos un site
         if (typeof (psiteid) !== 'undefined' && psiteid !== null) {
             mSiteEditingID = psiteid;
             view.WaitingForServer();
+            // Esta operacion establece CurrentSite y obtiene DonationID
             _getSiteManager().GetSiteDataFromCacheOrDB(
                 psiteid,
                 function (pdata) {
-                    if ((typeof(pdata) !== 'undefined') && (pdata !== null)) {
+                    if ((typeof (pdata) !== 'undefined') && (pdata !== null)) {
+                        mDonationID = pdata.DonationID;
+                        // pdata.Reserved
+                        // pdata.ReservedFor
+                        // TODO nombre reservador para
                         view.ShowPageAdminSite(pdata);
                     }
                 }
@@ -163,6 +171,18 @@
     // -----------------------------------------------
     // Donations
     // -----------------------------------------------
+    // TODO UI: page donation reserved vs donation available
+    // donation reserved: to me OR to other
+    // Action makes a reservation
+    Constr.prototype.MakeReservationCurrent = function (pcbkok, pcbkerr) {
+        var uid = _getUserManager().CurrentUserID();
+        // SI OK
+        if (mDonationID !== null && mSiteEditingID !== null && uid !== null) {
+            var data = {Site: mSiteEditingID, TakerID: uid, DonationID: mDonationID};
+            _getDonateView().WaitingForServer('Intenta hacer la reserva...');
+            _getDonationManager().MakeReservation(data, pcbkok, pcbkerr);
+        }
+    }
     // Action create a donation
     Constr.prototype.CreateDonation = function () {
         var view = _getDonateView();

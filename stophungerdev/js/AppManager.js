@@ -54,16 +54,19 @@
     function _showPageForRol() {
         // SI encuentra usuario registrado
         if (mUserManager.CurrentUserIsValid()) {
+            var role = mUserManager.CurrentUserRole();
+            mDonateView.SetRole(role);
             // SI rol Admin
-            if (mUserManager.CurrentUserIsAdmin()) {
+            if (role === Role.Admin) {
                 mDonateView.ShowPageAdminMenu();
             } else
             // SI rol Giver
-            if (mUserManager.CurrentUserIsGiver()) {
+            if (role === Role.Donor) {
+                // TODO use role
                 mDonateView.ShowPageDonate(false);
             } else
             // SI rol Taker
-            if (mUserManager.CurrentUserIsTaker()) {
+            if (role === Role.Taker) {
                 mDonateController.ShowPageAdminSiteList();
             } else {
                 mDonateView.ShowPageNoRol();
