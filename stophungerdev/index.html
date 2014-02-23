@@ -248,16 +248,29 @@ j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; 
         </div>
 
         <!-- Admin sites PAGE -->
-        <div data-role="page" data-theme="a" id="adminSiteListPage">
+        <div data-role="page" data-theme="a" id="adminSiteListPage" class="map">
             <div data-role="header" id="Div17">
                 <a href="#" data-icon="back" class="ui-btn-left back-to-menu">Volver</a>
                 <h3>Restaurantes</h3>
                 <a href="#" id="adminSitesNewButton" data-icon="plus" data-theme="b" class="ui-btn-right">Nuevo</a>
             </div>  
-            <div data-role="content" id="Div18">
-                <ul id="adminSiteList" data-role="listview" data-filter="true"
-                    data-filter-placeholder="Buscar restaurante..." data-inset="true">
-                </ul>
+            <div data-role="content"  class="map fullwidth">
+                <div data-role="tabs" id="listsitestabs" class="map">
+                    <div data-role="navbar">
+                        <ul>
+                            <li id="siteListTabLI"><a href="#siteListTab" data-ajax="false" id="siteListTabLink">Sitios</a></li>
+                            <li><a href="#siteListMapTab" data-ajax="false" id="siteListMapTabLink">Mapa</a></li>
+                        </ul>
+                    </div>
+                    <div id="siteListTab">
+                        <ul id="adminSiteList" data-role="listview" data-filter="true"
+                            data-filter-placeholder="Buscar restaurante..." data-inset="true">
+                        </ul>
+                    </div>
+                    <div id="siteListMapTab" class="ui-body-d ui-content map fullwidth">
+                        <div id="map-list-canvas" class="map fullwidth"></div>
+                    </div>
+                </div>
                 <button id="adminSiteListLogoutButton" class="ui-btn noadmin logout ui-icon-delete ui-btn-icon-left">Salir</button>
                 <!--<button id="adminSitesNewButton" class="ui-btn ui-icon-plus ui-btn-icon-left">Crear</button>-->
                 <!--<button id="adminSiteListBackButton" class="ui-btn back-to-menu ui-icon-back ui-btn-icon-left">Volver</button>-->

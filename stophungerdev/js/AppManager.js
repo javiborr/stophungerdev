@@ -9,6 +9,7 @@
     var mUserManager = null;
     var mSiteManager = null;
     var mMapManager = null;
+    var mListMapManager = null;
     //
     var mActivePage = 'start';
     //
@@ -98,6 +99,7 @@
         mUserManager = new UserManager();
         mSiteManager = new SiteManager();
         mMapManager = new MapManager();
+        mListMapManager = new MapManager();
         //
         mFBManager.SetUserManager(mUserManager);
         // 
@@ -112,6 +114,7 @@
         //
         mDonateView.SetDonateController(mDonateController);
         mDonateView.SetMapManager(mMapManager);
+        mDonateView.SetListMapManager(mListMapManager);
         mDonateView.SetUserManager(mUserManager);
         mDonateView.Setup();
         //

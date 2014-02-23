@@ -1,6 +1,6 @@
 ﻿DonateView = (function ($) {
     // -----------------------------------------------------
-    // Privado
+    // STATIC!!!
     // -----------------------------------------------------
     var mMobile = true;
     var me = null;
@@ -19,6 +19,14 @@
             throw 'DonateView mMapManager is null';
         }
         return mMapManager;
+    }
+    // ListMapManager
+    var mListMapManager = null;
+    function _getListMapManager() {
+        if (mListMapManager === null) {
+            throw 'DonateView mListMapManager is null';
+        }
+        return mListMapManager;
     }
     // UserManager
     var mUserManager = null;
@@ -389,6 +397,7 @@
         // ------------------------------------------------------
         // Form site
         // ------------------------------------------------------
+        // Setup site form validation
         $(document).on("pageshow", "#adminSiteFormPage", function () {
             $.validator.addMethod(
                 "ZIP"
@@ -408,13 +417,18 @@
                 );
             $("#adminSiteForm").validate();
         });
+        // Setup click for site form
         var mapman = _getMapManager();
         $('#siteMapTabLink').on('click', function (pev) {
-            // TODO
             // Obtener lonlat cuando no hay form???
             var long = $('#LongitudText').val();
             var lat = $('#LatitudText').val();
             mapman.Refresh(long, lat);
+        });
+        // Setup click for site list
+        var lsmapman = _getListMapManager();
+        $('#siteListMapTabLink').on('click', function (pev) {
+            lsmapman.RefreshList();
         });
     }
     //
@@ -438,6 +452,13 @@
         mMapManager = p;
         if (mMapManager !== null) {
             mMapManager.SetMapDivID('map-canvas');
+        }
+    }
+    // ListMapManager
+    Constr.prototype.SetListMapManager = function (p) {
+        mListMapManager = p;
+        if (mListMapManager !== null) {
+            mListMapManager.SetMapDivID('map-list-canvas');
         }
     }
     //
@@ -549,12 +570,15 @@
     }
     // -----------------------------------------------
     // Muestra la lista de sitios
-    Constr.prototype.ShowPageAdminSiteList = function (presponse) {
+    Constr.prototype.ShowPageAdminSiteList = function (psites) {
+        _getListMapManager().SetSites(psites.sites);
         var template = $('#siteListItemTpl').html();
-        var html = Mustache.to_html(template, presponse);
+        var html = Mustache.to_html(template, psites);
         var ui = $('#adminSiteList');
         ui.html(html);
         _showPage(_getAdminSiteListPage());
+        $("#listsitestabs").tabs("option", "active", 0);
+        $("#siteListTabLink").addClass('ui-btn-active');
         ui.listview('refresh');
     }
     // Muestra un sitio

@@ -16,12 +16,13 @@
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
     <script>
         function initialize() {
+            var mapo = document.getElementById('map-canvas');
             var myLatlng = new google.maps.LatLng(40.51325, -3.67158);
             var mapOptions = {
                 zoom: 15,
                 center: myLatlng
             }
-            var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+            var map = new google.maps.Map(mapo, mapOptions);
 
             var marker = new google.maps.Marker({
                 position: myLatlng,
