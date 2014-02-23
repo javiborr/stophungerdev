@@ -127,6 +127,7 @@ img.user-photo {
     font-weight: bold;
     color: white;
 }
+/* Not reserved */
 .reserved {
     background-color: limegreen;
     border-color: rgb(221, 221, 221);
@@ -135,8 +136,18 @@ img.user-photo {
     font-weight: normal;
     padding: 0px 6px 0px 6px;
 }
-.reserved.true {
+/* Reserved for somebody else */
+.reserved.rtrue {
     background-color: orangered;
+    border-color: rgb(221, 221, 221);
+    border-style: solid;
+    border-width: thin;
+    font-weight: bold;
+    color: white;
+}
+/* Reserved for me */
+.reserved.rtrue.mytrue {
+    background-color: yellow;
     border-color: rgb(221, 221, 221);
     border-style: solid;
     border-width: thin;

@@ -11,6 +11,8 @@
     var mCacheAllSites = null;
     // Current
     var mCurrentSite = null;
+    // User ID
+    var mUserID = null;
     // -----------------------------------------------------
     // Constructor
     // -----------------------------------------------------
@@ -23,6 +25,10 @@
     Constr.prototype.GetCurrentSite = function () {
         return mCurrentSite;
     }
+    // Set user id
+    Constr.prototype.SetUserID = function (p) {
+        mUserID = p;
+    }
     // -----------------------------------------------
     // Gets all sites from DB
     Constr.prototype.GetAllSitesFromDB = function (pcbkok, pcbkerr) {
@@ -33,6 +39,17 @@
                 method: "get",
             }).done(
                 function (presponse) {
+                    var i = 0;
+                    // PARA CADA site
+                    for (i = 0; i < presponse.result.length; i++) {
+                        var data = presponse.result[i];
+                        // SI reservado para mi
+                        if (data.ReservedFor === mUserID) {
+                            presponse.result[i].Reserved4Me = true;
+                        } else {
+                            presponse.result[i].Reserved4Me = false;
+                        }
+                    }
                     mCacheAllSites = presponse.result;
                     if (pcbkok) pcbkok(presponse.result);
                 }

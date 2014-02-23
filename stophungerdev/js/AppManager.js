@@ -56,6 +56,7 @@
         if (mUserManager.CurrentUserIsValid()) {
             var role = mUserManager.CurrentUserRole();
             mDonateView.SetRole(role);
+            mSiteManager.SetUserID(mUserManager.CurrentUserID());
             // SI rol Admin
             if (role === Role.Admin) {
                 mDonateView.ShowPageAdminMenu();

@@ -137,25 +137,42 @@ exports.get = function (request, response) {
 // SitesWithDonations
 exports.get = function (request, response) {
     var httpReq = require("request");
-    var sql = ["SELECT  s.name as [Name], s.Address1, s.ZIP, s.City, s.Longitud, s.Latitud, ISNULL(x.Bread,0) as Bread, ISNULL(x.Cake,0) as Cake"
-        , ",ISNULL(x.Sandwich,0) as Sandwich, ISNULL(x.Salad,0) as Salad, s.id as [SiteID], x.[DonatedWhen],ISNULL(x.Reserved,0) as Reserved"
-        , ",x.ReservedFor, x.ReservedWhen, DonationID"
-        , "FROM [stophunger].[Sites] as s"
-        , "left outer join (select d.Bread, d.Cake, d.Sandwich, d.Salad, d.Site as SiteID, d.[__updatedAt] as [DonatedWhen]"
-        , ", ISNULL(d.Reserved,0) as Reserved, d.ReservedFor, d.ReservedWhen, d.id as DonationID"
-        , "from [stophunger].[Donations] as d"
-        , "where d.[Current] = 1) as x"
-        , "on x.SiteID = s.id"].join(' ');
+    var sql = ["SELECT [Name],[Address1],[ZIP],[City],[Longitud],[Latitud]"
+        , ",[Bread],[Cake],[Sandwich],[Salad],[SiteID],[DonatedWhen]"
+        , ",[Reserved],[ReservedFor],[ReservedWhen],[FirstName],[LastName],[DonationID]"
+        , "  FROM [stophunger].[vSitesWithDonations]"
+        ].join(' ');
     var mssql = request.service.mssql;
     mssql.query(sql, {
         success: function (results) {
             request.respond(200, results);
         }, error: function (err) {
-            console.log(["sql is: " + sql,"error is: " + err].join('\n'));
+            console.log(["sql is: " + sql, "error is: " + err].join('\n'));
         }
 
     });
 };
+//exports.get = function (request, response) {
+//    var httpReq = require("request");
+//    var sql = ["SELECT  s.name as [Name], s.Address1, s.ZIP, s.City, s.Longitud, s.Latitud, ISNULL(x.Bread,0) as Bread, ISNULL(x.Cake,0) as Cake"
+//        , ",ISNULL(x.Sandwich,0) as Sandwich, ISNULL(x.Salad,0) as Salad, s.id as [SiteID], x.[DonatedWhen],ISNULL(x.Reserved,0) as Reserved"
+//        , ",x.ReservedFor, x.ReservedWhen, DonationID"
+//        , "FROM [stophunger].[Sites] as s"
+//        , "left outer join (select d.Bread, d.Cake, d.Sandwich, d.Salad, d.Site as SiteID, d.[__updatedAt] as [DonatedWhen]"
+//        , ", ISNULL(d.Reserved,0) as Reserved, d.ReservedFor, d.ReservedWhen, d.id as DonationID"
+//        , "from [stophunger].[Donations] as d"
+//        , "where d.[Current] = 1) as x"
+//        , "on x.SiteID = s.id"].join(' ');
+//    var mssql = request.service.mssql;
+//    mssql.query(sql, {
+//        success: function (results) {
+//            request.respond(200, results);
+//        }, error: function (err) {
+//            console.log(["sql is: " + sql, "error is: " + err].join('\n'));
+//        }
+
+//    });
+//};
 // sitebyidwithdonations
 exports.get = function(request, response) {
     var httpReq = require("request");

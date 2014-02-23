@@ -19,6 +19,7 @@
             font-weight: bold;
             color: white;
         }
+        /* Not reserved */
         .reserved {
             background-color: limegreen;
             border-color: rgb(221, 221, 221);
@@ -27,7 +28,8 @@
             font-weight: normal;
             padding: 0px 6px 0px 6px;
         }
-        .reserved.true {
+        /* Reserved not for me */
+        .reserved.rtrue {
             background-color: orangered;
             border-color: rgb(221, 221, 221);
             border-style: solid;
@@ -35,6 +37,16 @@
             font-weight: bold;
             color: white;
         }
+        /* Reserved for me */
+        .reserved.rtrue.mytrue {
+            background-color: yellow;
+            border-color: rgb(221, 221, 221);
+            border-style: solid;
+            border-width: thin;
+            font-weight: bold;
+            color: white;
+        }
+        /* No donation available */
         .reserved.d0000 {
             background-color: rgb(246, 246, 246);
             border-color: rgb(221, 221, 221);
@@ -52,8 +64,10 @@
     <br />
     <span class="notreserved false">D</span><span class="reserved true">R</span>
     <br />
-    <span class="reserved false d0000">&nbsp;</span>
+    <span class="reserved rfalse d0000">&nbsp;</span>
     <br />
-    <span class="reserved true">&nbsp;</span>
+    <span class="reserved rtrue myfalse">&nbsp;</span>
+    <br />
+    <span class="reserved rtrue mytrue">&nbsp;</span>
 </body>
 </html>
