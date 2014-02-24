@@ -128,6 +128,36 @@
         return map;
     }
     //
+    Constr.prototype._getMarkerData = function (p) {
+        var res = {icon: '', info: null};
+        if (p !== undefined && p !== null && p.Reserved !== undefined) {
+            var total = p.Bread + p.Cake + p.Sandwich + p.Salad;
+            // SI NO hay nada
+            if (total === 0) {
+                res.icon = 'img/marker_grey.png';
+            } else {
+                // SI libre
+                if (p.Reserved === false) {
+                    var template = $('#donationAvailableTpl').html();
+                    res.info = Mustache.to_html(template, p);
+                    res.icon = 'img/sandwich-green2.png';
+                } else {
+                    // SI para mi
+                    if (p.Reserved4Me === true) {
+                        var template = $('#donationReserved4MeTpl').html();
+                        res.info = Mustache.to_html(template, p);
+                        res.icon = 'img/sandwich-yellow.png';
+                    } else {
+                        var template = $('#donationReservedOtherTpl').html();
+                        res.info = Mustache.to_html(template, p);
+                        res.icon = 'img/sandwich-red.png';
+                    }
+                }
+            }
+        }
+        return res;
+    }
+    //
     Constr.prototype.SetMapDivID = function (p) { this.mMapDivID = p; }
     //
     Constr.prototype.SetLonLat = function (plon, plat) { this.mLon = plon; this.mLat = plat; }
@@ -136,7 +166,7 @@
     // Refresh site list
     Constr.prototype.RefreshList = function () {
         // SI tengo la lista de sitios
-        if (this.mSites !== undefined && this.mSites !== null) {
+        if (this.mSites !== undefined && this.mSites !== null && this.mSites.length > 0 ) {
             // SI tengo markers
             if (this.mMarkers !== undefined && this.mMarkers !== null && this.mMarkers.length > 0) {
                 // PARA CADA marker
@@ -145,9 +175,8 @@
                 }
             }
             this.mMarkers = [];
-            var map = null;
-            //  Make an array of the LatLng's of the markers you want to show
-            //var LatLngList = [];
+            var s = this.mSites[0];
+            var map = this._getSiteMap(s.Longitud, s.Latitud);
             //  Create a new viewpoint bound
             var bounds = new google.maps.LatLngBounds();
             // PARA CADA sitio
@@ -155,15 +184,24 @@
                 var s = this.mSites[i];
                 map = this._getSiteMap(s.Longitud, s.Latitud);
                 var myLatlng = new google.maps.LatLng(s.Longitud, s.Latitud);
-                //LatLngList.push(myLatlng);
+                var markerdata = this._getMarkerData(s);
                 //  And increase the bounds to take this point
                 bounds.extend(myLatlng);
                 var marker = new google.maps.Marker({
                     position: myLatlng,
-                    title: "Hello World!"
+                    animation: google.maps.Animation.DROP,
+                    icon: markerdata.icon
                 });
+                marker.setTitle((i + 1).toString());
                 marker.setMap(map);
                 this.mMarkers.push(marker);
+                attachInfo(marker, markerdata.info);
+                //var infowindow = new google.maps.InfoWindow({
+                //    content: markerdata.info
+                //});
+                //google.maps.event.addListener(marker, 'click', function () {
+                //    infowindow.open(map, marker);
+                //});
             }
             if (map && google) {
                 //  Fit these bounds to the map
@@ -173,11 +211,25 @@
                         center = map.getCenter();
                         google.maps.event.trigger(map, 'resize');
                         map.setCenter(center);
+                        // TODO drop markers.. not worth it
                     }, 1000);
                 });
             }
         }
         //_getSiteMap(plon, plat);
+    }
+    // Closure vs instance data 
+    // https://developers.google.com/maps/documentation/javascript/examples/event-closure
+    //
+    function attachInfo(pmarker, ptxt) {
+        if ( ptxt !== null ) {
+            var infowindow = new google.maps.InfoWindow({
+                content: ptxt
+            });
+            google.maps.event.addListener(pmarker, 'click', function () {
+                infowindow.open(pmarker.get('map'), pmarker);
+            });
+        }
     }
     //Constr.prototype.PanTo = function (plon, plat) {
     //    _resetSiteMap(plon, plat);
