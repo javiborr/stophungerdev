@@ -211,6 +211,7 @@
                         center = map.getCenter();
                         google.maps.event.trigger(map, 'resize');
                         map.setCenter(center);
+                        map.fitBounds(bounds);
                         // TODO drop markers.. not worth it
                     }, 1000);
                 });
