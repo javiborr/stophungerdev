@@ -52,10 +52,27 @@
     Constr.prototype.SetSiteManager = function (p) { mSiteManager = p; }
     Constr.prototype.SetDonateView = function (p) { mDonateView = p; }
     // -----------------------------------------------
-    // Logout
+    // Logout, Login
     // -----------------------------------------------
     Constr.prototype.LogoutStart = function () {
         _getUserManager().Logout();
+    }
+    Constr.prototype.LoginStart = function (pusername, ppassword) {
+        _getUserManager().Login(pusername, ppassword, _loginOK, _loginError);
+    }
+    function _loginOK(p) {
+        // SI tenemos el resultado de la consulta
+        if (typeof (p) !== 'undefined' && p !== null) {
+            // SI login OK
+            if (p.length > 0) {
+                _getUserManager().SetLogged(true, p[0].FBID);
+            } else {
+                _getDonateView().LoginError();
+            }
+        }
+    }
+    function _loginError(p) {
+        _getDonateView().LoginError();
     }
     // -----------------------------------------------
     // RequestAccess

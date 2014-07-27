@@ -228,6 +228,13 @@
         pevt.preventDefault();
     }
     //
+    function _loginButtonClick(pevt) {
+        var email = $('#LoginCorreoText').val();
+        var passw = $('#LoginClaveText').val();
+        _getDonateController().LoginStart(email, passw);
+        pevt.preventDefault();
+    }
+    //
     function _logoutButtonClick(pevt) {
         _getDonateController().LogoutStart();
         pevt.preventDefault();
@@ -372,6 +379,7 @@
         // Admin
         $("#requestAccess").button().click(_requestAccessButtonClick);
         $(".ui-btn.logout").button().click(_logoutButtonClick);
+        $("#LoginButton").button().click(_loginButtonClick);
         // SI es Admin
         //if (bisadmin) {
         //    $("#adminSitesNewButton").click(_adminSitesNewButtonClick);
@@ -430,6 +438,10 @@
         $('#siteListMapTabLink').on('click', function (pev) {
             lsmapman.RefreshList();
         });
+    }
+    //
+    Constr.prototype.LoginError = function () {
+        $("#LoginError").text('Error o el usuario no existe o la clave no es correcta');
     }
     //
     Constr.prototype.SetRole = function (p) {

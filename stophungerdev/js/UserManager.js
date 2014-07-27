@@ -11,13 +11,13 @@
         return mAppManager;
     }
     // FB user data
-    var mFBManager = null;
-    function _getFBManager() {
-        if (mFBManager === null) {
-            throw 'UserManager mFBManager is null';
-        }
-        return mFBManager;
-    }
+    //var mFBManager = null;
+    //function _getFBManager() {
+    //    if (mFBManager === null) {
+    //        throw 'UserManager mFBManager is null';
+    //    }
+    //    return mFBManager;
+    //}
     // DB user data
     var mPeopleManager = null;
     function _getPeopleManager() {
@@ -29,6 +29,8 @@
     // User data
     var mCurrentUserDBData = null;
     var mCurrentUserFBData = null;
+    // Login alternativo a FB
+    var mCurrentUserID = null;
     // -----------------------------------------------------
     // Constructor
     // -----------------------------------------------------
@@ -40,12 +42,12 @@
     Constr.prototype.SetAppManager = function (p) { mAppManager = p; }
     //
     Constr.prototype.Init = function () {
-        var fbman = _getFBManager();
-        fbman.Init();
+        //var fbman = _getFBManager();
+        //fbman.Init();
     }
     //
-    Constr.prototype.SetLogged = function (pislogged) {
-        _getAppManager().SetLogged(pislogged);
+    Constr.prototype.SetLogged = function (pislogged, puserid) {
+        _getAppManager().SetLogged(pislogged, puserid);
     }
     // -----------------------------------------------
     // Get current user data
@@ -97,50 +99,42 @@
     //
     // FB logado seguro
     // DB puede existir o no. Si no existe NO crea el usuario en DB
-    Constr.prototype.GetCurrentUserFromFBDB = function (pcbkok, pcbkerr) {
-        var fbman = _getFBManager();
-        // Debemos estar logados en FB asi que debemos poder recuperar los datos FB
-        fbman.GetCurrentUserFromFB(
-            function (pfbdata) {
-                var pman = _getPeopleManager();
-                // Got FB data
-                mCurrentUserFBData = pfbdata;
-                // Get DB data maybe there is not
-                pman.GetUserDataFromDB(pfbdata.id,
-                    function (presponse) {
-                        // SI hay datos en DB
-                        if (presponse && presponse.length > 0) {
-                            // Got DB data
-                            var role = Role.None;
-                            // SEGUN role
-                            if (presponse[0].Admin === true) {
-                                role = Role.Admin;
-                            } else 
-                                if (presponse[0].Gives === true) {
-                                    role = Role.Donor;
-                                } else
-                                    if (presponse[0].Takes === true) {
-                                        role = Role.Taker;
-                                    }
-                            mCurrentUserDBData = {
-                                valid: true,
-                                id: presponse[0].UserID,
-                                FBID: pfbdata.id,
-                                UserName: presponse[0].UserName,
-                                Admin: presponse[0].Admin,
-                                Gives: presponse[0].Gives,
-                                Takes: presponse[0].Takes,
-                                Role: role,
-                                SiteID: presponse[0].SiteID,
-                                Site: presponse[0].Site,
-                                Address1: presponse[0].Address1,
-                                ZIP: presponse[0].ZIP,
-                                City: presponse[0].City
-                            };
-                        }
-                        if (pcbkok) pcbkok();
-                    }, pcbkerr
-                );
+    Constr.prototype.GetCurrentUserFromFBDB = function (pcbkok, pcbkerr, puserid) {
+        var pman = _getPeopleManager();
+        // Get DB data maybe there is not
+        pman.GetUserDataFromDB(puserid,
+            function (presponse) {
+                // SI hay datos en DB
+                if (presponse && presponse.length > 0) {
+                    // Got DB data
+                    var role = Role.None;
+                    // SEGUN role
+                    if (presponse[0].Admin === true) {
+                        role = Role.Admin;
+                    } else 
+                        if (presponse[0].Gives === true) {
+                            role = Role.Donor;
+                        } else
+                            if (presponse[0].Takes === true) {
+                                role = Role.Taker;
+                            }
+                    mCurrentUserDBData = {
+                        valid: true,
+                        id: presponse[0].UserID,
+                        FBID: puserid,
+                        UserName: presponse[0].UserName,
+                        Admin: presponse[0].Admin,
+                        Gives: presponse[0].Gives,
+                        Takes: presponse[0].Takes,
+                        Role: role,
+                        SiteID: presponse[0].SiteID,
+                        Site: presponse[0].Site,
+                        Address1: presponse[0].Address1,
+                        ZIP: presponse[0].ZIP,
+                        City: presponse[0].City
+                    };
+                }
+                if (pcbkok) pcbkok();
             }, pcbkerr
         );
     }
@@ -156,10 +150,18 @@
     }
     // -----------------------------------------------
     //
+    // -----------------------------------------------
+    // Login from DB
+    Constr.prototype.Login = function (pusername, ppassword, pcbkok, pcbkerr) {
+        _getPeopleManager().LoginFromDB(pusername, ppassword, pcbkok, pcbkerr);
+    }
+    //
     Constr.prototype.Logout = function () {
-        _getFBManager().Logout(function () {
-            _getAppManager().LogoutEnd();
-        });
+        //_getFBManager().Logout(function () {
+        //    _getAppManager().LogoutEnd();
+        //});
+        // TODO logout?
+        _getAppManager().LogoutEnd();
     }
     // -----------------------------------------------
     // Creates user
@@ -171,8 +173,10 @@
     //lastName: presponse.last_name,
     //}
     Constr.prototype.Create = function (pcbkok, pcbkerr) {
-        var cudata = _getFBManager().GetCurrentUserFBData();
-        _getPeopleManager().Create(cudata, pcbkok, pcbkerr);
+        alert('TODO Create no FB!');
+        if (pcbkerr) pcbkerr();
+        //var cudata = _getFBManager().GetCurrentUserFBData();
+        //_getPeopleManager().Create(cudata, pcbkok, pcbkerr);
     }
     Constr.prototype.Save = function (pdata, pcbkok, pcbkerr) {
         _getPeopleManager().Save(pdata, pcbkok, pcbkerr);

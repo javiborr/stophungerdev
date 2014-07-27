@@ -42,11 +42,11 @@
     // Admin: adminPage
     // Gives: donatePage
     // Takes: checkPage
-    Constr.prototype.SetLogged = function (pislogged) {
+    Constr.prototype.SetLogged = function (pislogged, puserid) {
         if (pislogged === true) {
             // Gets user data from FB and DB
-            mDonateView.WaitingForServer('Datos de FaceBook...');
-            mUserManager.GetCurrentUserFromFBDB(_showPageForRol, _showError);
+            mDonateView.WaitingForServer('Espera por favor...');
+            mUserManager.GetCurrentUserFromFBDB(_showPageForRol, _showError, puserid);
         } else {
             this.LogoutEnd();
         }

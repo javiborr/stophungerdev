@@ -54,7 +54,7 @@
     }
     // FB
     function _fbInit() {
-        if (FB) {
+        if (typeof(FB) !== 'undefined' && FB !== null) {
             try {
                 var azurerex = new RegExp('azurewebsites.net');
                 var pro = azurerex.test(location.href);

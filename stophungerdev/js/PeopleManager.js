@@ -64,7 +64,7 @@
     // -----------------------------------------------
     // Gets user from DB
     Constr.prototype.GetUserDataFromDB = function (pfbid, pcbkok, pcbkerr) {
-        var filter = { FBID: pfbid };
+        //var filter = { FBID: pfbid };
         //var data = mMSClient.getTable('people')
         //    .where(filter)
         //    .read()
@@ -72,6 +72,21 @@
                 body: null,
                 method: "get",
             }).done(
+                function (presponse) {
+                    if (pcbkok) pcbkok(presponse.result);
+                }
+                , function (perror) {
+                    if (pcbkerr) pcbkerr(perror);
+                }
+            );
+    }
+    // -----------------------------------------------
+    // Login from DB
+    Constr.prototype.LoginFromDB = function (pusername, ppassword, pcbkok, pcbkerr) {
+        mMSClient.invokeApi("peoplelogin?user=" + pusername + "&pass=" + ppassword, {
+            body: null,
+            method: "get",
+        }).done(
                 function (presponse) {
                     if (pcbkok) pcbkok(presponse.result);
                 }

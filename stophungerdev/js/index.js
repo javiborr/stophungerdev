@@ -59,10 +59,11 @@ var app = {
 };
 $(document).on("pageinit", function (event, ui) {
     jqmReady.resolve();
+    fbReady.resolve(); // drop FB login
     $.ajaxSetup({ cache: true });
-    $.getScript('//connect.facebook.net/es_ES/all.js', function () {
-        fbReady.resolve();
-    });
+    //$.getScript('//connect.facebook.net/es_ES/all.js', function () {
+    //    fbReady.resolve();
+    //});
 });
 /**
 * General initialization.

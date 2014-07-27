@@ -1,8 +1,25 @@
 ﻿// insert donation
 function insert(item, user, request) {
+    // Get all donations for this site order by updated descending
     var donations = tables.getTable('donations');
     donations.where({ Site: item.Site }).orderByDescending('__updatedAt').read({ success: _checkTime, systemProperties: ['__updatedAt'] });
-
+    // BROADCAST
+    function _broadcast() {
+        var broadcasturl = ['https://webservices.appmobi.com/pushmobi.aspx?CMD=SendBroadcastMessage'
+            ,'authuser=javiborr@gmail.com'
+            ,'authpw=Perla2009'
+            ,'appname=8u5sOwE8oC5QpRn1xf0J2I5l4i6LLV18Pis0XDrlY2Y'
+            ,'msg=Nueva%20donaci%C3%B3n'
+            ,'data='
+            ,'attributes='].join('&');
+        var https = require('https');
+        https.get(broadcasturl, function (res) {
+            console.log("statusCode: ", res.statusCode);
+        }).on('error', function (e) {
+            console.error(e);
+        });
+    }
+    // Process all donations for this site
     function _checkTime(plsdonatsite) {
         var now = new Date();
         // SI ya hay una donacion en este sitio
@@ -14,6 +31,7 @@ function insert(item, user, request) {
             // SI la mas reciente es el mismo dia
             if (bsameyear && bsamemonth && bsameday) {
                 console.log("mismo dia " + plsdonatsite[0].__updatedAt.getFullYear() + "/" + plsdonatsite[0].__updatedAt.getMonth() + "/" + plsdonatsite[0].__updatedAt.getDate());
+                // update la donacion más reciente con los datos de item y FIN
                 item.Current = true;
                 item.id = plsdonatsite[0].id;
                 donations.update(item, {
@@ -30,6 +48,8 @@ function insert(item, user, request) {
                         // Inserta la donacion nueva como current
                         item.Current = true;
                         request.execute();
+                        // TODO BROADCAST
+                        _broadcast();
                         //request.respond(201, { id: 1, status: 'Table updated successfully' });
                     } else {
                         var old = plsdonatsite[index];
@@ -52,6 +72,8 @@ function insert(item, user, request) {
             // NO hay ninguna donacion en este sitio
             item.Current = true;
             request.execute();
+            // TODO BROADCAST
+            _broadcast();
         }
     }
 }
@@ -85,6 +107,30 @@ function insert(item, user, request) {
         }
     }
 }
+
+// People insert
+function insert(item, user, request) {
+
+    function _broadcast() {
+        var broadcasturl = ['https://webservices.appmobi.com/pushmobi.aspx?CMD=SendBroadcastMessage'
+            , 'authuser=javiborr@gmail.com'
+            , 'authpw=Perla2009'
+            , 'appname=8u5sOwE8oC5QpRn1xf0J2I5l4i6LLV18Pis0XDrlY2Y'
+            , 'msg=Nuevo%20usuario'
+            , 'data='
+            , 'attributes='].join('&');
+        var https = require('https');
+        https.get(broadcasturl, function (res) {
+            console.log("statusCode: ", res.statusCode);
+        }).on('error', function (e) {
+            console.error(e);
+        });
+    }
+    request.execute();
+    _broadcast();
+}
+
+
 
 // People extra
 exports.get = function (request, response) {
@@ -133,6 +179,26 @@ exports.get = function (request, response) {
     });
 };
 
+// Sites insert
+function insert(item, user, request) {
+    function _broadcast() {
+        var broadcasturl = ['https://webservices.appmobi.com/pushmobi.aspx?CMD=SendBroadcastMessage'
+            , 'authuser=javiborr@gmail.com'
+            , 'authpw=Perla2009'
+            , 'appname=8u5sOwE8oC5QpRn1xf0J2I5l4i6LLV18Pis0XDrlY2Y'
+            , 'msg=Nuevo%20restaurante'
+            , 'data='
+            , 'attributes='].join('&');
+        var https = require('https');
+        https.get(broadcasturl, function (res) {
+            console.log("statusCode: ", res.statusCode);
+        }).on('error', function (e) {
+            console.error(e);
+        });
+    }
+    request.execute();
+    _broadcast();
+}
 
 // SitesWithDonations
 exports.get = function (request, response) {
