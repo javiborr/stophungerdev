@@ -442,6 +442,7 @@
     //
     Constr.prototype.LoginError = function () {
         $("#LoginError").text('Error o el usuario no existe o la clave no es correcta');
+        _showPage(_getLoginPage());
     }
     //
     Constr.prototype.SetRole = function (p) {

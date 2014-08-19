@@ -58,6 +58,7 @@
         _getUserManager().Logout();
     }
     Constr.prototype.LoginStart = function (pusername, ppassword) {
+        _getDonateView().WaitingForServer();
         _getUserManager().Login(pusername, ppassword, _loginOK, _loginError);
     }
     function _loginOK(p) {
