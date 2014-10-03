@@ -1,132 +1,144 @@
-﻿<!DOCTYPE html>
+﻿<!DOCTYPE html><!--HTML5 doctype-->
 <html>
-    <head>
-        <meta charset="utf-8" />
-        <meta name="format-detection" content="telephone=no" />
-        <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
-        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
-        <link rel="stylesheet" type="text/css" href="css/index.css" />
-        <title>Stop Hunger DEV</title>
-        <script src="js/lib/jquery.min.js"></script>
-        <script src="js/lib/jquery.validate.js"></script>
-        <script src="js/lib/jquery.validate.messages_es.js"></script>
-        <link href="js/lib/jquery.mobile.min.css" rel="stylesheet" />
-        <script src="js/lib/jquery.mobile.min.js"></script>
-        <script src="js/lib/MobileServices.Web.min.js"></script>
-        <script src="js/lib/mustache.js"></script>
-        <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBCmJ0voNd2GqInqdiVZOPlUm29LNHRCUQ &sensor=false&language=es"></script>
-        <script src="js/index.js"></script>
-        <script src="js/FBManager.js"></script>
-        <script src="js/PeopleManager.js"></script>
-        <script src="js/UserManager.js"></script>
-        <script src="js/SiteManager.js"></script>
-        <script src="js/MapManager.js"></script>
-        <script src="js/DonationManager.js"></script>
-        <script src="js/DonateView.js"></script>
-        <script src="js/DonateController.js"></script>
-        <script src="js/AppManager.js"></script>
-        <script src="js/Enum.js"></script>
-        <script type="text/javascript">
-            var gAppManager = null;
-            function mystuff() {
-                gAppManager = new AppManager();
-                gAppManager.Init();
-            }
-        </script>
-        <!-- Templates -->
-        <script id="personListItemTpl" type="text/template">
-            {{#users}}
-                <li><a href="#" onclick="gAppManager.ShowUserData('{{FBID}}')">
-                    <img src="http://graph.facebook.com/{{UserName}}/picture"/>
-                    <h4>{{FirstName}} {{LastName}}</h4>
-                    <p><span class="role {{Admin}}">A</span><span class="role {{Gives}}">D</span><span class="role {{Takes}}">R</span>&nbsp;{{Site}}</p>
-                    </a>
-                </li>
-            {{/users}}
-        </script>
-        <script id="personTpl" type="text/template">
-            <img class="user-photo" src="http://graph.facebook.com/{{UserName}}/picture"/>
-            <h4>{{FirstName}} {{LastName}}</h4>
-        </script>
-        <script id="siteListItemTpl" type="text/template">
-            {{#sites}}
-                <li><a href="#" onclick="gAppManager.ShowSiteData('{{SiteID}}')">
-                    <h4>{{Name}}</h4>
-                    <p>{{Address1}} {{ZIP}} {{City}}</p>
-                    <p><span class="reserved my{{Reserved4Me}} r{{Reserved}} d{{Bread}}{{Cake}}{{Sandwich}}{{Salad}}">&nbsp;</span> {{Bread}} panes, {{Cake}} bollos, {{Sandwich}} bocadillos, {{Salad}} ensaladas                       
-                    </p>
-                    </a>
-                </li>
-            {{/sites}}
-        </script>
-        <script id="selectSiteListItemTpl" type="text/template">
-            {{#sites}}
-                <option value="{{SiteID}}">{{Name}}</option>
-            {{/sites}}
-        </script>
+<head>
+	<title>Stop Hunger</title>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0" />
+	<style type="text/css">
+		/* Prevent copy paste for all elements except text fields */
+		*  { -webkit-user-select:none; -webkit-tap-highlight-color:rgba(255, 255, 255, 0); }
+		input, textarea  { -webkit-user-select:text; }
+		body { background-color:white; color:black }
+	</style>
+    <script type="text/javascript" src="cordova.js"></script>
+    <!-- import old app -->
+    <link rel="stylesheet" type="text/css" href="css/index.css" />
+    <script src="js/lib/jquery.min.js"></script>
+    <script src="js/lib/jquery.validate.js"></script>
+    <script src="js/lib/jquery.validate.messages_es.js"></script>
+    <link href="js/lib/jquery.mobile.min.css" rel="stylesheet" />
+    <script src="js/lib/jquery.mobile.min.js"></script>
+    <script src="js/lib/MobileServices.Web.min.js"></script>
+    <script src="js/lib/mustache.js"></script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBCmJ0voNd2GqInqdiVZOPlUm29LNHRCUQ &sensor=false&language=es"></script>
+    <script src="js/index.js"></script>
+    <script src="js/Enum.js"></script>
+    <script src="js/FBManager.js"></script>
+    <script src="js/PeopleManager.js"></script>
+    <script src="js/UserManager.js"></script>
+    <script src="js/SiteManager.js"></script>
+    <script src="js/MapManager.js"></script>
+    <script src="js/DonationManager.js"></script>
+    <script src="js/DonateView.js"></script>
+    <script src="js/DonateController.js"></script>
+    <script src="js/AppManager.js"></script>
+    <!--<script src="js/push.js"></script>-->
+    <!-- Templates -->
+    <script id="personListItemTpl" type="text/template">
+        {{#users}}
+            <li><a href="#" onclick="gAppManager.ShowUserData('{{FBID}}')">
+                <img src="http://graph.facebook.com/{{UserName}}/picture"/>
+                <h4>{{FirstName}} {{LastName}}</h4>
+                <p><span class="role {{Admin}}">A</span><span class="role {{Gives}}">D</span><span class="role {{Takes}}">R</span>&nbsp;{{Site}}</p>
+                </a>
+            </li>
+        {{/users}}
+    </script>
+    <script id="personTpl" type="text/template">
+        <img class="user-photo" src="http://graph.facebook.com/{{UserName}}/picture"/>
+        <h4>{{FirstName}} {{LastName}}</h4>
+    </script>
+    <script id="siteListItemTpl" type="text/template">
+        {{#sites}}
+            <li><a href="#" onclick="gAppManager.ShowSiteData('{{SiteID}}')">
+                <h4>{{Name}}</h4>
+                <p>{{Address1}} {{ZIP}} {{City}}</p>
+                <p><span class="reserved my{{Reserved4Me}} r{{Reserved}} d{{Bread}}{{Cake}}{{Sandwich}}{{Salad}}">&nbsp;</span> {{Bread}} panes, {{Cake}} bollos, {{Sandwich}} bocadillos, {{Salad}} ensaladas                       
+                </p>
+                </a>
+            </li>
+        {{/sites}}
+    </script>
+    <script id="selectSiteListItemTpl" type="text/template">
+        {{#sites}}
+            <option value="{{SiteID}}">{{Name}}</option>
+        {{/sites}}
+    </script>
 
-        <script id="siteTpl" type="text/template">
-            <p id="siteFormError"></p>
-            <div id="Div4" class="ui-field-contain">
-                <label for="SiteNameText">Nombre:</label>
-                <input type="text" class="required" minlength="5" name="SiteNameText" id="SiteNameText" value="{{Name}}"/>
-            </div>
-            <div id="Div19" class="ui-field-contain">
-                <label for="Address1Text">Direcci&oacute;n:</label>
-                <input type="text" class="required" minlength="5" name="Address1Text" id="Address1Text" value="{{Address1}}"/>
-            </div>
-            <div id="Div21" class="ui-field-contain">
-                <label for="ZIPText">C&oacute;digo Postal:</label>
-                <input type="text" class="required ZIP" maxlength="5" name="ZIPText" id="ZIPText" value="{{ZIP}}"/>
-            </div>
-            <div id="Div22" class="ui-field-contain">
-                <label for="CityText">Ciudad:</label>
-                <input type="text" class="required" minlength="5" name="CityText" id="CityText" value="{{City}}"/>
-            </div>
-            <div id="Div23" class="ui-field-contain">
-                <label for="LongitudText">Longitud:</label>
-                <input type="text" class="required Geodata" name="LongitudText" id="LongitudText" value="{{Longitud}}"/>
-            </div>
-            <div id="Div24" class="ui-field-contain">
-                <label for="LatitudText">Latitud:</label>
-                <input type="text" class="required Geodata" name="LatitudText" id="LatitudText" value="{{Latitud}}"/>
-            </div>
-        </script>
-        <script id="donationAvailableTpl" type="text/template">
-            <p>Hay {{Bread}} panes, {{Cake}} bollos, {{Sandwich}} bocadillos, {{Salad}} ensaladas,
-               <br />en {{Name}}<br />{{Address1}}<br />{{ZIP}} {{City}}</p>
-        </script>
-        <script id="donationReservedOtherTpl" type="text/template">
-            <p>Hay {{Bread}} panes, {{Cake}} bollos, {{Sandwich}} bocadillos, {{Salad}} ensaladas,
-               <br />en {{Name}}<br />{{Address1}}<br />{{ZIP}} {{City}}</p>
-            <p>Reservado para {{FirstName}} {{LastName}}</p>
-        </script>
-        <script id="donationReserved4MeTpl" type="text/template">
-            <p>Hay {{Bread}} panes, {{Cake}} bollos, {{Sandwich}} bocadillos, {{Salad}} ensaladas,
-               <br />en {{Name}}<br />{{Address1}}<br />{{ZIP}} {{City}}</p>
-            <p>Reservado para mi</p>
-        </script>
-        <script id="donateConfirmTpl" type="text/template">
-            <p>Vas a donar {{donation.Bread}} panes, {{donation.Cake}} bollos, {{donation.Sandwich}} bocadillos, {{donation.Salad}} ensaladas,
-               <br />en {{user.Site}}<br />{{user.Address1}}<br />{{user.ZIP}} {{user.City}}</p>
-            <p>¿Confirmar?</p>
-        </script>
-        <script>
-            dataLayer = [];
-        </script>
-        <script src="js/lib/googleanalytics.js"></script>
-    </head>
-    <body>
+    <script id="siteTpl" type="text/template">
+        <p id="siteFormError"></p>
+        <div id="Div4" class="ui-field-contain">
+            <label for="SiteNameText">Nombre:</label>
+            <input type="text" class="required" minlength="5" name="SiteNameText" id="SiteNameText" value="{{Name}}"/>
+        </div>
+        <div id="Div19" class="ui-field-contain">
+            <label for="Address1Text">Direcci&oacute;n:</label>
+            <input type="text" class="required" minlength="5" name="Address1Text" id="Address1Text" value="{{Address1}}"/>
+        </div>
+        <div id="Div21" class="ui-field-contain">
+            <label for="ZIPText">C&oacute;digo Postal:</label>
+            <input type="text" class="required ZIP" maxlength="5" name="ZIPText" id="ZIPText" value="{{ZIP}}"/>
+        </div>
+        <div id="Div22" class="ui-field-contain">
+            <label for="CityText">Ciudad:</label>
+            <input type="text" class="required" minlength="5" name="CityText" id="CityText" value="{{City}}"/>
+        </div>
+        <div id="Div27" class="ui-field-contain">
+            <label for="Comment">Comentario:</label>
+            <input type="text" name="CommentText" id="CommentText" value="{{Comment}}"/>
+        </div>
+        <div id="Div23" class="ui-field-contain">
+            <label for="LongitudText">Longitud:</label>
+            <input type="text" class="required Geodata" name="LongitudText" id="LongitudText" value="{{Longitud}}"/>
+        </div>
+        <div id="Div24" class="ui-field-contain">
+            <label for="LatitudText">Latitud:</label>
+            <input type="text" class="required Geodata" name="LatitudText" id="LatitudText" value="{{Latitud}}"/>
+        </div>
+    </script>
+    <script id="donationAvailableTpl" type="text/template">
+        <p>Hay {{Bread}} panes, {{Cake}} bollos, {{Sandwich}} bocadillos, {{Salad}} ensaladas,
+           <br />en {{Name}}<br />{{Address1}}<br />{{ZIP}} {{City}}</p>
+    </script>
+    <script id="donationReservedOtherTpl" type="text/template">
+        <p>Hay {{Bread}} panes, {{Cake}} bollos, {{Sandwich}} bocadillos, {{Salad}} ensaladas,
+           <br />en {{Name}}<br />{{Address1}}<br />{{ZIP}} {{City}}</p>
+        <p>Reservado para {{FirstName}} {{LastName}}</p>
+    </script>
+    <script id="donationReserved4MeTpl" type="text/template">
+        <p>Hay {{Bread}} panes, {{Cake}} bollos, {{Sandwich}} bocadillos, {{Salad}} ensaladas,
+           <br />en {{Name}}<br />{{Address1}}<br />{{ZIP}} {{City}}</p>
+        <p>Reservado para mi</p>
+    </script>
+    <script id="donateConfirmTpl" type="text/template">
+        <p>Vas a donar {{donation.Bread}} panes, {{donation.Cake}} bollos, {{donation.Sandwich}} bocadillos, {{donation.Salad}} ensaladas,
+           <br />en {{user.Site}}<br />{{user.Address1}}<br />{{user.ZIP}} {{user.City}}</p>
+        <p>¿Confirmar?</p>
+    </script>
+    <script>
+        dataLayer = [];
+    </script>
+    <script src="js/lib/googleanalytics.js"></script>
+    <!-- import old app END -->
+	<script type="text/javascript">
+	    var gAppManager = null;
+	    function mystuff() {
+	        gAppManager = new AppManager();
+	        gAppManager.Init();
+	    }
+	</script>
+</head>
+<body>
         <!-- Google Tag Manager -->
 <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-M6DLD5"
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <script>(function (w, d, s, l, i) {
-w[l] = w[l] || []; w[l].push({
-'gtm.start':
-new Date().getTime(), event: 'gtm.js'
-}); var f = d.getElementsByTagName(s)[0],
-j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
-'//www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+    w[l] = w[l] || []; w[l].push({
+        'gtm.start':
+        new Date().getTime(), event: 'gtm.js'
+    }); var f = d.getElementsByTagName(s)[0],
+    j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+    '//www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
 })(window, document, 'script', 'dataLayer', 'GTM-M6DLD5');</script>
 <!-- End Google Tag Manager -->
 
@@ -408,5 +420,5 @@ j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; 
         <script type="text/javascript">
             app.initialize(mystuff);
         </script>
-    </body>
+</body>
 </html>

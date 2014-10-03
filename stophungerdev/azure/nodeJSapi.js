@@ -121,7 +121,7 @@ exports.post = function (request, response) {
 exports.get = function (request, response) {
     var httpReq = require("request");
     var siteid = request.query.siteid;
-    var sql = "SELECT  s.name as [Name], s.Address1, s.ZIP, s.City, s.Longitud, s.Latitud, ISNULL(x.Bread,0) as Bread, ISNULL(x.Cake,0) as Cake, ISNULL(x.Sandwich,0) as Sandwich, ISNULL(x.Salad,0) as Salad, s.id as [SiteID], x.[DonatedWhen],ISNULL(x.Reserved,0) as Reserved, x.ReservedFor, x.ReservedWhen, DonationID  FROM [stophunger].[Sites] as s left outer join (select d.Bread, d.Cake, d.Sandwich, d.Salad, d.Site as SiteID, d.[__updatedAt] as [DonatedWhen], ISNULL(d.Reserved,0) as Reserved, d.ReservedFor, d.ReservedWhen, d.id as DonationID from [stophunger].[Donations] as d where d.[Current] = 1) as x on x.SiteID = s.id WHERE s.id = '" + siteid + "'";
+    var sql = "SELECT  s.name as [Name], s.Comment, s.Address1, s.ZIP, s.City, s.Longitud, s.Latitud, ISNULL(x.Bread,0) as Bread, ISNULL(x.Cake,0) as Cake, ISNULL(x.Sandwich,0) as Sandwich, ISNULL(x.Salad,0) as Salad, s.id as [SiteID], x.[DonatedWhen],ISNULL(x.Reserved,0) as Reserved, x.ReservedFor, x.ReservedWhen, DonationID  FROM [stophunger].[Sites] as s left outer join (select d.Bread, d.Cake, d.Sandwich, d.Salad, d.Site as SiteID, d.[__updatedAt] as [DonatedWhen], ISNULL(d.Reserved,0) as Reserved, d.ReservedFor, d.ReservedWhen, d.id as DonationID from [stophunger].[Donations] as d where d.[Current] = 1) as x on x.SiteID = s.id WHERE s.id = '" + siteid + "'";
     var mssql = request.service.mssql;
     mssql.query(sql, {
         success: function (results) {

@@ -322,9 +322,10 @@
         });
         var f = $("#adminSiteForm");
         f.validate();
-        if ( f.valid() ) {
+        if (f.valid()) {
             var data = {};
             data.name = $('#SiteNameText').val();
+            data.Comment = $('#CommentText').val();
             data.Address1 = $('#Address1Text').val();
             data.ZIP = $('#ZIPText').val();
             data.City = $('#CityText').val();
@@ -396,7 +397,7 @@
         $(document).on('change', 'input:radio.selectSite', function () {
             // SI es Giver muestra el control
             var bvisible = ((this.id === 'radioRolGives') || (this.id === 'radioRolAdmin'));
-            if ( bvisible ) {
+            if (bvisible) {
                 $("#adminUserSelectSite").show();
             } else {
                 $("#adminUserSelectSite").hide();
@@ -477,7 +478,7 @@
     //
     Constr.prototype.Setup = function () { _setup(); }
     // -----------------------------------------------
-    Constr.prototype.AccessRequestedEnd = function() {
+    Constr.prototype.AccessRequestedEnd = function () {
         var p = _getAccessRequestedPage();
         _showPage(p);
     }
@@ -571,7 +572,7 @@
                     ui = $('#select-site');
                     ui.html(html);
                     // Selecciona el restaurante del usuario
-                    var s = ["#select-site option[value='",udata.SiteID,"']"].join('');
+                    var s = ["#select-site option[value='", udata.SiteID, "']"].join('');
                     $(s).attr('selected', 'selected');
                     _showPage(_getAdminUserPage());
                     ui.selectmenu('refresh');
